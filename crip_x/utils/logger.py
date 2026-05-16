@@ -8,7 +8,7 @@ Never use print() anywhere in the codebase.
 Why structured logging over print():
 - Log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 - Timestamps on every message
-- Module-aware — tells you exactly where a log came from
+- Module-aware - tells you exactly where a log came from
 - Can be redirected to files, monitoring systems, dashboards
 - Can be silenced in tests without touching application code
 """
@@ -68,7 +68,7 @@ def _setup_root_logger() -> None:
     )
 
     # ── File Handler ─────────────────────────────────────────
-    # Rotating file — max 5MB per file, keep last 3 files
+    # Rotating file - max 5MB per file, keep last 3 files
     # Prevents logs from eating your disk
     from logging.handlers import RotatingFileHandler
 
@@ -103,7 +103,7 @@ def get_logger(name: str) -> logging.Logger:
     fully qualified name e.g. crip_x.signal.detectors.spike
     which tells you exactly where the log came from.
     """
-    return logging.getLogger(f"crip_x.{name}")
+    return logging.getLogger(name)
 
 
 # ── Initialize on import ─────────────────────────────────────
