@@ -1,0 +1,199 @@
+# ============================================
+# CRIP-X .gitignore
+# ============================================
+
+# --------------------------------------------
+# CREDENTIALS — never commit these
+# --------------------------------------------
+.env
+*.env
+.env.*
+!.env.example
+secrets/
+credentials/
+*.pem
+*.key
+*.cert
+*.p12
+
+# --------------------------------------------
+# Python
+# --------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+.installed.cfg
+MANIFEST
+
+# --------------------------------------------
+# Poetry
+# --------------------------------------------
+poetry.lock
+
+# Note: some teams commit poetry.lock
+# For a solo portfolio project, we don't
+# It keeps the repo clean and dependency
+# resolution fresh
+
+# --------------------------------------------
+# Virtual Environments
+# --------------------------------------------
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# --------------------------------------------
+# Data — NEVER commit patient data
+# --------------------------------------------
+data/cache/*
+data/processed/*
+!data/cache/.gitkeep
+!data/processed/.gitkeep
+*.wfdb
+*.dat
+*.hea
+*.atr
+*.csv
+*.parquet
+*.feather
+*.h5
+*.hdf5
+
+# --------------------------------------------
+# ML Models — too large for git
+# --------------------------------------------
+crip_x/models/saved/*
+!crip_x/models/saved/.gitkeep
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+
+# --------------------------------------------
+# Testing & Coverage
+# --------------------------------------------
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# --------------------------------------------
+# Type Checking
+# --------------------------------------------
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# --------------------------------------------
+# Linting
+# --------------------------------------------
+.ruff_cache/
+
+# --------------------------------------------
+# Jupyter (keeping just in case)
+# --------------------------------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# --------------------------------------------
+# IDEs
+# --------------------------------------------
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# --------------------------------------------
+# OS Generated
+# --------------------------------------------
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# --------------------------------------------
+# Streamlit
+# --------------------------------------------
+.streamlit/secrets.toml
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+logs/
+*.log
+*.log.*
+log/
+
+# --------------------------------------------
+# Temporary Files
+# --------------------------------------------
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# --------------------------------------------
+# Distribution
+# --------------------------------------------
+site/
+docs/_build/
