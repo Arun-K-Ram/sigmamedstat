@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "crip-x"
+version = "0.1.0"
+description = "Contextual Reliability Intelligence Platform for medical device signals"
+authors = ["Your Name <you@email.com>"]
+readme = "README.md"
+packages = [{include = "crip_x"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+wfdb = "^4.1.0"
+pandas = "^2.1.0"
+numpy = "^1.26.0"
+scipy = "^1.11.0"
+scikit-learn = "^1.3.0"
+fastapi = "^0.104.0"
+uvicorn = "^0.24.0"
+pydantic = "^2.4.0"
+streamlit = "^1.28.0"
+sqlalchemy = "^2.0.0"
+python-dotenv = "^1.0.0"
+xgboost = "^2.0.0"
+shap = "^0.43.0"
+plotly = "^5.18.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+black = "^23.9.0"
+ruff = "^0.1.0"
+mypy = "^1.6.0"
+ipython = "^8.16.0"
+
+[tool.poetry.group.ml.dependencies]
+torch = "^2.1.0"
+
+[tool.poetry.scripts]
+crip-explore = "exploration.explore_signals:main"
+crip-api = "api.main:start"
+crip-dashboard = "dashboard.app:main"
+crip-evaluate = "evaluation.run_evaluation:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=crip_x --cov-report=term-missing"
