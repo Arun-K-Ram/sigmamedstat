@@ -162,3 +162,43 @@ logger.info(
     f"confidence={result.confidence:.2f} | "
     f"{result.message}"
 )
+from crip_x.signal.detectors.noise_detector import NoiseDetector
+
+noise_detector = NoiseDetector()
+np.random.seed(42)
+
+# Base clean signal
+base = np.array([98.0, 97.8, 98.2, 97.9, 98.1] * 20)
+
+# Test 1 — clean signal
+result = noise_detector.detect(base.copy(), SignalType.SPO2)
+logger.info(
+    f"Noise Test 1 — detected={result.artifact_detected} | "
+    f"{result.message}"
+)
+
+# Test 2 — heavy noise
+noisy = base.copy() + np.random.normal(0, 5.0, 100)
+result = noise_detector.detect(noisy, SignalType.SPO2)
+logger.info(
+    f"Noise Test 2 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
+
+# Test 3 — pure random noise
+pure_noise = np.random.normal(98.0, 8.0, 100)
+result = noise_detector.detect(pure_noise, SignalType.SPO2)
+logger.info(
+    f"Noise Test 3 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
+
+# Test 4 — mild noise (borderline)
+mild_noise = base.copy() + np.random.normal(0, 1.0, 100)
+result = noise_detector.detect(mild_noise, SignalType.SPO2)
+logger.info(
+    f"Noise Test 4 (mild) — detected={result.artifact_detected} | "
+    f"SNR={result.metadata['snr_db']:.1f}dB"
+)
