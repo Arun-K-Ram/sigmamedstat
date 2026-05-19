@@ -34,3 +34,46 @@ except TypeError as e:
     logger.info(f"Abstract class correctly blocked: {e}")
 
 logger.info("All tests complete")
+
+from crip_x.signal.detectors.flatline_detector import FlatlineDetector
+
+detector = FlatlineDetector()
+
+# Test 1 — obvious flatline
+flatline = np.full(100, 98.0)  # 100 samples all exactly 98.0
+result = detector.detect(flatline, SignalType.SPO2)
+logger.info(
+    f"Flatline Test 1 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | {result.message}"
+)
+
+# Test 2 — real signal with natural variance
+real_signal = np.array([
+    98.0, 97.8, 98.2, 97.9, 98.1,
+    97.7, 98.3, 97.6, 98.4, 97.8,
+    98.0, 97.9, 98.1, 97.8, 98.2,
+    97.7, 98.3, 97.9, 98.0, 97.8,
+] * 5)  # 100 samples of realistic SpO2
+result = detector.detect(real_signal, SignalType.SPO2)
+logger.info(
+    f"Flatline Test 2 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | {result.message}"
+)
+
+# Test 3 — subtle flatline (nearly flat, not perfect)
+subtle_flatline = np.full(100, 98.0)
+subtle_flatline += np.random.normal(0, 0.001, 100)  # tiny noise
+result = detector.detect(subtle_flatline, SignalType.SPO2)
+logger.info(
+    f"Flatline Test 3 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | {result.message}"
+)
+
+# Test 4 — high sensitivity catches subtle flatline
+sensitive_detector = FlatlineDetector(sensitivity=2.0)
+result = sensitive_detector.detect(subtle_flatline, SignalType.SPO2)
+logger.info(
+    f"Flatline Test 4 (high sensitivity) — "
+    f"detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f}"
+)
