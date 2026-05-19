@@ -103,8 +103,11 @@ def get_logger(name: str) -> logging.Logger:
     fully qualified name e.g. crip_x.signal.detectors.spike
     which tells you exactly where the log came from.
     """
-    return logging.getLogger(name)
-
+    if name == "__main__":
+        return logging.getLogger("crip_x.main")
+    if name.startswith("crip_x."):
+        return logging.getLogger(name)
+    return logging.getLogger(f"crip_x.{name}")
 
 # ── Initialize on import ─────────────────────────────────────
 _setup_root_logger()

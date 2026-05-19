@@ -3,7 +3,6 @@ name = "crip-x"
 version = "0.1.0"
 description = "Contextual Reliability Intelligence Platform for medical device signals"
 authors = ["Arunkumar Ramachandran"]
-readme = "README.md"
 packages = [{include = "crip_x"}]
 
 [tool.poetry.dependencies]
