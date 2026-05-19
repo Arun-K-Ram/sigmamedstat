@@ -77,3 +77,47 @@ logger.info(
     f"detected={result.artifact_detected} | "
     f"confidence={result.confidence:.2f}"
 )
+from crip_x.signal.detectors.spike_detector import SpikeDetector
+
+spike_detector = SpikeDetector()
+
+# Base signal — normal SpO2
+base = np.array([98.0, 97.8, 98.2, 97.9, 98.1] * 20)  # 100 samples
+
+# Test 1 — clean signal, no spikes
+result = spike_detector.detect(base.copy(), SignalType.SPO2)
+logger.info(
+    f"Spike Test 1 — detected={result.artifact_detected} | "
+    f"{result.message}"
+)
+
+# Test 2 — inject obvious spike
+spiked = base.copy()
+spiked[50] = 245.0   # impossible SpO2 value
+result = spike_detector.detect(spiked, SignalType.SPO2)
+logger.info(
+    f"Spike Test 2 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
+
+# Test 3 — multiple spikes
+multi_spike = base.copy()
+multi_spike[20] = 10.0
+multi_spike[50] = 245.0
+multi_spike[80] = 5.0
+result = spike_detector.detect(multi_spike, SignalType.SPO2)
+logger.info(
+    f"Spike Test 3 — detected={result.artifact_detected} | "
+    f"n_spikes={result.metadata['n_zscore_spikes']} | "
+    f"confidence={result.confidence:.2f}"
+)
+
+# Test 4 — subtle spike
+subtle_spike = base.copy()
+subtle_spike[50] = 85.0  # low but not impossible
+result = spike_detector.detect(subtle_spike, SignalType.SPO2)
+logger.info(
+    f"Spike Test 4 (subtle) — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f}"
+)
