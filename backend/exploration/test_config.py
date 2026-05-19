@@ -121,3 +121,44 @@ logger.info(
     f"Spike Test 4 (subtle) — detected={result.artifact_detected} | "
     f"confidence={result.confidence:.2f}"
 )
+from crip_x.signal.detectors.dropout_detector import DropoutDetector
+
+dropout_detector = DropoutDetector()
+base = np.array([98.0, 97.8, 98.2, 97.9, 98.1] * 20)
+
+# Test 1 — clean signal
+result = dropout_detector.detect(base.copy(), SignalType.SPO2)
+logger.info(
+    f"Dropout Test 1 — detected={result.artifact_detected} | "
+    f"{result.message}"
+)
+
+# Test 2 — NaN dropout
+nan_signal = base.copy().astype(float)
+nan_signal[40:50] = np.nan   # 10 consecutive NaNs
+result = dropout_detector.detect(nan_signal, SignalType.SPO2)
+logger.info(
+    f"Dropout Test 2 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
+
+# Test 3 — zero burst (device reports 0 instead of NaN)
+zero_signal = base.copy()
+zero_signal[60:68] = 0.0    # 8 consecutive zeros
+result = dropout_detector.detect(zero_signal, SignalType.SPO2)
+logger.info(
+    f"Dropout Test 3 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
+
+# Test 4 — sudden signal loss (second half flatlines)
+sudden_loss = base.copy()
+sudden_loss[50:] = 0.0      # second half goes dead
+result = dropout_detector.detect(sudden_loss, SignalType.SPO2)
+logger.info(
+    f"Dropout Test 4 — detected={result.artifact_detected} | "
+    f"confidence={result.confidence:.2f} | "
+    f"{result.message}"
+)
