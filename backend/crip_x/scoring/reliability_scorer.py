@@ -46,7 +46,7 @@ class Recommendation(Enum):
     """
     TRUST = "trust"                   # Use this reading normally
     CAUTION = "caution"               # Use but verify with other signals
-    VERIFY = "verify"                 # Do not act on alone — verify first
+    VERIFY = "verify"                 # Do not act on alone - verify first
     DISCARD = "discard"               # Do not use this reading
     RESEAT_SENSOR = "reseat_sensor"   # Likely physical sensor issue
 
@@ -93,11 +93,11 @@ class ReliabilityScorer:
 
     Scoring Algorithm:
 
-    Step 1 — Base score from SQI
+    Step 1 - Base score from SQI
         SQI is the technical signal quality.
         It becomes the starting point.
 
-    Step 2 — Context adjustment
+    Step 2 - Context adjustment
         Context can push the score up or down.
 
         Push DOWN (artifact likely):
@@ -114,12 +114,12 @@ class ReliabilityScorer:
             - No recent events or motion
             → These increase confidence in the reading.
 
-    Step 3 — Confidence calculation
+    Step 3 - Confidence calculation
         How certain is CRIP-X about this score?
         Low confidence = borderline cases.
         High confidence = clear clean or clear artifact.
 
-    Step 4 — Recommendation
+    Step 4 - Recommendation
         Maps final trust score to clinical action.
     """
 
@@ -143,10 +143,10 @@ class ReliabilityScorer:
         Args:
             sqi_result: Output from SignalQualityIndex
             context_features: Output from ContextFeatureExtractor
-                              (optional — degrades gracefully)
+                              (optional - degrades gracefully)
 
         Returns:
-            ReliabilityScore — the final CRIP-X output
+            ReliabilityScore - the final CRIP-X output
         """
 
         # ── Step 1: Base Score from SQI ───────────────────────
@@ -335,7 +335,7 @@ class ReliabilityScorer:
             return (
                 Recommendation.DISCARD,
                 f"Trust score {trust_score:.0f} indicates "
-                f"signal is unreliable — do not use"
+                f"signal is unreliable - do not use"
             )
 
     def _build_interpretation(
@@ -379,4 +379,4 @@ class ReliabilityScorer:
                 f"context {direction} trust by {abs(context_delta):.0f} points"
             )
 
-        return " — ".join(parts) if parts else "No issues detected"
+        return " - ".join(parts) if parts else "No issues detected"

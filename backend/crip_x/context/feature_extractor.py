@@ -91,7 +91,7 @@ class ContextInput:
     In production this comes from multiple data sources
     assembled by the ingestion layer.
 
-    Not all fields are always available — the extractor
+    Not all fields are always available - the extractor
     handles missing context gracefully.
     """
     # Primary signal being assessed
@@ -153,7 +153,7 @@ class ContextFeatures:
     # Device session age in seconds
     session_age_seconds: float = 0.0
 
-    # Reliability trend — negative = degrading
+    # Reliability trend - negative = degrading
     # Computed from historical SQI slope
     reliability_trend: float = 0.0
 
@@ -256,7 +256,7 @@ class ContextFeatureExtractor:
         failure attribution downstream.
         """
         if not context.neighboring_sqis:
-            # No neighboring signals — neutral assumption
+            # No neighboring signals - neutral assumption
             features.neighboring_degradation_ratio = 0.0
             features.neighboring_avg_sqi = 100.0
             return
@@ -312,7 +312,7 @@ class ContextFeatureExtractor:
         Analyze time-based reliability patterns.
 
         Key insight: reliability degrading over a session suggests
-        sensor drift or electrode drying — a temporal pattern
+        sensor drift or electrode drying - a temporal pattern
         a threshold alerter would completely miss.
         """
         # Session age
