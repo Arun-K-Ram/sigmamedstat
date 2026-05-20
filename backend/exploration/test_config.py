@@ -202,3 +202,54 @@ logger.info(
     f"Noise Test 4 (mild) — detected={result.artifact_detected} | "
     f"SNR={result.metadata['snr_db']:.1f}dB"
 )
+
+from crip_x.signal.signal_quality_index import SignalQualityIndex
+
+sqi = SignalQualityIndex()
+np.random.seed(42)
+
+# Base clean signal
+base = np.array([98.0, 97.8, 98.2, 97.9, 98.1] * 20)
+
+# Test 1 — clean signal
+result = sqi.compute(base.copy(), SignalType.SPO2)
+logger.info(
+    f"SQI Test 1 — score={result.sqi_score:.0f} | "
+    f"grade={result.grade} | {result.summary}"
+)
+
+# Test 2 — flatline
+flatline = np.full(100, 98.0)
+result = sqi.compute(flatline, SignalType.SPO2)
+logger.info(
+    f"SQI Test 2 — score={result.sqi_score:.0f} | "
+    f"grade={result.grade} | artifacts={[a.value for a in result.artifacts_detected]}"
+)
+
+# Test 3 — spike injected
+spiked = base.copy()
+spiked[50] = 245.0
+result = sqi.compute(spiked, SignalType.SPO2)
+logger.info(
+    f"SQI Test 3 — score={result.sqi_score:.0f} | "
+    f"grade={result.grade} | dominant={result.dominant_artifact}"
+)
+
+# Test 4 — multiple artifacts
+multi = base.copy().astype(float)
+multi[40:50] = np.nan       # dropout
+multi[80] = 245.0           # spike
+result = sqi.compute(multi, SignalType.SPO2)
+logger.info(
+    f"SQI Test 4 — score={result.sqi_score:.0f} | "
+    f"grade={result.grade} | "
+    f"artifacts={[a.value for a in result.artifacts_detected]}"
+)
+
+# Test 5 — noisy signal
+noisy = base.copy() + np.random.normal(0, 5.0, 100)
+result = sqi.compute(noisy, SignalType.SPO2)
+logger.info(
+    f"SQI Test 5 — score={result.sqi_score:.0f} | "
+    f"grade={result.grade}"
+)
