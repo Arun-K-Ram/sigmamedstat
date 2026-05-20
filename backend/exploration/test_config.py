@@ -444,3 +444,59 @@ logger.info(
     f"confidence={attr.confidence:.2f} | "
     f"{attr.primary_cause}"
 )
+from crip_x.drift.drift_tracker import DriftTracker
+
+tracker = DriftTracker()
+session_id = "patient_001_spo2"
+now = time.time()
+
+# ── Test 1: Stable session
+logger.info("--- Drift Test 1: Stable Session ---")
+stable_sqis = [95, 96, 94, 97, 95, 96, 94, 95, 96, 97]
+for i, sqi in enumerate(stable_sqis):
+    tracker.update(session_id, SignalType.SPO2, sqi, now + i*10)
+
+result = tracker.assess(session_id, SignalType.SPO2)
+logger.info(
+    f"Drift Test 1 - "
+    f"detected={result.drift_detected} | "
+    f"severity={result.drift_severity} | "
+    f"slope={result.trend_slope:+.3f} | "
+    f"{result.summary}"
+)
+
+# ── Test 2: Degrading session
+session_id_2 = "patient_002_spo2"
+logger.info("--- Drift Test 2: Degrading Session ---")
+degrading_sqis = [95, 92, 88, 83, 78, 72, 65, 58, 50, 43]
+for i, sqi in enumerate(degrading_sqis):
+    tracker.update(session_id_2, SignalType.SPO2, sqi, now + i*10)
+
+result = tracker.assess(session_id_2, SignalType.SPO2)
+logger.info(
+    f"Drift Test 2 - "
+    f"detected={result.drift_detected} | "
+    f"severity={result.drift_severity} | "
+    f"slope={result.trend_slope:+.3f} | "
+    f"time_to_critical={result.estimated_minutes_to_critical:.1f}min"
+    if result.estimated_minutes_to_critical else
+    f"Drift Test 2 - detected={result.drift_detected} | "
+    f"severity={result.drift_severity} | "
+    f"slope={result.trend_slope:+.3f}"
+)
+
+# ── Test 3: Recovering session
+session_id_3 = "patient_003_spo2"
+logger.info("--- Drift Test 3: Recovering Session ---")
+recovering_sqis = [45, 50, 58, 65, 72, 78, 83, 88, 92, 95]
+for i, sqi in enumerate(recovering_sqis):
+    tracker.update(session_id_3, SignalType.SPO2, sqi, now + i*10)
+
+result = tracker.assess(session_id_3, SignalType.SPO2)
+logger.info(
+    f"Drift Test 3 - "
+    f"detected={result.drift_detected} | "
+    f"direction={result.trend_direction} | "
+    f"slope={result.trend_slope:+.3f} | "
+    f"delta={result.sqi_delta:+.0f}"
+)
