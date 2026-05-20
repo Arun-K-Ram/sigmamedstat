@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"
-import Navbar from "../components/Navbar"
 import { useState, useEffect, useRef } from "react"
 
 function MedicalBackground() {
@@ -53,7 +52,7 @@ function MedicalBackground() {
 
 function HospitalAnimation() {
   const [phase, setPhase] = useState<0|1|2|3>(0)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const phaseRef   = useRef<number>(0)
 
   useEffect(() => {
