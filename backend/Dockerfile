@@ -3,11 +3,15 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY pyproject.toml ./
+COPY crip_x/ ./crip_x/
+COPY api/ ./api/
+COPY data/ ./data/
+
 RUN pip install poetry --break-system-packages && \
     poetry config virtualenvs.create false && \
-    poetry install --without dev,ml
+    poetry install --without dev,ml --no-root && \
+    pip install pydantic-settings --break-system-packages
 
-COPY . .
 RUN pip install -e . --break-system-packages
 
 EXPOSE 8080

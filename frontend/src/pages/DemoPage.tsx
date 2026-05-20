@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Navbar from "../components/Navbar"
 
-const API = "http://127.0.0.1:8000"
+const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"
 
 const FIXTURES = [
   { id: "clean_spo2_001", label: "Clean SpO₂", tag: "Normal" },
