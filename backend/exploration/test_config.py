@@ -398,3 +398,49 @@ logger.info(
     f"context_delta={result.context_delta:+} | "
     f"{result.interpretation}"
 )
+
+from crip_x.attribution.attribute_engine import AttributionEngine
+
+engine = AttributionEngine()
+
+# ── Test 1: Clean signal
+clean_score = scorer.score(
+    sqi_result=sqi_engine.compute(base.copy(), SignalType.SPO2),
+    context_features=features1,
+)
+attr = engine.attribute(clean_score)
+logger.info(
+    f"Attribution Test 1 - "
+    f"category={attr.failure_category.value} | "
+    f"{attr.primary_cause}"
+)
+
+# ── Test 2: Flatline + motion + repositioning
+flatline_score = scorer.score(
+    sqi_result=sqi_engine.compute(np.full(100, 98.0), SignalType.SPO2),
+    context_features=features2,
+)
+attr = engine.attribute(flatline_score)
+logger.info(
+    f"Attribution Test 2 - "
+    f"category={attr.failure_category.value} | "
+    f"confidence={attr.confidence:.2f} | "
+    f"false_alarm={attr.likely_false_alarm} | "
+    f"{attr.primary_cause}"
+)
+for evidence in attr.supporting_evidence:
+    logger.info(f"  Evidence: {evidence}")
+logger.info(f"  Action: {attr.recommended_action}")
+
+# ── Test 3: Multi-signal environmental degradation
+multi_score = scorer.score(
+    sqi_result=sqi_engine.compute(np.full(100, 98.0), SignalType.SPO2),
+    context_features=features3,
+)
+attr = engine.attribute(multi_score)
+logger.info(
+    f"Attribution Test 3 - "
+    f"category={attr.failure_category.value} | "
+    f"confidence={attr.confidence:.2f} | "
+    f"{attr.primary_cause}"
+)
