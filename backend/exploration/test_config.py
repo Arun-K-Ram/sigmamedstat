@@ -253,3 +253,148 @@ logger.info(
     f"SQI Test 5 — score={result.sqi_score:.0f} | "
     f"grade={result.grade}"
 )
+from crip_x.context.feature_extractor import (
+    ContextFeatureExtractor,
+    ContextInput,
+    ClinicalEvent,
+    ClinicalEventType,
+)
+from crip_x.signal.signal_quality_index import SignalQualityIndex
+import time
+
+extractor = ContextFeatureExtractor()
+sqi_engine = SignalQualityIndex()
+now = time.time()
+
+# Build a primary signal SQI
+base = np.array([98.0, 97.8, 98.2, 97.9, 98.1] * 20)
+primary_sqi = sqi_engine.compute(base.copy(), SignalType.SPO2)
+
+# Build a degraded neighbor SQI
+noisy = base.copy() + np.random.normal(0, 5.0, 100)
+neighbor_sqi = sqi_engine.compute(noisy, SignalType.HEART_RATE)
+
+# ── Test 1: Clean context, no events, good neighbors
+context1 = ContextInput(
+    primary_signal_type=SignalType.SPO2,
+    primary_sqi=primary_sqi,
+    current_timestamp=now,
+    neighboring_sqis={SignalType.HEART_RATE: primary_sqi},
+    session_start_timestamp=now - 300,
+    historical_sqis=[95, 96, 94, 97, 95, 96, 94, 95, 96, 97],
+)
+features1 = extractor.extract(context1)
+logger.info(
+    f"Context Test 1 — "
+    f"artifact_prob={features1.context_artifact_probability:.2f} | "
+    f"reliability_bonus={features1.context_reliability_bonus:.2f} | "
+    f"trend={features1.reliability_trend:.3f}"
+)
+
+# ── Test 2: Patient repositioning event 10 seconds ago
+context2 = ContextInput(
+    primary_signal_type=SignalType.SPO2,
+    primary_sqi=primary_sqi,
+    current_timestamp=now,
+    neighboring_sqis={SignalType.HEART_RATE: neighbor_sqi},
+    session_start_timestamp=now - 1800,
+    historical_sqis=[95, 90, 80, 65, 55, 50, 48, 52, 55, 60],
+    recent_events=[
+        ClinicalEvent(
+            event_type=ClinicalEventType.PATIENT_REPOSITIONING,
+            timestamp=now - 10,
+            description="Nurse repositioned patient"
+        )
+    ],
+    motion_signal=np.random.normal(0, 3.0, 100),
+)
+features2 = extractor.extract(context2)
+logger.info(
+    f"Context Test 2 — "
+    f"artifact_prob={features2.context_artifact_probability:.2f} | "
+    f"event={features2.recent_clinical_event} | "
+    f"seconds_since={features2.seconds_since_event:.0f}s | "
+    f"motion={features2.motion_index:.2f} | "
+    f"trend={features2.reliability_trend:.3f}"
+)
+
+# ── Test 3: Multi-signal degradation
+degraded_sqi = sqi_engine.compute(
+    np.full(100, 98.0), SignalType.HEART_RATE
+)
+context3 = ContextInput(
+    primary_signal_type=SignalType.SPO2,
+    primary_sqi=degraded_sqi,
+    current_timestamp=now,
+    neighboring_sqis={
+        SignalType.HEART_RATE: degraded_sqi,
+        SignalType.RESPIRATORY_RATE: degraded_sqi,
+    },
+    session_start_timestamp=now - 600,
+    historical_sqis=[90, 85, 75, 60, 50, 45, 42, 40, 38, 35],
+)
+features3 = extractor.extract(context3)
+logger.info(
+    f"Context Test 3 — "
+    f"multi_signal_degradation={features3.multi_signal_simultaneous_degradation} | "
+    f"neighboring_ratio={features3.neighboring_degradation_ratio:.2f} | "
+    f"artifact_prob={features3.context_artifact_probability:.2f}"
+)
+from crip_x.scoring.reliability_scorer import ReliabilityScorer
+
+scorer = ReliabilityScorer()
+
+# ── Test 1: Clean signal, clean context
+result = scorer.score(
+    sqi_result=sqi_engine.compute(base.copy(), SignalType.SPO2),
+    context_features=features1,
+)
+logger.info(
+    f"Score Test 1 — "
+    f"trust={result.trust_score} | "
+    f"rec={result.recommendation.value} | "
+    f"{result.interpretation}"
+)
+
+# ── Test 2: Degraded signal + motion artifact context
+flatline_sqi = sqi_engine.compute(
+    np.full(100, 98.0), SignalType.SPO2
+)
+result = scorer.score(
+    sqi_result=flatline_sqi,
+    context_features=features2,
+)
+logger.info(
+    f"Score Test 2 — "
+    f"trust={result.trust_score} | "
+    f"confidence={result.confidence:.2f} | "
+    f"rec={result.recommendation.value} | "
+    f"context_delta={result.context_delta:+} | "
+    f"{result.interpretation}"
+)
+
+# ── Test 3: No context provided
+spike_sqi = sqi_engine.compute(spiked.copy(), SignalType.SPO2)
+result = scorer.score(
+    sqi_result=spike_sqi,
+    context_features=None,
+)
+logger.info(
+    f"Score Test 3 (no context) — "
+    f"trust={result.trust_score} | "
+    f"rec={result.recommendation.value} | "
+    f"{result.interpretation}"
+)
+
+# ── Test 4: Multi-signal degradation context
+result = scorer.score(
+    sqi_result=flatline_sqi,
+    context_features=features3,
+)
+logger.info(
+    f"Score Test 4 — "
+    f"trust={result.trust_score} | "
+    f"rec={result.recommendation.value} | "
+    f"context_delta={result.context_delta:+} | "
+    f"{result.interpretation}"
+)
