@@ -1,0 +1,47 @@
+{
+    "fixture_id": "dropout_spo2_001",
+    "description": "SpO2 with NaN dropout - probe disconnected briefly",
+    "signal_type": "spo2",
+    "sampling_frequency": 125,
+    "duration_seconds": 10,
+    "clinical_context": {
+        "session_id": "session_004",
+        "device_id": "spo2_monitor_D",
+        "session_age_seconds": 900,
+        "patient_id": "patient_004"
+    },
+    "signal": [
+        98.0, 97.8, 98.2, 97.9, 98.1, 97.7, 98.3, 97.6, 98.4, 97.8,
+        98.0, 97.9, 98.1, 97.8, 98.2, 97.7, 98.3, 97.9, 98.0, 97.8,
+        98.1, 97.8, 98.2, 97.9, 98.0, 97.8, 98.1, 97.9, 98.2, 97.7,
+        98.3, 97.8, 98.0, 97.9, 98.1, 97.8, 98.2, 97.9, 98.0, 97.8,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        98.1, 97.9, 98.2, 97.8, 98.0, 97.9, 98.1, 97.8, 98.2, 97.9,
+        98.0, 97.8, 98.1, 97.9, 98.2, 97.7, 98.3, 97.8, 98.0, 97.9,
+        98.1, 97.8, 98.2, 97.9, 98.0, 97.8, 98.1, 97.9, 98.2, 97.8,
+        98.0, 97.9, 98.1, 97.8, 98.2, 97.9, 98.0, 97.8, 98.1, 97.9
+    ],
+    "neighboring_signals": {
+        "heart_rate": [
+            72, 73, 72, 74, 73, 72, 73, 74, 72, 73,
+            72, 73, 74, 72, 73, 72, 74, 73, 72, 73,
+            72, 73, 72, 74, 73, 72, 73, 74, 72, 73,
+            72, 73, 74, 72, 73, 72, 74, 73, 72, 73,
+            72, 73, 72, 74, 73, 72, 73, 74, 72, 73,
+            72, 73, 74, 72, 73, 72, 74, 73, 72, 73,
+            72, 73, 72, 74, 73, 72, 73, 74, 72, 73,
+            72, 73, 74, 72, 73, 72, 74, 73, 72, 73,
+            72, 73, 72, 74, 73, 72, 73, 74, 72, 73,
+            72, 73, 74, 72, 73, 72, 74, 73, 72, 73
+        ]
+    },
+    "clinical_events": [],
+    "historical_sqi": [95, 96, 94, 97, 95, 96, 94, 95, 96, 97],
+    "expected_outcome": {
+        "trust_score_max": 70,
+        "recommendation": "verify",
+        "artifact_expected": true,
+        "artifact_type": "dropout"
+    }
+}

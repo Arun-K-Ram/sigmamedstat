@@ -500,3 +500,43 @@ logger.info(
     f"slope={result.trend_slope:+.3f} | "
     f"delta={result.sqi_delta:+.0f}"
 )
+from crip_x.ingestion.fixture_loader import (
+    load_fixture, get_signal_array,
+    get_neighboring_arrays, list_fixtures
+)
+
+logger.info("--- Fixture Loader Tests ---")
+logger.info(f"Available fixtures: {list_fixtures()}")
+
+# Load and run clean fixture through full pipeline
+fixture = load_fixture("clean_spo2.json")
+signal = get_signal_array(fixture)
+neighbors = get_neighboring_arrays(fixture)
+
+logger.info(
+    f"Loaded: {fixture['fixture_id']} | "
+    f"signal_length={len(signal)} | "
+    f"neighbors={list(neighbors.keys())}"
+)
+
+# Run through full pipeline
+sqi_result = sqi_engine.compute(signal, SignalType.SPO2)
+reliability = scorer.score(sqi_result)
+attribution = engine.attribute(reliability)
+
+logger.info(
+    f"Pipeline result - "
+    f"trust={reliability.trust_score} | "
+    f"rec={reliability.recommendation.value} | "
+    f"attribution={attribution.failure_category.value}"
+)
+
+# Verify against expected outcome
+expected = fixture["expected_outcome"]
+passed = reliability.trust_score >= expected["trust_score_min"]
+logger.info(
+    f"Fixture validation - "
+    f"expected_min={expected['trust_score_min']} | "
+    f"actual={reliability.trust_score} | "
+    f"{'PASS' if passed else 'FAIL'}"
+)
