@@ -45,7 +45,7 @@ class AnalyzeResponse(BaseModel):
     Full pipeline output returned to React frontend.
 
     This is the single most important data structure
-    in the entire system — everything the dashboard
+    in the entire system - everything the dashboard
     needs to render is in here.
     """
     # Core scores

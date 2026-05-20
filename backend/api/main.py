@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 app = FastAPI(
     title="CRIP-X API",
     description=(
-        "Contextual Reliability Intelligence Platform — "
+        "Contextual Reliability Intelligence Platform - "
         "real-time medical device signal trustworthiness evaluation"
     ),
     version="0.1.0",

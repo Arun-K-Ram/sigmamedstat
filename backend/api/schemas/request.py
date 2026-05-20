@@ -24,7 +24,7 @@ class AnalyzeRequest(BaseModel):
     """
     signal: list[Optional[float]] = Field(
         ...,
-        description="Signal array — use null for missing samples",
+        description="Signal array - use null for missing samples",
         min_length=10,
         max_length=10000,
     )

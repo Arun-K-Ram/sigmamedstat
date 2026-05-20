@@ -32,7 +32,7 @@ router = APIRouter(prefix="/analyze", tags=["reliability"])
 logger = get_logger(__name__)
 
 # ── Pipeline Singletons ───────────────────────────────────────
-# Initialized once at startup — not per request
+# Initialized once at startup - not per request
 sqi_engine = SignalQualityIndex()
 context_extractor = ContextFeatureExtractor()
 scorer = ReliabilityScorer()
