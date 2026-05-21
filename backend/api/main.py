@@ -33,6 +33,7 @@ app.add_middleware(
     "http://localhost:5173",
     "http://localhost:3000",
     "https://crip-x-cqoo.vercel.app",
+    "https://crip-x.vercel.app",
     "https://sigmamedstat.vercel.app",
 ],
     allow_credentials=True,
