@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react"
-import type { ReactNode, CSSProperties } from "react"
 import { useNavigate } from "react-router-dom"
 
 const R = "#c0392b"
@@ -18,36 +17,6 @@ function useIsMobile() {
     return () => window.removeEventListener("resize", handler)
   }, [])
   return isMobile
-}
-
-function useScrollReveal(threshold = 0.12) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
-      { threshold }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [threshold])
-  return { ref, visible }
-}
-
-function Reveal({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: CSSProperties }) {
-  const { ref, visible } = useScrollReveal()
-  return (
-    <div ref={ref} style={{
-      opacity: visible ? 1 : 0,
-      transform: visible ? "translateY(0)" : "translateY(20px)",
-      transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
-      ...style,
-    }}>
-      {children}
-    </div>
-  )
 }
 
 function AnimatedBar({ value, color, trigger }: { value: number; color: string; trigger: boolean }) {
