@@ -8,7 +8,6 @@ const SOFT = "#f4f4f2"
 const MID = "#e8e8e5"
 const LIGHT = "#ffffff"
 
-// ── Hooks ─────────────────────────────────────────────────────
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
@@ -37,7 +36,6 @@ function useScrollReveal(threshold = 0.15) {
   return { ref, visible }
 }
 
-// ── Reveal wrapper ─────────────────────────────────────────────
 function Reveal({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: CSSProperties }) {
   const { ref, visible } = useScrollReveal()
   return (
@@ -52,7 +50,6 @@ function Reveal({ children, delay = 0, style }: { children: ReactNode; delay?: n
   )
 }
 
-// ── Hospital Animation ─────────────────────────────────────────
 function HospitalAnimation() {
   const isMobile = useIsMobile()
   const [phase, setPhase] = useState<0|1|2|3>(0)
@@ -203,7 +200,6 @@ function HospitalAnimation() {
   )
 }
 
-// ── Industry Section ───────────────────────────────────────────
 function IndustrySection() {
   const isMobile = useIsMobile()
   const companies = [
@@ -223,11 +219,10 @@ function IndustrySection() {
               The industry is great at measuring signals. Nobody checks if they can be trusted.
             </h2>
             <p style={{ fontSize:isMobile?14:15, color:"#7f8c8d", lineHeight:1.8 }}>
-              Companies that build hospital monitors have spent decades improving the hardware. But what's missing is a layer that asks - before the alarm fires - whether the sensor reading actually means something real.
+              Companies that build hospital monitors have spent decades improving the hardware. But what's really missing is a layer that asks before any alarm fires...are the sensor readings trustworthy?
             </p>
           </div>
         </Reveal>
-
         <Reveal delay={0.1}>
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:16, marginBottom:32 }}>
             {companies.map((c,i) => (
@@ -248,7 +243,6 @@ function IndustrySection() {
             ))}
           </div>
         </Reveal>
-
         <Reveal delay={0.15}>
           <div style={{ padding:isMobile?"20px":"28px 32px", background:SOFT, borderRadius:12, border:`1px solid ${MID}` }}>
             <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:isMobile?20:40, alignItems:"start" }}>
@@ -279,7 +273,6 @@ function IndustrySection() {
   )
 }
 
-// ── ML Section ─────────────────────────────────────────────────
 function MLSection() {
   const isMobile = useIsMobile()
   const experiments = [
@@ -345,13 +338,15 @@ function MLSection() {
         <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
           {experiments.map((exp,idx) => (
             <Reveal key={idx} delay={idx * 0.1}>
-              <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:isMobile?20:32 }}>
-                <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:isMobile?20:40 }}>
+              <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:isMobile?16:32 }}>
+                {/* On mobile: stack title+detail first, then accuracy */}
+                <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
+                  {/* Title + detail */}
                   <div>
                     <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
                       <div style={{ width:32, height:32, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:R, fontFamily:"DM Mono", flexShrink:0 }}>{exp.num}</div>
                       <div>
-                        <div style={{ fontSize:14, fontWeight:400, color:CHARCOAL }}>{exp.title}</div>
+                        <div style={{ fontSize:isMobile?13:14, fontWeight:400, color:CHARCOAL }}>{exp.title}</div>
                         <div style={{ fontSize:11, color:"#95a5a6", marginTop:2 }}>{exp.subtitle}</div>
                       </div>
                     </div>
@@ -366,8 +361,14 @@ function MLSection() {
                       <div style={{ fontSize:12, color:exp.findingColor, lineHeight:1.7 }}>{exp.finding}</div>
                     </div>
                   </div>
-                  <div>
-                    <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14, marginTop:isMobile?8:0 }}>How accurate was each approach?</div>
+
+                  {/* Accuracy - separator on desktop via nested grid */}
+                  {!isMobile ? (
+                    <div style={{ display:"none" }} />
+                  ) : null}
+
+                  <div style={{ borderTop: isMobile ? `1px solid ${MID}` : "none", paddingTop: isMobile ? 16 : 0 }}>
+                    <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>How accurate was each approach?</div>
                     <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
                       {exp.results.map((r,i) => (
                         <div key={i}>
@@ -397,6 +398,14 @@ function MLSection() {
                     )}
                   </div>
                 </div>
+
+                {/* Desktop: side by side */}
+                {!isMobile && (
+                  <style>{`
+                    .exp-grid-${idx} { display: grid !important; grid-template-columns: 1fr 1fr; gap: 40px; }
+                    .exp-grid-${idx} > div:last-child { border-top: none !important; padding-top: 0 !important; }
+                  `}</style>
+                )}
               </div>
             </Reveal>
           ))}
@@ -404,7 +413,7 @@ function MLSection() {
 
         {/* Hyperparameter tuning */}
         <Reveal delay={0.05}>
-          <div style={{ marginTop:32, background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:isMobile?20:32 }}>
+          <div style={{ marginTop:32, background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:isMobile?16:32 }}>
             <div style={{ marginBottom:20 }}>
               <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>How the model was tuned</p>
               <h3 style={{ fontSize:isMobile?18:22, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.3px", marginBottom:12 }}>
@@ -414,17 +423,28 @@ function MLSection() {
                 Most people tune hyperparameters by instinct or trial and error. A more structured approach is to define a clear search grid, vary one parameter at a time while holding others fixed, and log every result. I followed this method during my master's and across other ML projects at the time.
               </p>
             </div>
-            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:16, marginBottom:24 }}>
+
+            {/* Hyperparameter cards - single col on mobile */}
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:isMobile?12:16, marginBottom:24 }}>
               {[
-                { param:"Dropout rate", values:"0.2 → 0.3 → 0.4 → 0.5", winner:"0.5", why:"With only 498 training samples, overfitting was the biggest risk. Higher dropout performed best - the dataset was too small to support anything less aggressive." },
-                { param:"Hidden layer size", values:"64 → 128 → 256 → 512", winner:"256", why:"256 neurons hit the sweet spot - large enough to capture the signal, small enough to avoid memorizing the training data." },
-                { param:"Learning rate", values:"0.01 → 0.001 → 0.0001 → 0.00001", winner:"0.0001", why:"The sweep confirmed 1e-4 works best - aggressive enough to learn, careful enough not to distort the pretrained EfficientNet features." },
+                { param:"Dropout rate", values:["0.2","0.3","0.4","0.5"], winner:"0.5", why:"With only 498 training samples, overfitting was the biggest risk. Higher dropout performed best - the dataset was too small to support anything less aggressive." },
+                { param:"Hidden layer size", values:["64","128","256","512"], winner:"256", why:"256 neurons hit the sweet spot - large enough to capture the signal, small enough to avoid memorizing the training data." },
+                { param:"Learning rate", values:["0.01","0.001","0.0001","0.00001"], winner:"0.0001", why:"The sweep confirmed 1e-4 works best - aggressive enough to learn, careful enough not to distort the pretrained EfficientNet features." },
               ].map((p,i) => (
-                <div key={i} style={{ background:SOFT, borderRadius:10, padding:18, border:`1px solid ${MID}` }}>
+                <div key={i} style={{ background:SOFT, borderRadius:10, padding:isMobile?14:18, border:`1px solid ${MID}` }}>
                   <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{p.param}</div>
-                  <div style={{ display:"flex", gap:4, marginBottom:10, flexWrap:"wrap" }}>
-                    {p.values.split(" → ").map((v,j) => (
-                      <span key={j} style={{ fontSize:11, padding:"2px 8px", borderRadius:4, background:v===p.winner?"#fdf0ef":LIGHT, border:`1px solid ${v===p.winner?"#e8b4b0":MID}`, color:v===p.winner?R:"#95a5a6", fontFamily:"DM Mono" }}>{v}</span>
+                  {/* Values - wrap naturally, bigger touch targets */}
+                  <div style={{ display:"flex", gap:6, marginBottom:10, flexWrap:"wrap" }}>
+                    {p.values.map((v,j) => (
+                      <span key={j} style={{
+                        fontSize:11,
+                        padding: isMobile ? "4px 10px" : "2px 8px",
+                        borderRadius:4,
+                        background:v===p.winner?"#fdf0ef":LIGHT,
+                        border:`1px solid ${v===p.winner?"#e8b4b0":MID}`,
+                        color:v===p.winner?R:"#95a5a6",
+                        fontFamily:"DM Mono"
+                      }}>{v}</span>
                     ))}
                   </div>
                   <div style={{ fontSize:11, color:"#27ae60", marginBottom:6 }}>Winner: <span style={{ fontFamily:"DM Mono" }}>{p.winner}</span></div>
@@ -432,7 +452,8 @@ function MLSection() {
                 </div>
               ))}
             </div>
-            <div style={{ padding:"18px 20px", background:SOFT, borderRadius:10, border:`1px solid ${MID}` }}>
+
+            <div style={{ padding:isMobile?"14px":"18px 20px", background:SOFT, borderRadius:10, border:`1px solid ${MID}` }}>
               <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:isMobile?16:32, alignItems:"center" }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>What makes this different</div>
@@ -440,7 +461,7 @@ function MLSection() {
                     Instead of random search or manual guessing, I use a structured one-parameter-at-a-time sweep with all results logged. Every decision can be traced and justified.
                   </div>
                 </div>
-                <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                <div style={{ display:"flex", flexDirection:"column", gap:10, marginTop:isMobile?12:0 }}>
                   {[
                     {label:"Sweep ran across", value:"3 extractors × 3 parameters × 4 values = 36 runs"},
                     {label:"Best config found", value:"EfficientNet · dropout=0.5 · hidden=256 · lr=1e-4"},
@@ -448,7 +469,7 @@ function MLSection() {
                   ].map((s,i) => (
                     <div key={i} style={{ padding:"10px 14px", background:LIGHT, borderRadius:8, border:`1px solid ${MID}` }}>
                       <div style={{ fontSize:11, color:"#95a5a6", marginBottom:4 }}>{s.label}</div>
-                      <div style={{ fontSize:12, color:CHARCOAL, fontFamily:i===1?"DM Mono, monospace":"inherit" }}>{s.value}</div>
+                      <div style={{ fontSize:isMobile?11:12, color:CHARCOAL, fontFamily:i===1?"DM Mono, monospace":"inherit", wordBreak:"break-word" }}>{s.value}</div>
                     </div>
                   ))}
                 </div>
@@ -470,7 +491,6 @@ function MLSection() {
   )
 }
 
-// ── Home Page ──────────────────────────────────────────────────
 export default function HomePage() {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
@@ -647,12 +667,12 @@ export default function HomePage() {
         {/* CTA */}
         <section style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"40px 20px 60px":"60px 40px 80px" }}>
           <Reveal>
-            <div style={{ display:"flex", flexDirection:isMobile?"column":"row", alignItems:isMobile?"flex-start":"center", justifyContent:"space-between", gap:20, padding:isMobile?"28px 24px":"44px 52px", border:`1px solid ${MID}`, borderRadius:12, background:LIGHT }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:20, padding:isMobile?"28px 20px":"44px 52px", border:`1px solid ${MID}`, borderRadius:12, background:LIGHT }}>
               <div>
                 <h2 style={{ fontSize:isMobile?20:24, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:8 }}>Try it on real hospital data</h2>
                 <p style={{ fontSize:14, color:"#95a5a6" }}>Six real ICU alarm events. Real model predictions. See where it gets it right - and where it doesn't.</p>
               </div>
-              <button className="btn" onClick={() => navigate("/demo")} style={{ flexShrink:0, whiteSpace:"nowrap" }}>Open the demo</button>
+              <button className="btn" onClick={() => navigate("/demo")} style={{ width:isMobile?"100%":"auto", alignSelf:"flex-start" }}>Open the demo</button>
             </div>
           </Reveal>
         </section>
@@ -668,7 +688,6 @@ export default function HomePage() {
             <div>
               <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>Built by</div>
               <div style={{ fontSize:14, color:CHARCOAL, marginBottom:4 }}>Arunkumar Ramachandran</div>
-              <div style={{ fontSize:13, color:"#7f8c8d", marginBottom:14 }}>Florida Institute of Technology</div>
               <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                 <a href="https://www.linkedin.com/in/arun-ramachandran-a2019a/" target="_blank" rel="noopener noreferrer" className="footlink">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>

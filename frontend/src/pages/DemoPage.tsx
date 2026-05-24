@@ -8,7 +8,6 @@ const SOFT = "#f4f4f2"
 const MID = "#e8e8e5"
 const LIGHT = "#ffffff"
 
-// ── Hooks ──────────────────────────────────────────────────────
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
@@ -37,7 +36,6 @@ function useScrollReveal(threshold = 0.12) {
   return { ref, visible }
 }
 
-// ── Reveal wrapper ─────────────────────────────────────────────
 function Reveal({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: CSSProperties }) {
   const { ref, visible } = useScrollReveal()
   return (
@@ -52,7 +50,6 @@ function Reveal({ children, delay = 0, style }: { children: ReactNode; delay?: n
   )
 }
 
-// ── Animated probability bar ───────────────────────────────────
 function AnimatedBar({ value, color, trigger }: { value: number; color: string; trigger: boolean }) {
   const [width, setWidth] = useState(0)
   useEffect(() => {
@@ -67,7 +64,6 @@ function AnimatedBar({ value, color, trigger }: { value: number; color: string; 
   )
 }
 
-// ── Scenarios ──────────────────────────────────────────────────
 const SCENARIOS: Record<string, any> = {
   v100s: {
     id:"v100s", label:"Irregular heartbeat alarm", bed:"Bed 7 · ICU West",
@@ -125,7 +121,7 @@ const SCENARIOS: Record<string, any> = {
     action:"The model flagged it as act now with high confidence, but the patient was completely fine. This is the kind of error that erodes trust in automated systems.",
     honest_note:true,
     why_wrong:"High-confidence mistakes are the most dangerous kind. The signal had features that genuinely resembled a cardiac arrest pattern. Patient-specific baselines could make a major difference here.",
-    without:"Even without the model, a nurse would have responded - it's a cardiac arrest alert. The cost is 5–10 minutes of emergency response for a patient who was fine. Multiply that by the number of false cardiac arrest alarms per week."
+    without:"Even without the model, a nurse would have responded - it's a cardiac arrest alert. The cost is 5-10 minutes of emergency response for a patient who was fine. Multiply that by the number of false cardiac arrest alarms per week."
   },
   t107l: {
     id:"t107l", label:"Rapid heart rate alarm", bed:"Bed 2 · Step-Down Unit",
@@ -179,8 +175,15 @@ export default function DemoPage() {
   const navigate  = useNavigate()
   const isMobile  = useIsMobile()
   const [selected, setSelected] = useState("v100s")
-  const [phase, setPhase]       = useState<Phase>("result")
+  const [phase, setPhase]       = useState<Phase>("analyzing")
   const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Fix: start as analyzing, resolve to result immediately without scroll
+  useEffect(() => {
+    window.scrollTo({ top: 0 })
+    const t = setTimeout(() => setPhase("result"), 50)
+    return () => clearTimeout(t)
+  }, [])
 
   const s        = SCENARIOS[selected]
   const pred     = s.prediction
@@ -192,6 +195,7 @@ export default function DemoPage() {
     if (timerRef.current) clearTimeout(timerRef.current)
     setSelected(id)
     setPhase("analyzing")
+    window.scrollTo({ top: 0 })
     timerRef.current = setTimeout(() => setPhase("result"), 2000)
   }
 
@@ -200,7 +204,7 @@ export default function DemoPage() {
   const verdictColor  = s.verdict_correct ? (pred.is_false_alarm ? "#1e8449" : R) : "#b7770d"
   const verdictBg     = s.verdict_correct ? (pred.is_false_alarm ? "#edf7f1" : "#fdf0ef") : "#fdf3e3"
   const verdictBorder = s.verdict_correct ? (pred.is_false_alarm ? "#a8d5b5" : "#e8b4b0") : "#f0c87a"
-  const cardPad       = isMobile ? 20 : 28
+  const cardPad       = isMobile ? 16 : 28
 
   return (
     <div style={{ minHeight:"100vh", background:SOFT, fontFamily:"'DM Sans','Helvetica Neue',sans-serif" }}>
@@ -210,16 +214,17 @@ export default function DemoPage() {
         @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         @keyframes dotBounce{0%,100%{transform:translateY(0);opacity:0.3}50%{transform:translateY(-4px);opacity:1}}
         .fade{animation:fadeUp 0.5s ease forwards;}
-        .scard{background:${LIGHT};border:1px solid ${MID};border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;transition:all 0.15s;width:100%;}
+        .fade *:focus{outline:none;}
+        .scard{background:${LIGHT};border:1px solid ${MID};border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;transition:all 0.15s;width:100%;}
         .scard:hover{border-color:#b0b0aa;background:${SOFT};}
         .scard.active{border-color:${CHARCOAL};background:${SOFT};}
       `}</style>
 
       {/* Navbar */}
       <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, background:"rgba(244,244,242,0.95)", borderBottom:`1px solid ${MID}`, backdropFilter:"blur(8px)" }}>
-        <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"0 20px":"0 40px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"0 16px":"0 40px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
           <div style={{ cursor:"pointer" }} onClick={() => navigate("/")}>
-            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?44:56, width:"auto" }} />
+            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?40:56, width:"auto" }} />
           </div>
           {!isMobile && (
             <div style={{ display:"flex", alignItems:"center", gap:16 }}>
@@ -230,182 +235,166 @@ export default function DemoPage() {
             </div>
           )}
           {isMobile && (
-            <div style={{ fontSize:12, padding:"4px 12px", borderRadius:100, background:LIGHT, border:`1px solid ${MID}`, color:CHARCOAL }}>
+            <div style={{ fontSize:11, padding:"4px 10px", borderRadius:100, background:LIGHT, border:`1px solid ${MID}`, color:CHARCOAL }}>
               {accuracy}/{total} correct
             </div>
           )}
         </div>
       </div>
 
-      <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"80px 20px 48px":"90px 40px 60px" }}>
+      <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"74px 16px 40px":"90px 40px 60px" }}>
 
         {/* Page intro */}
-        <Reveal>
-          <div style={{ marginBottom:28 }}>
-            <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:8 }}>Live demo - real data</p>
-            <h1 style={{ fontSize:isMobile?22:26, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:10 }}>
-              Six real ICU alarms. Our model analyzed each one.
-            </h1>
-            <p style={{ fontSize:isMobile?13:14, color:"#7f8c8d", lineHeight:1.8 }}>
-              Each scenario comes from real patient alarm recordings in a published hospital dataset. Select any one - the model will analyze the heart signal and tell you whether the alarm is worth acting on.
-            </p>
-          </div>
-        </Reveal>
+        <div style={{ marginBottom:20 }}>
+          <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:8 }}>Live demo - real data</p>
+          <h1 style={{ fontSize:isMobile?20:26, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:8 }}>
+            Six real ICU alarms. Our model analyzed each one.
+          </h1>
+          <p style={{ fontSize:isMobile?13:14, color:"#7f8c8d", lineHeight:1.8 }}>
+            Each scenario comes from real patient alarm recordings in a published hospital dataset. Select any one - the model will analyze the heart signal and tell you whether the alarm is worth acting on.
+          </p>
+        </div>
 
         {/* Scenario picker */}
-        <Reveal delay={0.05}>
-          <div style={{ display:"grid", gridTemplateColumns:isMobile?"repeat(3, 1fr)":"repeat(6, 1fr)", gap:isMobile?8:10, marginBottom:24 }}>
-            {Object.values(SCENARIOS).map((sc: any) => (
-              <button key={sc.id} className={`scard ${selected===sc.id?"active":""}`} onClick={() => pick(sc.id)}>
-                <div style={{ fontSize:isMobile?11:12, fontWeight:selected===sc.id?500:400, color:selected===sc.id?CHARCOAL:"#5d6d7e", marginBottom:2, lineHeight:1.4 }}>{sc.label}</div>
-                <div style={{ fontSize:10, color:"#95a5a6" }}>{sc.bed.split("·")[0].trim()}</div>
-              </button>
-            ))}
-          </div>
-        </Reveal>
+        <div style={{ display:"grid", gridTemplateColumns:isMobile?"repeat(2, 1fr)":"repeat(6, 1fr)", gap:isMobile?8:10, marginBottom:20 }}>
+          {Object.values(SCENARIOS).map((sc: any) => (
+            <button key={sc.id} className={`scard ${selected===sc.id?"active":""}`} onClick={() => pick(sc.id)}>
+              <div style={{ fontSize:isMobile?11:12, fontWeight:selected===sc.id?500:400, color:selected===sc.id?CHARCOAL:"#5d6d7e", marginBottom:2, lineHeight:1.3 }}>{sc.label}</div>
+              <div style={{ fontSize:9, color:"#95a5a6" }}>{sc.bed.split("·")[0].trim()}</div>
+            </button>
+          ))}
+        </div>
 
         {/* Main story */}
-        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
 
           {/* Step 1 */}
-          <Reveal delay={0.05}>
-            <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-                <div style={{ width:28, height:28, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:R, fontFamily:"DM Mono", flexShrink:0 }}>01</div>
-                <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What happened</div>
-              </div>
-              <div style={{ display:"flex", flexDirection:isMobile?"column":"row", gap:isMobile?14:24, alignItems:"start" }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>{s.bed} · {s.alarm_type}</div>
-                  <p style={{ fontSize:isMobile?13:14, color:"#5d6d7e", lineHeight:1.8 }}>{s.situation}</p>
-                </div>
-                <div style={{ flexShrink:0, textAlign:isMobile?"left":"right" }}>
-                  <div style={{ fontSize:11, color:"#95a5a6", marginBottom:6 }}>What actually happened</div>
-                  <div style={{ display:"inline-block", fontSize:12, padding:"4px 14px", borderRadius:100, background:s.ground_truth?"#fdf0ef":"#edf7f1", border:`1px solid ${s.ground_truth?"#e8b4b0":"#a8d5b5"}`, color:s.ground_truth?R:"#1e8449" }}>
-                    {s.ground_truth_plain}
-                  </div>
-                </div>
-              </div>
+          <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+              <div style={{ width:26, height:26, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:R, fontFamily:"DM Mono", flexShrink:0 }}>01</div>
+              <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What happened</div>
             </div>
-          </Reveal>
+            <div style={{ marginBottom:10 }}>
+              <div style={{ fontSize:10, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>{s.bed} · {s.alarm_type}</div>
+              <p style={{ fontSize:isMobile?13:14, color:"#5d6d7e", lineHeight:1.7 }}>{s.situation}</p>
+            </div>
+            <div style={{ display:"inline-block", fontSize:12, padding:"4px 14px", borderRadius:100, background:s.ground_truth?"#fdf0ef":"#edf7f1", border:`1px solid ${s.ground_truth?"#e8b4b0":"#a8d5b5"}`, color:s.ground_truth?R:"#1e8449" }}>
+              {s.ground_truth_plain}
+            </div>
+          </div>
 
           {/* Step 2 */}
-          <Reveal delay={0.08}>
-            <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-                <div style={{ width:28, height:28, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:R, fontFamily:"DM Mono", flexShrink:0 }}>02</div>
-                <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What the monitor did</div>
-              </div>
-              <div style={{ padding:"12px 16px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, marginBottom:14, fontSize:13, color:"#5d6d7e" }}>
-                {s.what_monitor_said}
-              </div>
-              <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>
-                Raw heart signal - 60 seconds of data
-              </div>
-              <Waveform signal={s.signal} active={phase==="result"} />
-              <div style={{ fontSize:11, color:"#bdc3c7", marginTop:8 }}>
-                This is the actual electrical signal from the patient's heart. SigmaMedStat analyzes the full 60-second window - not just the moment the alarm fired.
-              </div>
+          <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+              <div style={{ width:26, height:26, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:R, fontFamily:"DM Mono", flexShrink:0 }}>02</div>
+              <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What the monitor did</div>
             </div>
-          </Reveal>
+            <div style={{ padding:"10px 14px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, marginBottom:12, fontSize:13, color:"#5d6d7e" }}>
+              {s.what_monitor_said}
+            </div>
+            <div style={{ fontSize:10, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>
+              Raw heart signal - 60 seconds
+            </div>
+            <Waveform signal={s.signal} active={phase==="result"} />
+            <div style={{ fontSize:11, color:"#bdc3c7", marginTop:6 }}>
+              This is the actual electrical signal from the patient's heart. SigmaMedStat analyzes the full 60-second window - not just the moment the alarm fired.
+            </div>
+          </div>
 
           {/* Step 3 */}
-          <Reveal delay={0.1}>
-            <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-                <div style={{ width:28, height:28, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:R, fontFamily:"DM Mono", flexShrink:0 }}>03</div>
-                <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What SigmaMedStat found</div>
-              </div>
-
-              {phase==="analyzing" && (
-                <div style={{ padding:"18px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, fontSize:13, color:"#7f8c8d" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
-                    <div style={{ display:"flex", gap:4 }}>
-                      {[0,1,2].map(i => <div key={i} style={{ width:4, height:4, borderRadius:"50%", background:"#95a5a6", animation:`dotBounce 1.2s ease ${i*0.2}s infinite` }} />)}
-                    </div>
-                    <span style={{ fontWeight:500, color:CHARCOAL }}>Pipeline running...</span>
-                  </div>
-                  <div style={{ fontSize:12, color:"#95a5a6", lineHeight:1.7 }}>
-                    Step 1 - Converting signal to time-frequency heat map...<br/>
-                    Step 2 - EfficientNet extracting 1,280 signal features...<br/>
-                    Step 3 - Neural classifier calculating alarm probability...
-                  </div>
-                </div>
-              )}
-
-              {phase==="result" && (
-                <div className="fade">
-                  <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:10, marginBottom:16 }}>
-                    {[
-                      { n:"1", title:"Signal → Image", body:"60 seconds of raw signal converted into a visual heat map. Patterns invisible in numbers become visible as shapes." },
-                      { n:"2", title:"Image → Features", body:"EfficientNet analyzed the heat map and extracted 1,280 measurements describing the signal's time-frequency patterns." },
-                      { n:"3", title:"Features → Decision", body:"A neural classifier took those 1,280 measurements and calculated the probability that this alarm is real vs. a device error." },
-                    ].map((step,i) => (
-                      <div key={i} style={{ padding:"12px 14px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
-                        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
-                          <div style={{ width:22, height:22, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:R, flexShrink:0 }}>{step.n}</div>
-                          <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL }}>{step.title}</div>
-                        </div>
-                        <div style={{ fontSize:12, color:"#7f8c8d", lineHeight:1.6 }}>{step.body}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div style={{ padding:"14px 18px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, fontSize:13, color:"#5d6d7e", lineHeight:1.7, marginBottom:14 }}>
-                    {s.what_sigmamedstat_found}
-                  </div>
-
-                  {/* Animated probability bars */}
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
-                    <div style={{ padding:"12px 14px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
-                      <div style={{ fontSize:11, color:"#95a5a6", marginBottom:6 }}>Chance this is a device error</div>
-                      <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                        <div style={{ fontSize:20, fontWeight:300, color:"#1e8449", fontFamily:"DM Mono", flexShrink:0 }}>{(pred.false_alarm_prob*100).toFixed(0)}%</div>
-                        <AnimatedBar value={pred.false_alarm_prob*100} color="#27ae60" trigger={phase==="result"} />
-                      </div>
-                    </div>
-                    <div style={{ padding:"12px 14px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
-                      <div style={{ fontSize:11, color:"#95a5a6", marginBottom:6 }}>Chance this is a real emergency</div>
-                      <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                        <div style={{ fontSize:20, fontWeight:300, color:R, fontFamily:"DM Mono", flexShrink:0 }}>{(pred.true_alarm_prob*100).toFixed(0)}%</div>
-                        <AnimatedBar value={pred.true_alarm_prob*100} color={R} trigger={phase==="result"} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+          <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+              <div style={{ width:26, height:26, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:R, fontFamily:"DM Mono", flexShrink:0 }}>03</div>
+              <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What SigmaMedStat found</div>
             </div>
-          </Reveal>
+
+            {phase==="analyzing" && (
+              <div style={{ padding:"16px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, fontSize:13, color:"#7f8c8d" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                  <div style={{ display:"flex", gap:4 }}>
+                    {[0,1,2].map(i => <div key={i} style={{ width:4, height:4, borderRadius:"50%", background:"#95a5a6", animation:`dotBounce 1.2s ease ${i*0.2}s infinite` }} />)}
+                  </div>
+                  <span style={{ fontWeight:500, color:CHARCOAL }}>Pipeline running...</span>
+                </div>
+                <div style={{ fontSize:12, color:"#95a5a6", lineHeight:1.7 }}>
+                  Step 1 - Converting signal to time-frequency heat map...<br/>
+                  Step 2 - EfficientNet extracting 1,280 signal features...<br/>
+                  Step 3 - Neural classifier calculating alarm probability...
+                </div>
+              </div>
+            )}
+
+            {phase==="result" && (
+              <div className="fade">
+                <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:8, marginBottom:14 }}>
+                  {[
+                    { n:"1", title:"Signal → Image", body:"60 seconds of raw signal converted into a visual heat map. Patterns invisible in numbers become visible as shapes." },
+                    { n:"2", title:"Image → Features", body:"EfficientNet analyzed the heat map and extracted 1,280 measurements describing the signal's time-frequency patterns." },
+                    { n:"3", title:"Features → Decision", body:"A neural classifier took those 1,280 measurements and calculated the probability that this alarm is real vs. a device error." },
+                  ].map((step,i) => (
+                    <div key={i} style={{ padding:"10px 12px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                        <div style={{ width:20, height:20, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, color:R, flexShrink:0 }}>{step.n}</div>
+                        <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL }}>{step.title}</div>
+                      </div>
+                      <div style={{ fontSize:12, color:"#7f8c8d", lineHeight:1.5 }}>{step.body}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ padding:"12px 16px", background:SOFT, borderRadius:8, border:`1px solid ${MID}`, fontSize:13, color:"#5d6d7e", lineHeight:1.7, marginBottom:12 }}>
+                  {s.what_sigmamedstat_found}
+                </div>
+
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                  <div style={{ padding:"10px 12px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
+                    <div style={{ fontSize:10, color:"#95a5a6", marginBottom:6 }}>Device error chance</div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                      <div style={{ fontSize:18, fontWeight:300, color:"#1e8449", fontFamily:"DM Mono", flexShrink:0 }}>{(pred.false_alarm_prob*100).toFixed(0)}%</div>
+                      <AnimatedBar value={pred.false_alarm_prob*100} color="#27ae60" trigger={phase==="result"} />
+                    </div>
+                  </div>
+                  <div style={{ padding:"10px 12px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
+                    <div style={{ fontSize:10, color:"#95a5a6", marginBottom:6 }}>Real emergency chance</div>
+                    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                      <div style={{ fontSize:18, fontWeight:300, color:R, fontFamily:"DM Mono", flexShrink:0 }}>{(pred.true_alarm_prob*100).toFixed(0)}%</div>
+                      <AnimatedBar value={pred.true_alarm_prob*100} color={R} trigger={phase==="result"} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Step 4 */}
           {phase==="result" && (
-            <div className="fade" style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-                <div style={{ width:28, height:28, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, color:R, fontFamily:"DM Mono", flexShrink:0 }}>04</div>
+            <div className="fade" tabIndex={-1} style={{ outline:"none", background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:cardPad }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+                <div style={{ width:26, height:26, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:R, fontFamily:"DM Mono", flexShrink:0 }}>04</div>
                 <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL }}>What to do</div>
               </div>
 
-              <div style={{ padding:"14px 18px", background:verdictBg, border:`1px solid ${verdictBorder}`, borderRadius:10, marginBottom:14 }}>
-                <div style={{ display:"flex", flexDirection:isMobile?"column":"row", alignItems:isMobile?"flex-start":"center", justifyContent:"space-between", gap:isMobile?8:0, marginBottom:8 }}>
-                  <div style={{ fontSize:isMobile?14:16, fontWeight:400, color:verdictColor }}>{s.verdict}</div>
-                  <div style={{ fontSize:12, padding:"3px 12px", borderRadius:100, background:LIGHT, border:`1px solid ${verdictBorder}`, color:verdictColor, alignSelf:"flex-start" }}>
+              <div style={{ padding:"12px 16px", background:verdictBg, border:`1px solid ${verdictBorder}`, borderRadius:10, marginBottom:12 }}>
+                <div style={{ display:"flex", flexDirection:"column", gap:6, marginBottom:8 }}>
+                  <div style={{ fontSize:isMobile?13:16, fontWeight:400, color:verdictColor }}>{s.verdict}</div>
+                  <div style={{ fontSize:11, padding:"2px 10px", borderRadius:100, background:LIGHT, border:`1px solid ${verdictBorder}`, color:verdictColor, alignSelf:"flex-start" }}>
                     {s.confidence}% confident
                   </div>
                 </div>
                 <div style={{ fontSize:13, color:"#5d6d7e", lineHeight:1.7 }}>{s.action}</div>
               </div>
 
-              <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:12 }}>
-                <div style={{ padding:"14px 16px", background:correct?"#edf7f1":"#fdf0ef", borderRadius:8, border:`1px solid ${correct?"#a8d5b5":"#e8b4b0"}` }}>
-                  <div style={{ fontSize:11, color:correct?"#1e8449":R, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>
+              <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:10 }}>
+                <div style={{ padding:"12px 14px", background:correct?"#edf7f1":"#fdf0ef", borderRadius:8, border:`1px solid ${correct?"#a8d5b5":"#e8b4b0"}` }}>
+                  <div style={{ fontSize:10, color:correct?"#1e8449":R, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>
                     {correct?"✓ The model got this right":"✗ The model got this wrong"}
                   </div>
                   <div style={{ fontSize:12, color:"#5d6d7e", lineHeight:1.6 }}>
                     {correct?"The model's prediction matched what was actually happening with this patient.":s.why_wrong}
                   </div>
                 </div>
-                <div style={{ padding:"14px 16px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
-                  <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>Without SigmaMedStat</div>
+                <div style={{ padding:"12px 14px", background:SOFT, borderRadius:8, border:`1px solid ${MID}` }}>
+                  <div style={{ fontSize:10, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>Without SigmaMedStat</div>
                   <div style={{ fontSize:12, color:"#7f8c8d", lineHeight:1.6 }}>{s.without}</div>
                 </div>
               </div>
@@ -414,20 +403,18 @@ export default function DemoPage() {
         </div>
 
         {/* Bottom context */}
-        <Reveal delay={0.05}>
-          <div style={{ marginTop:32, display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:12 }}>
-            {[
-              { title:"Why are there so many false alarms?", body:"Hospital monitors were designed in the 1980s to alarm whenever a reading crosses a threshold. They have no way to distinguish between a sick patient and a loose sensor. The hardware hasn't changed - it just got louder." },
-              { title:"What does the model actually do?", body:"It converts 60 seconds of raw signal into a visual pattern, extracts 1,280 measurements using a computer vision model, and calculates the probability that the alarm reflects something real. All in 34 milliseconds." },
-              { title:"Why does it get some wrong?", body:"The model was trained on 498 recordings and achieves 64% accuracy - meaningfully better than random guessing, but not good enough for clinical deployment yet. Patient-specific training is the next step." },
-            ].map((c,i) => (
-              <div key={i} style={{ padding:"18px 20px", background:LIGHT, border:`1px solid ${MID}`, borderRadius:10 }}>
-                <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{c.title}</div>
-                <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>{c.body}</div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+        <div style={{ marginTop:24, display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:10 }}>
+          {[
+            { title:"Why are there so many false alarms?", body:"Hospital monitors were designed in the 1980s to alarm whenever a reading crosses a threshold. They have no way to distinguish between a sick patient and a loose sensor. The hardware hasn't changed - it just got louder." },
+            { title:"What does the model actually do?", body:"It converts 60 seconds of raw signal into a visual pattern, extracts 1,280 measurements using a computer vision model, and calculates the probability that the alarm reflects something real. All in 34 milliseconds." },
+            { title:"Why does it get some wrong?", body:"The model was trained on 498 recordings and achieves 64% accuracy - meaningfully better than random guessing, but not good enough for clinical deployment yet. Patient-specific training is the next step." },
+          ].map((c,i) => (
+            <div key={i} style={{ padding:"16px 18px", background:LIGHT, border:`1px solid ${MID}`, borderRadius:10 }}>
+              <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{c.title}</div>
+              <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>{c.body}</div>
+            </div>
+          ))}
+        </div>
 
       </div>
     </div>
