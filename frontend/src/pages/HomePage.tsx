@@ -29,7 +29,7 @@ function HospitalAnimation() {
   const isAlarm   = phase === 1
   const isAnalyze = phase === 2
   const isResult  = phase === 3
-  const phaseLabel = ["Everything looks fine","⚠ Something triggered an alarm","Checking if this alarm is real...","Here's what's actually happening"][phase]
+  const phaseLabel = ["Everything looks fine","Something triggered an alarm","Checking if this alarm is real...","Here's what's actually happening"][phase]
   const phaseLabelColor = isAlarm?R:isAnalyze?"#2d6a4f":isResult?"#1b4332":"#7f8c8d"
 
   return (
@@ -48,7 +48,7 @@ function HospitalAnimation() {
               <div style={{ fontSize:12, color:"#7f8c8d", marginTop:2 }}>Blood Oxygen · 2h 14m</div>
             </div>
             <div style={{ fontSize:9, padding:"3px 8px", borderRadius:4, letterSpacing:"0.08em", textTransform:"uppercase", background:isAlarm?"#fdf0ef":"#edf7f1", border:`1px solid ${isAlarm?"#e8b4b0":"#a8d5b5"}`, color:isAlarm?R:"#1e8449", transition:"all 1s" }}>
-              {isAlarm ? "⚠ ALARM" : "● All good"}
+              {isAlarm ? "ALARM" : "● All good"}
             </div>
           </div>
           <div style={{ background:SOFT, borderRadius:6, padding:"10px 12px", marginBottom:14, height:72, overflow:"hidden", border:`1px solid ${MID}` }}>
@@ -111,7 +111,7 @@ function HospitalAnimation() {
             </div>
           </div>
           <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
-            {["Blood oxygen reading froze — sensor lost contact","Patient moved 10 seconds ago","Heart rhythm is completely normal"].map((e,i) => (
+            {["Blood oxygen reading froze because the sensor lost contact","Patient movement detected 10 seconds ago","Heart rhythm is completely normal"].map((e,i) => (
               <div key={i} style={{ display:"flex", gap:8, fontSize:11, color:"#5d6d7e" }}>
                 <span style={{ color:"#27ae60", flexShrink:0 }}>→</span><span>{e}</span>
               </div>
@@ -130,26 +130,26 @@ function IndustrySection() {
   const companies = [
     {
       name:"Traditional bedside monitors",
-      what:"The monitors found in every ICU worldwide are engineering marvels — they measure blood oxygen, heart rhythm, and breathing with remarkable precision. The hardware is excellent.",
-      gap:"They were designed to compare a reading against a fixed threshold. If blood oxygen drops below 90%, the alarm fires. Always. Even if the sensor just slipped off the finger.",
+      what:"The monitors in every ICU around the world are engineering marvels. They measure blood oxygen, heart rhythm, and breathing with remarkable precision. The hardware is excellent.",
+      gap:"They were designed to compare a reading against a fixed threshold. If blood oxygen drops below 90%, the alarm fires every time, even if the sensor has just slipped off the finger.",
       tag:"Hardware"
     },
     {
       name:"Threshold-based alerting systems",
-      what:"Some newer systems let hospitals customize alert thresholds — a doctor can set alarm levels specific to a patient's condition rather than using generic defaults.",
+      what:"Some newer systems let hospitals customize alert thresholds, so doctors can set alarm levels based on a patient’s condition instead of relying on generic defaults.",
       gap:"Customized thresholds still don't know whether a reading is trustworthy. A low blood oxygen alarm fires whether the patient is deteriorating or whether someone bumped the sensor.",
       tag:"Alerting"
     },
     {
       name:"Single-channel monitoring devices",
-      what:"Modern devices measure individual signals with extraordinary accuracy — each sensor is calibrated, validated, and reliable on its own.",
-      gap:"They analyze each signal in isolation. No device currently asks: if blood oxygen looks bad but heart rhythm is perfectly fine, should I trust the blood oxygen reading?",
+      what:"Modern devices measure individual signals with high accuracy. Each sensor is calibrated, validated, and reliable on its own.",
+      gap:"They analyze each signal in isolation. No device really asks: if blood oxygen looks bad but heart rhythm is normal, should we trust that oxygen reading?",
       tag:"Devices"
     },
     {
       name:"Remote alarm management platforms",
-      what:"Cloud-connected platforms let clinical staff view alarms from anywhere — a nurse can silence or escalate an alert from a phone rather than walking to the bedside.",
-      gap:"Remote silencing is still manual. A human still has to decide, alarm by alarm, whether to act. There's no system that evaluates signal quality before the decision reaches the nurse.",
+      what:"Cloud-connected platforms let clinical staff view alarms from anywhere, a nurse can silence or escalate an alert from a phone instead of walking to the bedside. But it’s still manual. A person has to decide, alarm by alarm, whether to act. There’s no system that evaluates whether the signal is trustworthy before it reaches the nurse.",
+      gap:"The nurse is the final decision maker for every single alarm. That’s a lot of pressure when 350 alarms can go off per patient per day. The human brain isn’t designed to evaluate that many signals in real time.",
       tag:"Software"
     },
   ]
@@ -163,7 +163,7 @@ function IndustrySection() {
             The industry is great at measuring signals.<br/>Nobody checks if they can be trusted.
           </h2>
           <p style={{ fontSize:15, color:"#7f8c8d", maxWidth:640, lineHeight:1.8 }}>
-            The companies that build hospital monitors have spent decades perfecting the hardware. The sensors are accurate. The displays are clear. The alarms are loud. What nobody built was a layer that asks — before the alarm fires — is this reading actually telling us something real?
+            Companies that build hospital monitors have spent decades improving the hardware. But what’s missing is a layer that asks, before the alarm goes off, whether the sensor reading actually means something real.
           </p>
         </div>
 
@@ -189,9 +189,9 @@ function IndustrySection() {
         <div style={{ padding:"28px 32px", background:SOFT, borderRadius:12, border:`1px solid ${MID}` }}>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:40, alignItems:"start" }}>
             <div>
-              <div style={{ fontSize:15, fontWeight:400, color:CHARCOAL, marginBottom:12 }}>What SigmaMedStat adds — without replacing anything</div>
+              <div style={{ fontSize:15, fontWeight:400, color:CHARCOAL, marginBottom:12 }}>What SigmaMedStat adds : without replacing anything</div>
               <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8 }}>
-                SigmaMedStat doesn't replace the monitor. It sits alongside it — reading the same signals, but asking a different question. Not "is this reading abnormal?" but "should anyone act on this reading at all?" That question has never had a systematic answer. Until now.
+                SigmaMedStat doesn’t replace the monitor. It sits alongside it, reading the same signals but asking a different question: not “Is this reading abnormal?” but “Should anyone act on this at all?” That question has never really had a systematic answer...until now.
               </div>
             </div>
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
@@ -199,7 +199,7 @@ function IndustrySection() {
                 {them:"Alarm fires when reading crosses a threshold", us:"Signal is evaluated before the alarm reaches the nurse"},
                 {them:"350 alarms per patient per day", us:"Each alarm comes with a confidence score and explanation"},
                 {them:"Nurse decides on every single alarm", us:"Model pre-screens: act now, or stand down"},
-                {them:"No explanation — just a beeping sound", us:"Plain English: what happened and what to do"},
+                {them:"No explanation - just a beeping sound", us:"Plain English: what happened and what to do"},
               ].map((r,i) => (
                 <div key={i} style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, paddingBottom:12, borderBottom:i<3?`1px solid ${MID}`:"none" }}>
                   <div style={{ fontSize:12, color:"#bdc3c7", textDecoration:"line-through", lineHeight:1.6 }}>{r.them}</div>
@@ -219,43 +219,43 @@ function MLSection() {
     {
       num:"01", best:true,
       title:"Teaching a computer to see alarm patterns",
-      subtitle:"We turned raw hospital signals into images and ran them through AI",
-      detail:"We converted 60 seconds of heart monitor data into visual heat maps using a technique called Continuous Wavelet Transform. Then we fed those images into three different AI models originally trained to recognize everyday photos. The question: can an AI learn to spot a fake alarm the same way it learned to recognize a dog?",
+      subtitle:"Raw hospital signals are converted into images and analyzed using AI.",
+      detail:"Sixty seconds of heart monitor data are converted into visual heat maps using a technique called Continuous Wavelet Transform. Those images are then fed into three different AI models originally trained on everyday photographs. The question is whether an AI can learn to detect a false alarm the same way it learned to recognize a dog.",
       models:["ResNet18","ResNet50","EfficientNet"],
       results:[
         {name:"EfficientNet + Neural Classifier", auc:0.641, best:true},
         {name:"EfficientNet + Logistic Regression", auc:0.587, best:false},
         {name:"ResNet18 + SVM", auc:0.542, best:false},
       ],
-      finding:"EfficientNet won. It correctly identified real vs fake alarms 64% of the time — better than any other approach we tried. The visual heat map approach captures signal patterns you simply can't see by looking at raw numbers.",
+      finding:"EfficientNet won. It correctly identified real versus false alarms 64% of the time, outperforming other approaches tested. The visual heat map method captures signal patterns that are not visible when looking at raw numbers alone.",
       findingColor:"#1b4332", findingBg:"#edf7f1", findingBorder:"#a8d5b5",
     },
     {
       num:"02", best:false,
       title:"What if we measure the signals the old-fashioned way?",
-      subtitle:"We extracted 103 clinical measurements and let the algorithm decide",
-      detail:"Instead of images, we measured everything we could about each signal directly — how noisy it is, its dominant frequency, how correlated the channels are, how much it varies over time. We extracted 103 measurements per recording, then ran a full hyperparameter sweep to find the best model settings.",
+      subtitle:"103 clinical measurements were extracted and the algorithm was allowed to determine the outcome.",
+      detail:"Instead of images, every measurable property of each signal was captured directly...noise levels, dominant frequency, cross-channel correlation, and variation over time. In total, 103 features were extracted per recording, followed by a full hyperparameter sweep to identify the best model settings.",
       models:["XGBoost","Random Forest","Gradient Boosting","SVM"],
       results:[
         {name:"SVM (best settings)", auc:0.539, best:true},
         {name:"XGBoost (tuned)", auc:0.517, best:false},
         {name:"Gradient Boosting", auc:0.465, best:false},
       ],
-      finding:"This approach underperformed the image-based one. The measurements we could define by hand weren't as informative as the visual patterns the AI discovered on its own. The signal contains information that humans haven't yet figured out how to describe.",
+      finding:"This approach underperformed the image-based method. The hand-defined measurements were not as informative as the visual patterns the AI learned on its own. The signal contains information that hasn’t yet been fully captured in human-defined features.",
       findingColor:"#7d4e00", findingBg:"#fdf3e3", findingBorder:"#f0c87a",
     },
     {
       num:"03", best:false,
       title:"Different alarms need different models",
-      subtitle:"We trained a separate model for each type of heart alarm",
-      detail:"Hospitals see four main alarm types — irregular heartbeat, stopped heart, too fast, too slow. Each looks completely different on a monitor. We built a beat detector to find individual heartbeats, measured their shape and timing, then trained a separate model for each alarm type.",
+      subtitle:"A separate model was trained for each type of heart alarm.",
+      detail:"Hospitals deal with four main alarm types: irregular heartbeat, stopped heart, too fast, and too slow. Each one looks different on a monitor. A beat detector was built to identify individual heartbeats, measure their shape and timing, and then a separate model was trained for each alarm type.",
       models:["XGBoost per alarm type","Pan-Tompkins Beat Detector"],
       results:[
         {name:"Rapid heartbeat model", auc:0.612, best:true},
         {name:"Irregular heartbeat model", auc:0.528, best:false},
         {name:"Stopped heart model", auc:0.478, best:false},
       ],
-      finding:"Rapid heartbeat alarms were easiest to classify correctly (61%). This makes clinical sense — that alarm type has a distinct, measurable pattern. One-size-fits-all models are the wrong approach for this problem.",
+      finding:"Rapid heartbeat alarms were easiest to classify correctly (61%). This makes clinical sense - that alarm type has a distinct, measurable pattern. One-size-fits-all models are the wrong approach for this problem.",
       findingColor:"#1a3a6b", findingBg:"#eaf0fb", findingBorder:"#9db8e8",
     },
   ]
@@ -266,10 +266,10 @@ function MLSection() {
         <div style={{ marginBottom:56 }}>
           <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The research behind it</p>
           <h2 style={{ fontSize:32, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:16 }}>
-            We ran three experiments.<br/>Here's what we learned.
+            Three experiments were run.<br/>Here are the results..
           </h2>
           <p style={{ fontSize:15, color:"#7f8c8d", maxWidth:600, lineHeight:1.8 }}>
-            The first version of SigmaMedStat used hand-coded rules — if the signal flatlines, reduce the trust score. That works, but it's just logic we wrote ourselves. These experiments tested whether a machine learning model trained on 750 real hospital alarm recordings could do better.
+            The first version of SigmaMedStat used hand-coded rules. For example, if the signal flatlines, the trust score is reduced. That approach works, but it is still just logic written by hand. The goal here was to see whether a machine learning model trained on 750 real hospital alarm recordings could outperform the rule-based system.
           </p>
           <div style={{ display:"flex", gap:16, marginTop:24, flexWrap:"wrap" }}>
             {[
@@ -307,7 +307,7 @@ function MLSection() {
                     ))}
                   </div>
                   <div style={{ padding:"12px 16px", borderRadius:8, background:exp.findingBg, border:`1px solid ${exp.findingBorder}` }}>
-                    <div style={{ fontSize:10, color:exp.findingColor, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>What we found</div>
+                    <div style={{ fontSize:10, color:exp.findingColor, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>Key findings</div>
                     <div style={{ fontSize:12, color:exp.findingColor, lineHeight:1.7 }}>{exp.finding}</div>
                   </div>
                 </div>
@@ -349,12 +349,12 @@ function MLSection() {
         {/* Hyperparameter tuning section */}
         <div style={{ marginTop:40, background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:32 }}>
           <div style={{ marginBottom:24 }}>
-            <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>How we tuned the model</p>
+            <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>How the model was tuned</p>
             <h3 style={{ fontSize:22, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.3px", marginBottom:12 }}>
               A different approach to hyperparameter tuning
             </h3>
             <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8, maxWidth:700 }}>
-              Most people tune hyperparameters by instinct or trial and error — try a value, see if it improves, repeat. The problem with that is you're only ever testing one thing at a time and you have no idea how parameters interact with each other. Since Florida Tech, I've used a different method: define an explicit sweep grid, vary one parameter at a time while holding the others fixed at their best known value, and log every result. It takes longer but it gives you a real picture of what each decision actually costs you.
+              Most people tune hyperparameters by instinct or trial and error : change a value, check if performance improves, and repeat. The problem is that only one factor is tested at a time, so interactions between parameters are often missed. A more structured approach is to define a clear search grid, vary one parameter at a time while holding others fixed at their best known values, and log every result. This takes longer, but it gives a clearer picture of how each decision affects performance. I followed this approach to hyperparameter tuning during my master’s and in other ML projects at the time.
             </p>
           </div>
 
@@ -364,19 +364,19 @@ function MLSection() {
                 param:"Dropout rate",
                 values:"0.2 → 0.3 → 0.4 → 0.5",
                 winner:"0.5",
-                why:"With only 498 training samples, overfitting was our biggest risk. Dropout randomly switches off neurons during training, forcing the model not to rely on any single signal path. We tested four levels. Higher dropout won — the dataset was too small to afford anything less aggressive.",
+                why:"With only 498 training samples, overfitting was the biggest risk. Dropout helps by randomly turning off neurons during training, forcing the model not to rely on any single signal path. Four dropout levels were tested. Higher dropout performed best : the dataset was too small to support anything less aggressive.",
               },
               {
                 param:"Hidden layer size",
                 values:"64 → 128 → 256 → 512",
                 winner:"256",
-                why:"The neural classifier sits on top of 1,280 EfficientNet features. Too small a hidden layer can't learn the patterns. Too large and it memorizes the training data instead of generalizing. 256 neurons hit the sweet spot — big enough to be expressive, small enough to stay honest.",
+                why:"The neural classifier sits on top of 1,280 EfficientNet features. If the hidden layer is too small, it can’t learn the patterns. If it’s too large, it starts memorizing the training data instead of generalizing. A size of 256 neurons hit the sweet spot-large enough to capture the signal, but small enough to avoid overfitting.",
               },
               {
                 param:"Learning rate",
                 values:"0.01 → 0.001 → 0.0001 → 0.00001",
                 winner:"0.0001",
-                why:"Learning rate controls how aggressively the model updates its weights each step. Too high and it overshoots. Too low and it barely moves. The sweep confirmed 1e-4 — aggressive enough to learn, careful enough not to corrupt the pretrained EfficientNet features underneath.",
+                why:"Learning rate controls how aggressively the model updates its weights at each step. Too high, and it overshoots. Too low, and it barely learns. The sweep confirmed that 1e-4 works best - aggressive enough to learn, but careful enough not to distort the pretrained EfficientNet features underneath.",
               },
             ].map((p,i) => (
               <div key={i} style={{ background:SOFT, borderRadius:10, padding:20, border:`1px solid ${MID}` }}>
@@ -397,7 +397,7 @@ function MLSection() {
               <div>
                 <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>What makes this different from most approaches</div>
                 <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8 }}>
-                  The standard approach in most tutorials is random search or manual guessing. What I use is a structured one-parameter-at-a-time sweep with all results logged — so I can look back and explain exactly why each decision was made. I've applied this method across every ML project since Florida Tech. It produces defensible results, not lucky ones.
+                  The standard approach in most tutorials is random search or manual guessing. What I use instead is a structured, one-parameter-at-a-time sweep with all results logged, so each decision can be traced and justified. It produces defensible results, not just lucky ones.
                 </div>
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
@@ -421,7 +421,7 @@ function MLSection() {
         <div style={{ marginTop:24, padding:"28px 32px", background:CHARCOAL, borderRadius:12 }}>
           <div style={{ fontSize:11, color:"#7f8c8d", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The bottom line</div>
           <p style={{ fontSize:15, color:"#ecf0f1", lineHeight:1.8 }}>
-            The image-based approach beat everything else — <span style={{ color:R, fontFamily:"DM Mono" }}>64%</span> accuracy on real hospital alarms the model had never seen before. That's not good enough for clinical deployment yet, but it's a meaningful result on a genuinely hard problem. The next step is training on each patient's individual baseline — a model that learns what "normal" looks like for you specifically, not just for people in general.
+            The image-based approach beat everything else - <span style={{ color:R, fontFamily:"DM Mono" }}>64%</span> accuracy on real hospital alarms the model had never seen before. That's not good enough for clinical deployment yet, but it's a meaningful result on a genuinely hard problem. The next step is training on each patient's individual baseline - a model that learns what "normal" looks like for you specifically, not just for people in general.
           </p>
         </div>
       </div>
@@ -471,12 +471,12 @@ export default function HomePage() {
             <span style={{ fontSize:11, color:R, letterSpacing:"0.1em", textTransform:"uppercase" }}>Built for ICU nurses and the patients they protect</span>
           </div>
           <h1 className="fi d2" style={{ fontSize:"clamp(34px,5.5vw,58px)", fontWeight:300, color:CHARCOAL, lineHeight:1.15, letterSpacing:"-2px", marginBottom:22 }}>
-            Hospital monitors cry wolf<br/>
+            Hospital monitors go off<br/>
             <span style={{ color:R }}>hundreds of times a day.</span><br/>
             Most of it is noise.
           </h1>
           <p className="fi d3" style={{ fontSize:17, color:"#7f8c8d", maxWidth:520, margin:"0 auto 44px", lineHeight:1.8 }}>
-            SigmaMedStat reads the same signals your hospital monitor does — and tells you, before the alarm even reaches the nurse, whether it's worth acting on.
+            SigmaMedStat analyzes the same signals as hospital monitors and determines, before the alarm reaches clinical staff, whether intervention is required. It would basically tell you, before the alarm even reaches the nurse, whether it's worth acting on.
           </p>
           <div className="fi d4" style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
           </div>
@@ -485,7 +485,7 @@ export default function HomePage() {
         {/* Alert strip */}
         <section style={{ background:CHARCOAL, padding:"24px 40px", textAlign:"center" }}>
           <p style={{ fontSize:14, color:"#95a5a6", maxWidth:760, margin:"0 auto", lineHeight:1.8 }}>
-            The Emergency Care Research Institute has listed alarm hazards as the <span style={{ color:"#ecf0f1" }}>#1 health technology danger</span> every single year for over a decade. Not because hospitals aren't trying — but because the monitors themselves have never gotten smarter.
+            The Emergency Care Research Institute has listed alarm hazards as the <span style={{ color:"#ecf0f1" }}>#1 health technology danger</span> every single year for over a decade. Not because hospitals are not trying, but because the monitors themselves have not become smarter.
           </p>
         </section>
 
@@ -494,18 +494,18 @@ export default function HomePage() {
           <div style={{ fontSize:11, color:"#bdc3c7", letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", marginBottom:32 }}>Here's what it looks like in practice</div>
           <HospitalAnimation />
           <div style={{ textAlign:"center", marginTop:20, fontSize:12, color:"#bdc3c7" }}>
-            Simulated scenario — blood oxygen sensor loses contact after patient repositions
+            Simulated scenario: blood oxygen sensor loses contact after the patient repositions.
           </div>
         </section>
 
-        {/* Stats */}
+        {/* Stats */}    
         <section style={{ borderTop:`1px solid ${MID}`, borderBottom:`1px solid ${MID}`, background:LIGHT }}>
           <div style={{ maxWidth:960, margin:"0 auto", padding:"0 40px", display:"flex" }}>
             {[
-              {num:"99%",  label:"of ICU alarms are ignored — most are false positives"},
-              {num:"350+", label:"alarms fired at a single patient every single day"},
-              {num:"34ms", label:"how fast SigmaMedStat evaluates each alarm"},
-              {num:"64%",  label:"accuracy on 750 real hospital alarm recordings"},
+              {num:"99%",  label:"Most ICU alarms are ignored, and most are false positives."},
+              {num:"350+", label:"Alarms are triggered for a single patient every day."},
+              {num:"34ms", label:"How quickly SigmaMedStat evaluates each alarm."},
+              {num:"64%",  label:"Accuracy on 750 real hospital alarm recordings."},
             ].map((s,i) => (
               <div key={i} style={{ flex:1, padding:"36px 0", ...(i>0?{paddingLeft:40, borderLeft:`1px solid ${MID}`}:{}), paddingRight:40 }}>
                 <div style={{ fontSize:36, fontWeight:300, color:R, fontFamily:"DM Mono, monospace", letterSpacing:"-1px" }}>{s.num}</div>
@@ -521,13 +521,13 @@ export default function HomePage() {
             <div>
               <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:20 }}>What's actually happening in hospitals</p>
               <h2 style={{ fontSize:30, fontWeight:300, color:CHARCOAL, lineHeight:1.3, letterSpacing:"-0.5px", marginBottom:20 }}>
-                Nurses have learned to ignore alarms. That's the crisis.
+                In many hospitals, nurses sometimes end up ignoring alarms. That’s the real problem.
               </h2>
               <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8, marginBottom:16 }}>
-                It's not negligence. It's survival. When 99% of alarms mean nothing, your brain stops treating them as emergencies. That's called alarm fatigue — and it's the number one patient safety hazard identified by the Emergency Care Research Institute, year after year.
+                It’s not negligence. It’s just survival. When 99% of alarms don’t mean anything, people start tuning them out. That’s called alarm fatigue, and the Emergency Care Research Institute has ranked it as a top patient safety risk year after year
               </p>
               <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8 }}>
-                The monitors aren't broken. They're doing exactly what they were designed to do — compare a reading to a fixed number and scream if it crosses the line. Nobody ever taught them to ask whether the reading itself should be trusted.
+                The monitors aren’t broken. They’re doing exactly what they were designed to do: compare a reading to a fixed threshold and alert when it crosses the line. But they were never built to question whether the reading itself is reliable.
               </p>
             </div>
             <div className="card">
@@ -536,7 +536,7 @@ export default function HomePage() {
                 {before:"Is this reading outside the normal range?", after:"Should anyone trust this reading at all?"},
                 {before:"Fire the alarm and let the nurse decide", after:"Check the signal first, then decide whether to alarm"},
                 {before:"Nurse is on her 347th alarm of the shift", after:"Only the alarms worth acting on reach the nurse"},
-                {before:"No explanation — just a beeping sound", after:"Plain English: what happened and what to do"},
+                {before:"No explanation - just a beeping sound", after:"Plain English: what happened and what to do"},
               ].map((r,i) => (
                 <div key={i} style={{ paddingBottom:14, marginBottom:14, borderBottom:i<3?`1px solid ${SOFT}`:"none" }}>
                   <div style={{ fontSize:12, color:"#bdc3c7", marginBottom:4, textDecoration:"line-through" }}>{r.before}</div>
@@ -552,13 +552,13 @@ export default function HomePage() {
           <div style={{ maxWidth:960, margin:"0 auto", padding:"80px 40px" }}>
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60 }}>
               <div>
-                <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:24 }}>How it works — in plain English</p>
+                <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:24 }}>How it works</p>
                 <div>
                   {[
-                    {n:"01", title:"It reads the raw signal", body:"SigmaMedStat looks at the actual electrical data coming from the sensor — not just the final reading the monitor displays."},
-                    {n:"02", title:"It checks all signals together", body:"If blood oxygen looks bad but heart rhythm is fine and the patient just moved, that tells a very different story than everything crashing at once."},
-                    {n:"03", title:"It gives a confidence score", body:"Instead of just alarming, it says: 'We're 90% sure this is a sensor slipping off, not a real drop in oxygen.'"},
-                    {n:"04", title:"It tells you what to do", body:"Not medical advice — just what the signal shows. Reattach the sensor. Don't treat the patient. Check back in 30 seconds."},
+                    {n:"01", title:"It reads the raw signal", body:"SigmaMedStat analyzes the raw electrical signals coming from the sensor, not just the final reading displayed by the monitor."},
+                    {n:"02", title:"It checks all signals together", body:"If blood oxygen looks bad but heart rhythm is normal and the patient just moved, that tells a very different story than everything deteriorating at once."},
+                    {n:"03", title:"It gives a confidence score", body:"Instead of just alarming, it says: “We’re 90% sure this is a sensor slipping off, not a real drop in oxygen.”'"},
+                    {n:"04", title:"It tells you what to do", body:"Not medical advice, just what the signal shows: reattach the sensor, don’t treat the patient, and check back in 30 seconds."},
                   ].map(s => (
                     <div key={s.n} className="step">
                       <div className="stepnum">{s.n}</div>
@@ -573,12 +573,12 @@ export default function HomePage() {
               <div>
                 <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:21 }}>What it detects</p>
                 {[
-                  {label:"Sensor fell off or slipped", sub:"The most common cause of false alarms — motion, sweat, repositioning"},
-                  {label:"Electrical interference", sub:"Nearby equipment can corrupt a reading without touching the patient"},
-                  {label:"Signal dropped out completely", sub:"Total loss of data — often a cable issue, not a patient issue"},
-                  {label:"Gradual signal drift", sub:"Long sessions cause sensors to drift — what looked normal at 8am may alarm by 4pm"},
-                  {label:"Genuine emergency", sub:"When multiple signals all degrade together, that's usually real"},
-                  {label:"Regulatory awareness", sub:"Built with IEC 62304 and FDA AI/ML guidance in mind"},
+                  {label:"Sensor fell off or slipped", sub:"The most common causes of false alarms are motion, sweat, and repositioning."},
+                  {label:"Electrical interference", sub:"Nearby equipment can interfere with a reading without ever touching the patient."},
+                  {label:"Signal dropped out completely", sub:"Over long sessions, sensors can drift. What looks normal at 8 a.m. may trigger an alarm by 4 p.m."},
+                  {label:"Gradual signal drift", sub:"Over long sessions, sensors can drift. What looks normal at 8 a.m. may trigger an alarm by 4 p.m."},
+                  {label:"Genuine emergency", sub:"When multiple signals degrade together, it’s usually a real event."},
+                  {label:"Regulatory awareness", sub:"Built with IEC 62304 and U.S. Food and Drug Administration AI/ML guidance in mind."},
                 ].map((f,i) => (
                   <div key={i} style={{ padding:"14px 18px", background:SOFT, border:`1px solid ${MID}`, borderRadius:8, marginBottom:4 }}>
                     <div style={{ fontSize:13, color:CHARCOAL, marginBottom:2 }}>{f.label}</div>
@@ -603,7 +603,7 @@ export default function HomePage() {
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"44px 52px", border:`1px solid ${MID}`, borderRadius:12, background:LIGHT }}>
             <div>
               <h2 style={{ fontSize:24, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:8 }}>Try it on real hospital data</h2>
-              <p style={{ fontSize:14, color:"#95a5a6" }}>Six real ICU alarm events. Real model predictions. See where it gets it right — and where it doesn't.</p>
+              <p style={{ fontSize:14, color:"#95a5a6" }}>Six real ICU alarm events. Real model predictions. See where it gets it right, and where it doesn’t..</p>
             </div>
             <button className="btn" onClick={() => navigate("/demo")} style={{ flexShrink:0, marginLeft:40 }}>Open the demo</button>
           </div>
@@ -613,9 +613,9 @@ export default function HomePage() {
         <footer style={{ borderTop:`1px solid ${MID}`, background:LIGHT }}>
           <div style={{ maxWidth:960, margin:"0 auto", padding:"40px 40px", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:40, alignItems:"start" }}>
             <div>
-              <img src="/logo.png" alt="SigmaMedStat" style={{ height:32, width:"auto", marginBottom:12 }} />
+              <img src="/logo.png" alt="SigmaMedStat" style={{ height:42, width:"auto", marginBottom:12 }} />
               <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>
-                A signal intelligence platform for ICU alarm management. Research project — not FDA cleared.
+                A signal intelligence platform for ICU alarm management. Research project - not FDA cleared.
               </div>
               <div style={{ fontSize:11, color:"#bdc3c7", marginTop:8 }}>IEC 62304 aware · ISO 14971</div>
             </div>
