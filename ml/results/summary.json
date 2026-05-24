@@ -1,0 +1,62 @@
+{
+  "resnet18+LogisticRegression": {
+    "test_auc": 0.46176046176046176,
+    "test_acc": 0.5066666666666667
+  },
+  "resnet18+SVM_RBF": {
+    "test_auc": 0.5422077922077921,
+    "test_acc": 0.4666666666666667
+  },
+  "resnet18+RandomForest": {
+    "test_auc": 0.4956709956709956,
+    "test_acc": 0.5466666666666666
+  },
+  "resnet18+GradientBoosting": {
+    "test_auc": 0.5079365079365079,
+    "test_acc": 0.5333333333333333
+  },
+  "resnet18+NeuralNet": {
+    "test_auc": 0.5007215007215007,
+    "test_acc": 0.52
+  },
+  "resnet50+LogisticRegression": {
+    "test_auc": 0.41991341991341985,
+    "test_acc": 0.4
+  },
+  "resnet50+SVM_RBF": {
+    "test_auc": 0.4231601731601732,
+    "test_acc": 0.4533333333333333
+  },
+  "resnet50+RandomForest": {
+    "test_auc": 0.48412698412698413,
+    "test_acc": 0.4666666666666667
+  },
+  "resnet50+GradientBoosting": {
+    "test_auc": 0.4906204906204906,
+    "test_acc": 0.44
+  },
+  "resnet50+NeuralNet": {
+    "test_auc": 0.4372294372294372,
+    "test_acc": 0.4266666666666667
+  },
+  "efficientnet+LogisticRegression": {
+    "test_auc": 0.5873015873015873,
+    "test_acc": 0.5466666666666666
+  },
+  "efficientnet+SVM_RBF": {
+    "test_auc": 0.5725108225108225,
+    "test_acc": 0.49333333333333335
+  },
+  "efficientnet+RandomForest": {
+    "test_auc": 0.5851370851370852,
+    "test_acc": 0.48
+  },
+  "efficientnet+GradientBoosting": {
+    "test_auc": 0.5483405483405484,
+    "test_acc": 0.4666666666666667
+  },
+  "efficientnet+NeuralNet": {
+    "test_auc": 0.6392496392496393,
+    "test_acc": 0.56
+  }
+}

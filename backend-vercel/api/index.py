@@ -10,7 +10,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 FIXTURES = {
     "clean_spo2_001": {
         "trust_score": 100.0,
@@ -252,3 +251,6 @@ async def analyze_fixture(fixture_id: str):
                      "available": list(FIXTURES.keys())}
         )
     return FIXTURES[fixture_id]
+
+# Vercel handler
+handler = app

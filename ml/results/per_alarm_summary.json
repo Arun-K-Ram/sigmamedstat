@@ -1,0 +1,63 @@
+{
+  "Asystole": {
+    "test_auc": 0.2564102564102564,
+    "test_acc": 0.32,
+    "cv_auc": 0.47777777777777775,
+    "cv_std": 0.09772157475624052,
+    "best_params": {
+      "learning_rate": 0.01,
+      "max_depth": 4,
+      "min_child_weight": 1,
+      "n_estimators": 100,
+      "reg_alpha": 1.0,
+      "reg_lambda": 5.0,
+      "subsample": 1.0
+    }
+  },
+  "Bradycardia": {
+    "test_auc": 0.30864197530864196,
+    "test_acc": 0.3888888888888889,
+    "cv_auc": 0.6285714285714287,
+    "cv_std": 0.08909746919568601,
+    "best_params": {
+      "learning_rate": 0.01,
+      "max_depth": 3,
+      "min_child_weight": 3,
+      "n_estimators": 100,
+      "reg_alpha": 1.0,
+      "reg_lambda": 5.0,
+      "subsample": 1.0
+    }
+  },
+  "Tachycardia": {
+    "test_auc": 0.6122448979591837,
+    "test_acc": 0.5714285714285714,
+    "cv_auc": 0.5120936639118457,
+    "cv_std": 0.10165301947777397,
+    "best_params": {
+      "learning_rate": 0.01,
+      "max_depth": 4,
+      "min_child_weight": 1,
+      "n_estimators": 100,
+      "reg_alpha": 1.0,
+      "reg_lambda": 1.0,
+      "subsample": 1.0
+    }
+  },
+  "Ventricular Flutter/Fib": {
+    "test_auc": 0.41008403361344536,
+    "test_acc": 0.4492753623188406,
+    "cv_auc": 0.5945326278659612,
+    "cv_std": 0.052112611846975784,
+    "best_params": {
+      "learning_rate": 0.01,
+      "max_depth": 6,
+      "min_child_weight": 3,
+      "n_estimators": 300,
+      "reg_alpha": 0,
+      "reg_lambda": 1.0,
+      "subsample": 1.0
+    }
+  },
+  "weighted_average_auc": 0.41003191019997737
+}

@@ -1,0 +1,45 @@
+{
+  "XGBoost (tuned)": {
+    "test_auc": 0.4517333333333333,
+    "test_acc": 0.5,
+    "cv_auc": 0.49727028066128415,
+    "cv_std": 0.04928663578058714
+  },
+  "RandomForest": {
+    "test_auc": 0.49884444444444453,
+    "test_acc": 0.4666666666666667,
+    "cv_auc": 0.4366782006920415,
+    "cv_std": 0.06011449243248285
+  },
+  "GradientBoosting": {
+    "test_auc": 0.46524444444444446,
+    "test_acc": 0.4666666666666667,
+    "cv_auc": 0.4685890042291426,
+    "cv_std": 0.051652405448274624
+  },
+  "LogisticRegression (L1)": {
+    "test_auc": 0.5157333333333334,
+    "test_acc": 0.5333333333333333,
+    "cv_auc": 0.4680507497116494,
+    "cv_std": 0.04251772664672672
+  },
+  "LogisticRegression (L2)": {
+    "test_auc": 0.5388444444444445,
+    "test_acc": 0.52,
+    "cv_auc": 0.4484429065743945,
+    "cv_std": 0.07287240680549568
+  },
+  "SVM (RBF)": {
+    "test_auc": 0.4989333333333334,
+    "test_acc": 0.5,
+    "cv_auc": 0.5277201076509035,
+    "cv_std": 0.045520433925773485
+  },
+  "best_xgb_params": {
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "n_estimators": 200,
+    "reg_alpha": 0.1,
+    "reg_lambda": 5.0
+  }
+}
