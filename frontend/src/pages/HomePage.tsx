@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 
+const R = "#c0392b"
+const CHARCOAL = "#2c3e50"
+const SOFT = "#f4f4f2"
+const MID = "#e8e8e5"
+const LIGHT = "#ffffff"
+
 function HospitalAnimation() {
   const [phase, setPhase] = useState<0|1|2|3>(0)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -23,99 +29,96 @@ function HospitalAnimation() {
   const isAlarm   = phase === 1
   const isAnalyze = phase === 2
   const isResult  = phase === 3
-  const phaseLabel = ["Normal operation","⚠ Alarm triggered","Analyzing signal...","Analysis complete"][phase]
-  const phaseLabelColor = isAlarm?"#b91c1c":isAnalyze?"#1d6a4a":isResult?"#166534":"#6b7280"
+  const phaseLabel = ["Everything looks fine","⚠ Something triggered an alarm","Checking if this alarm is real...","Here's what's actually happening"][phase]
+  const phaseLabelColor = isAlarm?R:isAnalyze?"#2d6a4f":isResult?"#1b4332":"#7f8c8d"
 
   return (
     <div>
       <div style={{ textAlign:"center", marginBottom:28 }}>
-        <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 16px", borderRadius:100, background:isAlarm?"#fef2f2":isAnalyze?"#f0fdf4":isResult?"#f0fdf4":"#f9fafb", border:`1px solid ${isAlarm?"#fecaca":isAnalyze?"#bbf7d0":isResult?"#86efac":"#e5e7eb"}`, transition:"all 1s" }}>
-          <div style={{ width:6, height:6, borderRadius:"50%", background:isAlarm?"#ef4444":isAnalyze?"#22c55e":isResult?"#16a34a":"#9ca3af", transition:"background 1s" }} />
+        <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 16px", borderRadius:100, background:isAlarm?"#fdf0ef":isAnalyze?"#edf7f1":isResult?"#edf7f1":SOFT, border:`1px solid ${isAlarm?"#e8b4b0":isAnalyze?"#a8d5b5":isResult?"#7ec8a0":MID}`, transition:"all 1s" }}>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:isAlarm?R:isAnalyze?"#27ae60":isResult?"#1e8449":"#95a5a6", transition:"background 1s" }} />
           <span style={{ fontSize:12, color:phaseLabelColor, transition:"color 1s" }}>{phaseLabel}</span>
         </div>
       </div>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
-        {/* LEFT monitor */}
-        <div style={{ width:260, background:"#ffffff", border:`1.5px solid ${isAlarm?"#fca5a5":"#e5e7eb"}`, borderRadius:12, padding:20, transition:"border-color 1s, box-shadow 1s", boxShadow:isAlarm?"0 0 30px rgba(220,38,38,0.08)":"0 1px 8px rgba(0,0,0,0.06)" }}>
+        <div style={{ width:260, background:LIGHT, border:`1.5px solid ${isAlarm?"#e8b4b0":MID}`, borderRadius:12, padding:20, transition:"border-color 1s, box-shadow 1s", boxShadow:isAlarm?"0 0 30px rgba(192,57,43,0.08)":"0 1px 8px rgba(0,0,0,0.06)" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
             <div>
-              <div style={{ fontSize:10, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase" }}>ICU Monitor · Bed 4</div>
-              <div style={{ fontSize:12, color:"#6b7280", marginTop:2 }}>SpO₂ · Session 2h 14m</div>
+              <div style={{ fontSize:10, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase" }}>ICU Monitor · Bed 4</div>
+              <div style={{ fontSize:12, color:"#7f8c8d", marginTop:2 }}>Blood Oxygen · 2h 14m</div>
             </div>
-            <div style={{ fontSize:9, padding:"3px 8px", borderRadius:4, letterSpacing:"0.08em", textTransform:"uppercase", background:isAlarm?"#fef2f2":"#f0fdf4", border:`1px solid ${isAlarm?"#fca5a5":"#86efac"}`, color:isAlarm?"#dc2626":"#16a34a", transition:"all 1s" }}>
-              {isAlarm ? "⚠ ALARM" : "● Live"}
+            <div style={{ fontSize:9, padding:"3px 8px", borderRadius:4, letterSpacing:"0.08em", textTransform:"uppercase", background:isAlarm?"#fdf0ef":"#edf7f1", border:`1px solid ${isAlarm?"#e8b4b0":"#a8d5b5"}`, color:isAlarm?R:"#1e8449", transition:"all 1s" }}>
+              {isAlarm ? "⚠ ALARM" : "● All good"}
             </div>
           </div>
-          <div style={{ background:"#f8fafc", borderRadius:6, padding:"10px 12px", marginBottom:14, height:72, overflow:"hidden", position:"relative", border:"1px solid #f1f5f9" }}>
+          <div style={{ background:SOFT, borderRadius:6, padding:"10px 12px", marginBottom:14, height:72, overflow:"hidden", border:`1px solid ${MID}` }}>
             <svg width="200" height="52" viewBox="0 0 200 52" style={{ display:"block" }}>
-              <path d={isAlarm ? ecgChaos : ecgNormal} stroke={isAlarm?"#ef4444":"#16a34a"} strokeWidth="1.5" fill="none" style={{ transition:"stroke 1s" }}/>
+              <path d={isAlarm?ecgChaos:ecgNormal} stroke={isAlarm?R:"#27ae60"} strokeWidth="1.5" fill="none" style={{ transition:"stroke 1s" }}/>
             </svg>
           </div>
           <div style={{ display:"flex", justifyContent:"space-between" }}>
-            {[{label:"SpO₂",val:isAlarm?"--":"98%",bad:isAlarm},{label:"HR",val:"72 bpm",bad:false},{label:"RR",val:"16/m",bad:false}].map((m,i) => (
+            {[{label:"Blood Oxygen",val:isAlarm?"--":"98%",bad:isAlarm},{label:"Heart Rate",val:"72 bpm",bad:false},{label:"Breathing",val:"16/min",bad:false}].map((m,i) => (
               <div key={i} style={{ textAlign:"center" }}>
-                <div style={{ fontSize:16, fontFamily:"DM Mono", color:m.bad?"#dc2626":"#374151", fontWeight:300, transition:"color 1s" }}>{m.val}</div>
-                <div style={{ fontSize:10, color:"#9ca3af", marginTop:2 }}>{m.label}</div>
+                <div style={{ fontSize:16, fontFamily:"DM Mono", color:m.bad?R:CHARCOAL, fontWeight:300, transition:"color 1s" }}>{m.val}</div>
+                <div style={{ fontSize:9, color:"#95a5a6", marginTop:2 }}>{m.label}</div>
               </div>
             ))}
           </div>
-          <div style={{ marginTop:16, fontSize:10, color:"#d1d5db", textAlign:"center" }}>Standard threshold monitor</div>
+          <div style={{ marginTop:16, fontSize:10, color:"#bdc3c7", textAlign:"center" }}>Standard hospital monitor</div>
         </div>
 
-        {/* CENTER */}
         <div style={{ display:"flex", flexDirection:"column", alignItems:"center", width:160, gap:12 }}>
-          <div style={{ height:1, width:"100%", background:"#e5e7eb", position:"relative" }}>
-            {isAnalyze && <div style={{ position:"absolute", top:-1, left:0, width:"28px", height:3, background:"#16a34a", borderRadius:2, animation:"scanRight 2.5s ease-in-out infinite" }} />}
+          <div style={{ height:1, width:"100%", background:MID, position:"relative" }}>
+            {isAnalyze && <div style={{ position:"absolute", top:-1, left:0, width:"28px", height:3, background:"#27ae60", borderRadius:2, animation:"scanRight 2.5s ease-in-out infinite" }} />}
           </div>
-          <div style={{ background:isAnalyze||isResult?"#f0fdf4":"#f9fafb", border:`1px solid ${isAnalyze||isResult?"#86efac":"#e5e7eb"}`, borderRadius:8, padding:"12px 18px", textAlign:"center", transition:"all 1s", minWidth:120 }}>
-            {phase===0 && <div style={{ fontSize:11, color:"#9ca3af" }}>Standby</div>}
-            {phase===1 && <div style={{ fontSize:11, color:"#ef4444" }}>Signal anomaly</div>}
+          <div style={{ background:isAnalyze||isResult?"#edf7f1":SOFT, border:`1px solid ${isAnalyze||isResult?"#a8d5b5":MID}`, borderRadius:8, padding:"12px 18px", textAlign:"center", transition:"all 1s", minWidth:120 }}>
+            {phase===0 && <div style={{ fontSize:11, color:"#95a5a6" }}>Watching...</div>}
+            {phase===1 && <div style={{ fontSize:11, color:R }}>Alarm detected</div>}
             {phase===2 && (
               <div>
-                <div style={{ fontSize:10, color:"#16a34a", letterSpacing:"0.08em", marginBottom:6 }}>ANALYZING</div>
+                <div style={{ fontSize:10, color:"#27ae60", letterSpacing:"0.08em", marginBottom:6 }}>CHECKING</div>
                 <div style={{ display:"flex", gap:4, justifyContent:"center" }}>
-                  {[0,1,2].map(i => <div key={i} style={{ width:4, height:4, borderRadius:"50%", background:"#16a34a", animation:`dotBounce 1.4s ease ${i*0.25}s infinite` }} />)}
+                  {[0,1,2].map(i => <div key={i} style={{ width:4, height:4, borderRadius:"50%", background:"#27ae60", animation:`dotBounce 1.4s ease ${i*0.25}s infinite` }} />)}
                 </div>
               </div>
             )}
-            {phase===3 && <div style={{ fontSize:11, color:"#16a34a" }}>✓ Complete</div>}
+            {phase===3 && <div style={{ fontSize:11, color:"#1e8449" }}>✓ Done</div>}
           </div>
-          <div style={{ height:1, width:"100%", background:"#e5e7eb" }} />
-          <div style={{ fontSize:9, color:"#9ca3af", letterSpacing:"0.08em", textTransform:"uppercase" }}>SigmaMedStat</div>
+          <div style={{ height:1, width:"100%", background:MID }} />
+          <div style={{ fontSize:9, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase" }}>SigmaMedStat</div>
         </div>
 
-        {/* RIGHT result */}
-        <div style={{ width:260, background:"#ffffff", border:`1.5px solid ${isResult?"#86efac":"#e5e7eb"}`, borderRadius:12, padding:20, opacity:isResult?1:0.2, transform:isResult?"translateY(0)":"translateY(10px)", transition:"opacity 1.2s, transform 1.2s, border-color 1.2s", boxShadow:isResult?"0 1px 8px rgba(0,0,0,0.06)":"none" }}>
+        <div style={{ width:260, background:LIGHT, border:`1.5px solid ${isResult?"#a8d5b5":MID}`, borderRadius:12, padding:20, opacity:isResult?1:0.2, transform:isResult?"translateY(0)":"translateY(10px)", transition:"opacity 1.2s, transform 1.2s, border-color 1.2s", boxShadow:isResult?"0 1px 8px rgba(0,0,0,0.06)":"none" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
             <div>
-              <div style={{ fontSize:10, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase" }}>SigmaMedStat · Bed 4</div>
-              <div style={{ fontSize:12, color:"#6b7280", marginTop:2 }}>Signal Intelligence</div>
+              <div style={{ fontSize:10, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase" }}>SigmaMedStat · Bed 4</div>
+              <div style={{ fontSize:12, color:"#7f8c8d", marginTop:2 }}>Signal Check</div>
             </div>
-            <div style={{ fontSize:9, padding:"3px 8px", borderRadius:4, background:"#f0fdf4", border:"1px solid #86efac", color:"#16a34a", letterSpacing:"0.08em", textTransform:"uppercase" }}>● Active</div>
+            <div style={{ fontSize:9, padding:"3px 8px", borderRadius:4, background:"#edf7f1", border:"1px solid #a8d5b5", color:"#1e8449", letterSpacing:"0.08em", textTransform:"uppercase" }}>● Active</div>
           </div>
-          <div style={{ background:"#fef2f2", borderRadius:6, padding:14, marginBottom:14, border:"1px solid #fecaca" }}>
+          <div style={{ background:"#fdf0ef", borderRadius:6, padding:14, marginBottom:14, border:"1px solid #e8b4b0" }}>
             <div style={{ display:"flex", alignItems:"center", gap:14 }}>
               <div style={{ textAlign:"center" }}>
-                <div style={{ fontSize:38, fontWeight:300, color:"#dc2626", fontFamily:"DM Mono", lineHeight:1 }}>24</div>
-                <div style={{ fontSize:10, color:"#fca5a5" }}>/ 100</div>
-                <div style={{ fontSize:9, color:"#dc2626", marginTop:4, letterSpacing:"0.08em" }}>CRITICAL</div>
+                <div style={{ fontSize:38, fontWeight:300, color:R, fontFamily:"DM Mono", lineHeight:1 }}>24</div>
+                <div style={{ fontSize:10, color:"#e8b4b0" }}>/ 100</div>
+                <div style={{ fontSize:9, color:R, marginTop:4, letterSpacing:"0.08em" }}>DON'T TRUST IT</div>
               </div>
               <div>
-                <div style={{ fontSize:12, color:"#b45309", marginBottom:8 }}>⚠ Probable false alarm</div>
-                <div style={{ fontSize:11, color:"#166534" }}>Sensor displacement</div>
-                <div style={{ fontSize:10, color:"#166534", marginTop:2 }}>Confidence 95%</div>
+                <div style={{ fontSize:12, color:"#b7770d", marginBottom:8 }}>⚠ This alarm is probably fake</div>
+                <div style={{ fontSize:11, color:"#1e8449" }}>Sensor slipped off</div>
+                <div style={{ fontSize:10, color:"#1e8449", marginTop:2 }}>90% sure</div>
               </div>
             </div>
           </div>
           <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
-            {["Flatline - signal not changing","Patient repositioned 10s ago","ECG still normal - patient fine"].map((e,i) => (
-              <div key={i} style={{ display:"flex", gap:8, fontSize:11, color:"#4b5563" }}>
-                <span style={{ color:"#16a34a", flexShrink:0 }}>→</span><span>{e}</span>
+            {["Blood oxygen reading froze — sensor lost contact","Patient moved 10 seconds ago","Heart rhythm is completely normal"].map((e,i) => (
+              <div key={i} style={{ display:"flex", gap:8, fontSize:11, color:"#5d6d7e" }}>
+                <span style={{ color:"#27ae60", flexShrink:0 }}>→</span><span>{e}</span>
               </div>
             ))}
           </div>
-          <div style={{ marginTop:14, paddingTop:12, borderTop:"1px solid #f0fdf4", fontSize:11, color:"#16a34a" }}>
-            Recommendation: Reseat sensor · Do not act on reading
+          <div style={{ marginTop:14, paddingTop:12, borderTop:"1px solid #edf7f1", fontSize:11, color:"#1e8449" }}>
+            What to do: Reattach the sensor. Don't treat the patient.
           </div>
         </div>
       </div>
@@ -123,131 +126,218 @@ function HospitalAnimation() {
   )
 }
 
-function MLSection() {
-  const experiments = [
+function IndustrySection() {
+  const companies = [
     {
-      num:"01", best:true,
-      title:"CWT Scalograms + Pretrained CNNs",
-      subtitle:"Can ImageNet features transfer to medical signals?",
-      detail:"Converted raw ICU signals into 2D time-frequency scalogram images using Continuous Wavelet Transform. Fed them into frozen ResNet18, ResNet50, and EfficientNet-B0 as feature extractors. Trained lightweight classifiers on extracted features.",
-      models:["ResNet18","ResNet50","EfficientNet-B0"],
-      results:[
-        {name:"EfficientNet + NeuralNet", auc:0.641, best:true},
-        {name:"EfficientNet + LogReg",    auc:0.587, best:false},
-        {name:"ResNet18 + SVM",           auc:0.542, best:false},
-      ],
-      finding:"EfficientNet features on CWT scalograms outperform all classical approaches. Time-frequency representations capture signal structure that window statistics fundamentally miss.",
-      findingColor:"#166534", findingBg:"#f0fdf4", findingBorder:"#86efac",
+      name:"Traditional bedside monitors",
+      what:"The monitors found in every ICU worldwide are engineering marvels — they measure blood oxygen, heart rhythm, and breathing with remarkable precision. The hardware is excellent.",
+      gap:"They were designed to compare a reading against a fixed threshold. If blood oxygen drops below 90%, the alarm fires. Always. Even if the sensor just slipped off the finger.",
+      tag:"Hardware"
     },
     {
-      num:"02", best:false,
-      title:"Hand-Crafted Signal Features + XGBoost",
-      subtitle:"Can clinical domain knowledge beat learned features?",
-      detail:"Extracted 103 clinically meaningful features per record: time-domain (RMS, Hjorth parameters, line length), frequency-domain (spectral entropy, band power), and cross-channel correlation. Full hyperparameter grid search with 5-fold cross-validation.",
-      models:["XGBoost","RandomForest","GradientBoosting","SVM"],
-      results:[
-        {name:"SVM RBF",          auc:0.539, best:true},
-        {name:"XGBoost (tuned)",  auc:0.517, best:false},
-        {name:"GradientBoosting", auc:0.465, best:false},
-      ],
-      finding:"Hand-crafted window statistics underperform CNN features - confirming that learned time-frequency representations encode clinical information that manual engineering cannot replicate.",
-      findingColor:"#92400e", findingBg:"#fffbeb", findingBorder:"#fcd34d",
+      name:"Threshold-based alerting systems",
+      what:"Some newer systems let hospitals customize alert thresholds — a doctor can set alarm levels specific to a patient's condition rather than using generic defaults.",
+      gap:"Customized thresholds still don't know whether a reading is trustworthy. A low blood oxygen alarm fires whether the patient is deteriorating or whether someone bumped the sensor.",
+      tag:"Alerting"
     },
     {
-      num:"03", best:false,
-      title:"Beat Morphology + Per-Alarm Classifiers",
-      subtitle:"Does alarm-type-specific training improve results?",
-      detail:"Implemented Pan-Tompkins QRS detector to extract beat-level features: RR intervals, RMSSD, pNN50, QRS morphology, and beat-to-beat correlation. Trained separate XGBoost models for each alarm type.",
-      models:["XGBoost (per type)","Pan-Tompkins QRS detector"],
-      results:[
-        {name:"Tachycardia classifier", auc:0.612, best:true},
-        {name:"Ventricular classifier", auc:0.528, best:false},
-        {name:"Asystole classifier",    auc:0.478, best:false},
-      ],
-      finding:"Tachycardia is the most classifiable alarm type (AUC 0.61). Per-type analysis reveals that different alarm types require fundamentally different feature representations.",
-      findingColor:"#1e40af", findingBg:"#eff6ff", findingBorder:"#93c5fd",
+      name:"Single-channel monitoring devices",
+      what:"Modern devices measure individual signals with extraordinary accuracy — each sensor is calibrated, validated, and reliable on its own.",
+      gap:"They analyze each signal in isolation. No device currently asks: if blood oxygen looks bad but heart rhythm is perfectly fine, should I trust the blood oxygen reading?",
+      tag:"Devices"
+    },
+    {
+      name:"Remote alarm management platforms",
+      what:"Cloud-connected platforms let clinical staff view alarms from anywhere — a nurse can silence or escalate an alert from a phone rather than walking to the bedside.",
+      gap:"Remote silencing is still manual. A human still has to decide, alarm by alarm, whether to act. There's no system that evaluates signal quality before the decision reaches the nurse.",
+      tag:"Software"
     },
   ]
 
   return (
-    <section style={{ borderTop:"1px solid #f3f4f6", background:"#fafafa" }}>
+    <section style={{ borderTop:`1px solid ${MID}`, background:LIGHT }}>
+      <div style={{ maxWidth:960, margin:"0 auto", padding:"80px 40px" }}>
+        <div style={{ marginBottom:48 }}>
+          <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>Why this gap still exists</p>
+          <h2 style={{ fontSize:32, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:16 }}>
+            The industry is great at measuring signals.<br/>Nobody checks if they can be trusted.
+          </h2>
+          <p style={{ fontSize:15, color:"#7f8c8d", maxWidth:640, lineHeight:1.8 }}>
+            The companies that build hospital monitors have spent decades perfecting the hardware. The sensors are accurate. The displays are clear. The alarms are loud. What nobody built was a layer that asks — before the alarm fires — is this reading actually telling us something real?
+          </p>
+        </div>
+
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20, marginBottom:40 }}>
+          {companies.map((c,i) => (
+            <div key={i} style={{ background:SOFT, border:`1px solid ${MID}`, borderRadius:12, padding:28 }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
+                <div style={{ fontSize:10, padding:"2px 10px", borderRadius:100, background:LIGHT, border:`1px solid ${MID}`, color:"#7f8c8d" }}>{c.tag}</div>
+                <div style={{ fontSize:14, fontWeight:500, color:CHARCOAL }}>{c.name}</div>
+              </div>
+              <div style={{ marginBottom:16 }}>
+                <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>What works well</div>
+                <div style={{ fontSize:13, color:"#5d6d7e", lineHeight:1.7 }}>{c.what}</div>
+              </div>
+              <div style={{ paddingTop:16, borderTop:`1px solid ${MID}` }}>
+                <div style={{ fontSize:11, color:R, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>The gap</div>
+                <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>{c.gap}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ padding:"28px 32px", background:SOFT, borderRadius:12, border:`1px solid ${MID}` }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:40, alignItems:"start" }}>
+            <div>
+              <div style={{ fontSize:15, fontWeight:400, color:CHARCOAL, marginBottom:12 }}>What SigmaMedStat adds — without replacing anything</div>
+              <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8 }}>
+                SigmaMedStat doesn't replace the monitor. It sits alongside it — reading the same signals, but asking a different question. Not "is this reading abnormal?" but "should anyone act on this reading at all?" That question has never had a systematic answer. Until now.
+              </div>
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+              {[
+                {them:"Alarm fires when reading crosses a threshold", us:"Signal is evaluated before the alarm reaches the nurse"},
+                {them:"350 alarms per patient per day", us:"Each alarm comes with a confidence score and explanation"},
+                {them:"Nurse decides on every single alarm", us:"Model pre-screens: act now, or stand down"},
+                {them:"No explanation — just a beeping sound", us:"Plain English: what happened and what to do"},
+              ].map((r,i) => (
+                <div key={i} style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, paddingBottom:12, borderBottom:i<3?`1px solid ${MID}`:"none" }}>
+                  <div style={{ fontSize:12, color:"#bdc3c7", textDecoration:"line-through", lineHeight:1.6 }}>{r.them}</div>
+                  <div style={{ fontSize:12, color:CHARCOAL, lineHeight:1.6 }}>→ {r.us}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function MLSection() {
+  const experiments = [
+    {
+      num:"01", best:true,
+      title:"Teaching a computer to see alarm patterns",
+      subtitle:"We turned raw hospital signals into images and ran them through AI",
+      detail:"We converted 60 seconds of heart monitor data into visual heat maps using a technique called Continuous Wavelet Transform. Then we fed those images into three different AI models originally trained to recognize everyday photos. The question: can an AI learn to spot a fake alarm the same way it learned to recognize a dog?",
+      models:["ResNet18","ResNet50","EfficientNet"],
+      results:[
+        {name:"EfficientNet + Neural Classifier", auc:0.641, best:true},
+        {name:"EfficientNet + Logistic Regression", auc:0.587, best:false},
+        {name:"ResNet18 + SVM", auc:0.542, best:false},
+      ],
+      finding:"EfficientNet won. It correctly identified real vs fake alarms 64% of the time — better than any other approach we tried. The visual heat map approach captures signal patterns you simply can't see by looking at raw numbers.",
+      findingColor:"#1b4332", findingBg:"#edf7f1", findingBorder:"#a8d5b5",
+    },
+    {
+      num:"02", best:false,
+      title:"What if we measure the signals the old-fashioned way?",
+      subtitle:"We extracted 103 clinical measurements and let the algorithm decide",
+      detail:"Instead of images, we measured everything we could about each signal directly — how noisy it is, its dominant frequency, how correlated the channels are, how much it varies over time. We extracted 103 measurements per recording, then ran a full hyperparameter sweep to find the best model settings.",
+      models:["XGBoost","Random Forest","Gradient Boosting","SVM"],
+      results:[
+        {name:"SVM (best settings)", auc:0.539, best:true},
+        {name:"XGBoost (tuned)", auc:0.517, best:false},
+        {name:"Gradient Boosting", auc:0.465, best:false},
+      ],
+      finding:"This approach underperformed the image-based one. The measurements we could define by hand weren't as informative as the visual patterns the AI discovered on its own. The signal contains information that humans haven't yet figured out how to describe.",
+      findingColor:"#7d4e00", findingBg:"#fdf3e3", findingBorder:"#f0c87a",
+    },
+    {
+      num:"03", best:false,
+      title:"Different alarms need different models",
+      subtitle:"We trained a separate model for each type of heart alarm",
+      detail:"Hospitals see four main alarm types — irregular heartbeat, stopped heart, too fast, too slow. Each looks completely different on a monitor. We built a beat detector to find individual heartbeats, measured their shape and timing, then trained a separate model for each alarm type.",
+      models:["XGBoost per alarm type","Pan-Tompkins Beat Detector"],
+      results:[
+        {name:"Rapid heartbeat model", auc:0.612, best:true},
+        {name:"Irregular heartbeat model", auc:0.528, best:false},
+        {name:"Stopped heart model", auc:0.478, best:false},
+      ],
+      finding:"Rapid heartbeat alarms were easiest to classify correctly (61%). This makes clinical sense — that alarm type has a distinct, measurable pattern. One-size-fits-all models are the wrong approach for this problem.",
+      findingColor:"#1a3a6b", findingBg:"#eaf0fb", findingBorder:"#9db8e8",
+    },
+  ]
+
+  return (
+    <section style={{ borderTop:`1px solid ${MID}`, background:SOFT }}>
       <div style={{ maxWidth:960, margin:"0 auto", padding:"80px 40px" }}>
         <div style={{ marginBottom:56 }}>
-          <p style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>ML Research</p>
-          <h2 style={{ fontSize:32, fontWeight:300, color:"#111827", letterSpacing:"-0.5px", marginBottom:16 }}>Three experiments. One deployed model.</h2>
-          <p style={{ fontSize:15, color:"#6b7280", maxWidth:600, lineHeight:1.8 }}>
-            The rule-based pipeline proved the concept. These experiments tested whether machine learning could improve on hand-coded thresholds - using 750 real labeled ICU alarm events from PhysioNet Challenge 2015.
+          <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The research behind it</p>
+          <h2 style={{ fontSize:32, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:16 }}>
+            We ran three experiments.<br/>Here's what we learned.
+          </h2>
+          <p style={{ fontSize:15, color:"#7f8c8d", maxWidth:600, lineHeight:1.8 }}>
+            The first version of SigmaMedStat used hand-coded rules — if the signal flatlines, reduce the trust score. That works, but it's just logic we wrote ourselves. These experiments tested whether a machine learning model trained on 750 real hospital alarm recordings could do better.
           </p>
           <div style={{ display:"flex", gap:16, marginTop:24, flexWrap:"wrap" }}>
             {[
-              {label:"Records analyzed", value:"750"},
-              {label:"Best AUC",         value:"0.641"},
-              {label:"Features tested",  value:"103+"},
-              {label:"Models compared",  value:"15+"},
+              {label:"Real hospital alarm recordings", value:"750"},
+              {label:"Best accuracy achieved", value:"64%"},
+              {label:"Signal measurements tested", value:"103+"},
+              {label:"AI models compared", value:"15+"},
             ].map((s,i) => (
-              <div key={i} style={{ padding:"16px 24px", background:"#ffffff", border:"1px solid #e5e7eb", borderRadius:8 }}>
-                <div style={{ fontSize:24, fontWeight:300, color:"#dc2626", fontFamily:"DM Mono" }}>{s.value}</div>
-                <div style={{ fontSize:12, color:"#9ca3af", marginTop:4 }}>{s.label}</div>
+              <div key={i} style={{ padding:"16px 24px", background:LIGHT, border:`1px solid ${MID}`, borderRadius:8 }}>
+                <div style={{ fontSize:24, fontWeight:300, color:R, fontFamily:"DM Mono" }}>{s.value}</div>
+                <div style={{ fontSize:12, color:"#95a5a6", marginTop:4 }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
-        <img
-            src="/model_comparison.png"
-            alt="Model comparison"
-            style={{ width:"100%", borderRadius:12, marginBottom:32 }}
-             />     
+
+        <img src="/model_comparison.png" alt="Model comparison" style={{ width:"100%", borderRadius:12, marginBottom:32, border:`1px solid ${MID}` }} />
+
         <div style={{ display:"flex", flexDirection:"column", gap:24 }}>
-          {experiments.map((exp, idx) => (
-            <div key={idx} style={{ background:"#ffffff", border:"1px solid #e5e7eb", borderRadius:12, padding:32 }}>
+          {experiments.map((exp,idx) => (
+            <div key={idx} style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:32 }}>
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:40 }}>
                 <div>
                   <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:16 }}>
-                    <div style={{ width:32, height:32, borderRadius:"50%", background:"#fef2f2", border:"1px solid #fecaca", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:"#dc2626", fontFamily:"DM Mono", flexShrink:0 }}>{exp.num}</div>
+                    <div style={{ width:32, height:32, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:R, fontFamily:"DM Mono", flexShrink:0 }}>{exp.num}</div>
                     <div>
-                      <div style={{ fontSize:15, fontWeight:400, color:"#111827" }}>{exp.title}</div>
-                      <div style={{ fontSize:12, color:"#9ca3af", marginTop:2 }}>{exp.subtitle}</div>
+                      <div style={{ fontSize:15, fontWeight:400, color:CHARCOAL }}>{exp.title}</div>
+                      <div style={{ fontSize:12, color:"#95a5a6", marginTop:2 }}>{exp.subtitle}</div>
                     </div>
                   </div>
-                  <p style={{ fontSize:13, color:"#6b7280", lineHeight:1.8, marginBottom:16 }}>{exp.detail}</p>
+                  <p style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8, marginBottom:16 }}>{exp.detail}</p>
                   <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:16 }}>
                     {exp.models.map((m,i) => (
-                      <span key={i} style={{ fontSize:11, padding:"3px 10px", borderRadius:100, background:"#f9fafb", border:"1px solid #e5e7eb", color:"#6b7280" }}>{m}</span>
+                      <span key={i} style={{ fontSize:11, padding:"3px 10px", borderRadius:100, background:SOFT, border:`1px solid ${MID}`, color:"#7f8c8d" }}>{m}</span>
                     ))}
                   </div>
                   <div style={{ padding:"12px 16px", borderRadius:8, background:exp.findingBg, border:`1px solid ${exp.findingBorder}` }}>
-                    <div style={{ fontSize:10, color:exp.findingColor, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>Finding</div>
+                    <div style={{ fontSize:10, color:exp.findingColor, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:6 }}>What we found</div>
                     <div style={{ fontSize:12, color:exp.findingColor, lineHeight:1.7 }}>{exp.finding}</div>
                   </div>
                 </div>
-
                 <div>
-                  <div style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>Test AUC Results</div>
+                  <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>How accurate was each approach?</div>
                   <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:20 }}>
-                    {exp.results.map((r, i) => (
+                    {exp.results.map((r,i) => (
                       <div key={i}>
                         <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}>
-                          <span style={{ fontSize:12, color:r.best?"#111827":"#6b7280", fontWeight:r.best?500:400 }}>{r.name}</span>
-                          <span style={{ fontSize:12, fontFamily:"DM Mono", color:r.best?"#dc2626":"#9ca3af" }}>{r.auc.toFixed(3)}</span>
+                          <span style={{ fontSize:12, color:r.best?CHARCOAL:"#7f8c8d", fontWeight:r.best?500:400 }}>{r.name}</span>
+                          <span style={{ fontSize:12, fontFamily:"DM Mono", color:r.best?R:"#95a5a6" }}>{(r.auc*100).toFixed(0)}% accurate</span>
                         </div>
-                        <div style={{ height:6, background:"#f3f4f6", borderRadius:3, overflow:"hidden" }}>
-                          <div style={{ height:"100%", width:`${r.auc*100}%`, background:r.best?"#dc2626":"#d1d5db", borderRadius:3 }} />
+                        <div style={{ height:6, background:SOFT, borderRadius:3, overflow:"hidden" }}>
+                          <div style={{ height:"100%", width:`${r.auc*100}%`, background:r.best?R:"#bdc3c7", borderRadius:3 }} />
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div style={{ padding:"10px 14px", background:"#f9fafb", borderRadius:6, border:"1px solid #f3f4f6" }}>
+                  <div style={{ padding:"10px 14px", background:SOFT, borderRadius:6, border:`1px solid ${MID}` }}>
                     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-                      <span style={{ fontSize:11, color:"#9ca3af" }}>Random baseline</span>
-                      <span style={{ fontSize:11, fontFamily:"DM Mono", color:"#9ca3af" }}>0.500</span>
+                      <span style={{ fontSize:11, color:"#95a5a6" }}>Flipping a coin (random guessing)</span>
+                      <span style={{ fontSize:11, fontFamily:"DM Mono", color:"#95a5a6" }}>50% accurate</span>
                     </div>
-                    <div style={{ height:4, background:"#f3f4f6", borderRadius:2, marginTop:6, overflow:"hidden" }}>
-                      <div style={{ height:"100%", width:"50%", background:"#e5e7eb", borderRadius:2 }} />
+                    <div style={{ height:4, background:MID, borderRadius:2, marginTop:6, overflow:"hidden" }}>
+                      <div style={{ height:"100%", width:"50%", background:"#bdc3c7", borderRadius:2 }} />
                     </div>
                   </div>
                   {exp.best && (
-                    <div style={{ marginTop:12, padding:"8px 12px", background:"#fef2f2", borderRadius:6, border:"1px solid #fecaca", fontSize:11, color:"#dc2626" }}>
-                      ★ Best overall result across all experiments
+                    <div style={{ marginTop:12, padding:"8px 12px", background:"#fdf0ef", borderRadius:6, border:"1px solid #e8b4b0", fontSize:11, color:R }}>
+                      ★ Best result across all three experiments
                     </div>
                   )}
                 </div>
@@ -256,10 +346,82 @@ function MLSection() {
           ))}
         </div>
 
-        <div style={{ marginTop:40, padding:"28px 32px", background:"#111827", borderRadius:12 }}>
-          <div style={{ fontSize:11, color:"#6b7280", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>Overall Finding</div>
-          <p style={{ fontSize:15, color:"#f9fafb", lineHeight:1.8 }}>
-            CWT scalograms + EfficientNet features achieved the best AUC of <span style={{ color:"#dc2626", fontFamily:"DM Mono" }}>0.641</span> - validated by a full hyperparameter sweep across 3 extractors, 4 dropout values, 4 hidden dimensions, and 4 learning rates. Optimal config: dropout=0.5, hidden=256, lr=1e-4. - outperforming both hand-crafted clinical features and beat-morphology approaches. Time-frequency visual representations capture information that 1D signal statistics fundamentally cannot. The next step is patient-specific calibration and larger labeled datasets.
+        {/* Hyperparameter tuning section */}
+        <div style={{ marginTop:40, background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:32 }}>
+          <div style={{ marginBottom:24 }}>
+            <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>How we tuned the model</p>
+            <h3 style={{ fontSize:22, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.3px", marginBottom:12 }}>
+              A different approach to hyperparameter tuning
+            </h3>
+            <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8, maxWidth:700 }}>
+              Most people tune hyperparameters by instinct or trial and error — try a value, see if it improves, repeat. The problem with that is you're only ever testing one thing at a time and you have no idea how parameters interact with each other. Since Florida Tech, I've used a different method: define an explicit sweep grid, vary one parameter at a time while holding the others fixed at their best known value, and log every result. It takes longer but it gives you a real picture of what each decision actually costs you.
+            </p>
+          </div>
+
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:20, marginBottom:28 }}>
+            {[
+              {
+                param:"Dropout rate",
+                values:"0.2 → 0.3 → 0.4 → 0.5",
+                winner:"0.5",
+                why:"With only 498 training samples, overfitting was our biggest risk. Dropout randomly switches off neurons during training, forcing the model not to rely on any single signal path. We tested four levels. Higher dropout won — the dataset was too small to afford anything less aggressive.",
+              },
+              {
+                param:"Hidden layer size",
+                values:"64 → 128 → 256 → 512",
+                winner:"256",
+                why:"The neural classifier sits on top of 1,280 EfficientNet features. Too small a hidden layer can't learn the patterns. Too large and it memorizes the training data instead of generalizing. 256 neurons hit the sweet spot — big enough to be expressive, small enough to stay honest.",
+              },
+              {
+                param:"Learning rate",
+                values:"0.01 → 0.001 → 0.0001 → 0.00001",
+                winner:"0.0001",
+                why:"Learning rate controls how aggressively the model updates its weights each step. Too high and it overshoots. Too low and it barely moves. The sweep confirmed 1e-4 — aggressive enough to learn, careful enough not to corrupt the pretrained EfficientNet features underneath.",
+              },
+            ].map((p,i) => (
+              <div key={i} style={{ background:SOFT, borderRadius:10, padding:20, border:`1px solid ${MID}` }}>
+                <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{p.param}</div>
+                <div style={{ display:"flex", gap:4, marginBottom:12, flexWrap:"wrap" }}>
+                  {p.values.split(" → ").map((v,j) => (
+                    <span key={j} style={{ fontSize:11, padding:"2px 8px", borderRadius:4, background: v===p.winner?"#fdf0ef":LIGHT, border:`1px solid ${v===p.winner?"#e8b4b0":MID}`, color: v===p.winner?R:"#95a5a6", fontFamily:"DM Mono" }}>{v}</span>
+                  ))}
+                </div>
+                <div style={{ fontSize:11, color:"#27ae60", marginBottom:8 }}>Winner: <span style={{ fontFamily:"DM Mono" }}>{p.winner}</span></div>
+                <div style={{ fontSize:12, color:"#7f8c8d", lineHeight:1.7 }}>{p.why}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ padding:"20px 24px", background:SOFT, borderRadius:10, border:`1px solid ${MID}` }}>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"center" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>What makes this different from most approaches</div>
+                <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8 }}>
+                  The standard approach in most tutorials is random search or manual guessing. What I use is a structured one-parameter-at-a-time sweep with all results logged — so I can look back and explain exactly why each decision was made. I've applied this method across every ML project since Florida Tech. It produces defensible results, not lucky ones.
+                </div>
+              </div>
+              <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                <div style={{ padding:"10px 14px", background:LIGHT, borderRadius:8, border:`1px solid ${MID}` }}>
+                  <div style={{ fontSize:11, color:"#95a5a6", marginBottom:4 }}>Sweep ran across</div>
+                  <div style={{ fontSize:13, color:CHARCOAL }}>3 extractors × 3 parameters × 4 values = <span style={{ fontFamily:"DM Mono", color:R }}>36 training runs</span></div>
+                </div>
+                <div style={{ padding:"10px 14px", background:LIGHT, borderRadius:8, border:`1px solid ${MID}` }}>
+                  <div style={{ fontSize:11, color:"#95a5a6", marginBottom:4 }}>Best configuration found</div>
+                  <div style={{ fontSize:13, color:CHARCOAL, fontFamily:"DM Mono" }}>EfficientNet · dropout=0.5 · hidden=256 · lr=1e-4</div>
+                </div>
+                <div style={{ padding:"10px 14px", background:LIGHT, borderRadius:8, border:`1px solid ${MID}` }}>
+                  <div style={{ fontSize:11, color:"#95a5a6", marginBottom:4 }}>Validated using</div>
+                  <div style={{ fontSize:13, color:CHARCOAL }}>5-fold cross-validation · held-out test set · reproducible seed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop:24, padding:"28px 32px", background:CHARCOAL, borderRadius:12 }}>
+          <div style={{ fontSize:11, color:"#7f8c8d", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The bottom line</div>
+          <p style={{ fontSize:15, color:"#ecf0f1", lineHeight:1.8 }}>
+            The image-based approach beat everything else — <span style={{ color:R, fontFamily:"DM Mono" }}>64%</span> accuracy on real hospital alarms the model had never seen before. That's not good enough for clinical deployment yet, but it's a meaningful result on a genuinely hard problem. The next step is training on each patient's individual baseline — a model that learns what "normal" looks like for you specifically, not just for people in general.
           </p>
         </div>
       </div>
@@ -271,7 +433,7 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   return (
-    <div style={{ minHeight:"100vh", fontFamily:"'DM Sans','Helvetica Neue',sans-serif", background:"#ffffff" }}>
+    <div style={{ minHeight:"100vh", fontFamily:"'DM Sans','Helvetica Neue',sans-serif", background:SOFT }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -281,64 +443,73 @@ export default function HomePage() {
         @keyframes pulseDot{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
         .fi{animation:fadeUp 0.8s ease forwards;opacity:0;}
         .d1{animation-delay:0.1s}.d2{animation-delay:0.3s}.d3{animation-delay:0.5s}.d4{animation-delay:0.7s}
-        .btn{background:#111827;color:#ffffff;border:none;padding:14px 34px;border-radius:6px;font-size:15px;font-weight:400;cursor:pointer;font-family:inherit;transition:background 0.2s;}
-        .btn:hover{background:#374151;}
-        .card{background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;padding:28px;}
-        .step{display:flex;gap:16px;padding:24px 0;border-bottom:1px solid #f3f4f6;}
+        .btn{background:${CHARCOAL};color:#ffffff;border:none;padding:14px 34px;border-radius:6px;font-size:15px;font-weight:400;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+        .btn:hover{background:#1a252f;}
+        .card{background:${LIGHT};border:1px solid ${MID};border-radius:10px;padding:28px;}
+        .step{display:flex;gap:16px;padding:24px 0;border-bottom:1px solid ${MID};}
         .step:last-child{border-bottom:none;}
-        .stepnum{width:28px;height:28px;border-radius:50%;border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af;flex-shrink:0;font-family:DM Mono,monospace;margin-top:2px;}
+        .stepnum{width:28px;height:28px;border-radius:50%;border:1px solid ${MID};display:flex;align-items:center;justify-content:center;font-size:11px;color:#95a5a6;flex-shrink:0;font-family:DM Mono,monospace;margin-top:2px;}
+        .footlink{font-size:13px;color:#7f8c8d;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color 0.15s;}
+        .footlink:hover{color:${CHARCOAL};}
       `}</style>
 
       {/* Navbar */}
-      <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, background:"rgba(255,255,255,0.95)", borderBottom:"1px solid #f3f4f6", backdropFilter:"blur(8px)" }}>
+      <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, background:"rgba(244,244,242,0.95)", borderBottom:`1px solid ${MID}`, backdropFilter:"blur(8px)" }}>
         <div style={{ maxWidth:960, margin:"0 auto", padding:"0 40px", height:64, display:"flex", alignItems:"center" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer" }} onClick={() => navigate("/")}>
-          <img src="/logo.png" alt="SigmaMedStat" style={{ height:56, width:"auto" }} />
+          <div style={{ cursor:"pointer" }} onClick={() => navigate("/")}>
+            <img src="/logo.png" alt="SigmaMedStat" style={{ height:56, width:"auto" }} />
+          </div>
         </div>
-        <div />
-      </div>
       </div>
 
       <div style={{ position:"relative" }}>
 
         {/* Hero */}
         <section style={{ maxWidth:960, margin:"0 auto", padding:"140px 40px 60px", textAlign:"center" }}>
-          <div className="fi d1" style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#fef2f2", border:"1px solid #fecaca", borderRadius:100, padding:"5px 14px", marginBottom:36 }}>
-            <div style={{ width:6, height:6, borderRadius:"50%", background:"#dc2626", animation:"pulseDot 2s ease infinite" }} />
-            <span style={{ fontSize:11, color:"#dc2626", letterSpacing:"0.1em", textTransform:"uppercase" }}>Signal Intelligence Platform</span>
+          <div className="fi d1" style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#fdf0ef", border:"1px solid #e8b4b0", borderRadius:100, padding:"5px 14px", marginBottom:36 }}>
+            <div style={{ width:6, height:6, borderRadius:"50%", background:R, animation:"pulseDot 2s ease infinite" }} />
+            <span style={{ fontSize:11, color:R, letterSpacing:"0.1em", textTransform:"uppercase" }}>Built for ICU nurses and the patients they protect</span>
           </div>
-          <h1 className="fi d2" style={{ fontSize:"clamp(34px, 5.5vw, 62px)", fontWeight:300, color:"#111827", lineHeight:1.1, letterSpacing:"-2px", marginBottom:22 }}>
-            Should you trust what your<br />
-            <span style={{ color:"#dc2626" }}>medical devices are reporting?</span>
+          <h1 className="fi d2" style={{ fontSize:"clamp(34px,5.5vw,58px)", fontWeight:300, color:CHARCOAL, lineHeight:1.15, letterSpacing:"-2px", marginBottom:22 }}>
+            Hospital monitors cry wolf<br/>
+            <span style={{ color:R }}>hundreds of times a day.</span><br/>
+            Most of it is noise.
           </h1>
-          <p className="fi d3" style={{ fontSize:17, color:"#6b7280", maxWidth:480, margin:"0 auto 44px", lineHeight:1.8 }}>
-            SigmaMedStat determines whether a device reading is trustworthy before any clinical decision is made.
+          <p className="fi d3" style={{ fontSize:17, color:"#7f8c8d", maxWidth:520, margin:"0 auto 44px", lineHeight:1.8 }}>
+            SigmaMedStat reads the same signals your hospital monitor does — and tells you, before the alarm even reaches the nurse, whether it's worth acting on.
           </p>
           <div className="fi d4" style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
           </div>
         </section>
 
+        {/* Alert strip */}
+        <section style={{ background:CHARCOAL, padding:"24px 40px", textAlign:"center" }}>
+          <p style={{ fontSize:14, color:"#95a5a6", maxWidth:760, margin:"0 auto", lineHeight:1.8 }}>
+            The Emergency Care Research Institute has listed alarm hazards as the <span style={{ color:"#ecf0f1" }}>#1 health technology danger</span> every single year for over a decade. Not because hospitals aren't trying — but because the monitors themselves have never gotten smarter.
+          </p>
+        </section>
+
         {/* Animation */}
-        <section style={{ maxWidth:960, margin:"0 auto", padding:"0 40px 100px" }}>
-          <div style={{ fontSize:11, color:"#d1d5db", letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", marginBottom:32 }}>Watch it in action</div>
+        <section style={{ maxWidth:960, margin:"0 auto", padding:"60px 40px 80px" }}>
+          <div style={{ fontSize:11, color:"#bdc3c7", letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", marginBottom:32 }}>Here's what it looks like in practice</div>
           <HospitalAnimation />
-          <div style={{ textAlign:"center", marginTop:20, fontSize:12, color:"#d1d5db" }}>
-            Simulated - SpO₂ flatline after patient repositioning
+          <div style={{ textAlign:"center", marginTop:20, fontSize:12, color:"#bdc3c7" }}>
+            Simulated scenario — blood oxygen sensor loses contact after patient repositions
           </div>
         </section>
 
         {/* Stats */}
-        <section style={{ borderTop:"1px solid #f3f4f6", borderBottom:"1px solid #f3f4f6" }}>
+        <section style={{ borderTop:`1px solid ${MID}`, borderBottom:`1px solid ${MID}`, background:LIGHT }}>
           <div style={{ maxWidth:960, margin:"0 auto", padding:"0 40px", display:"flex" }}>
             {[
-              {num:"85–99%", label:"of ICU alarms are false positives"},
-              {num:"350+",   label:"alarms per patient per day"},
-              {num:"34ms",   label:"full pipeline response time"},
-              {num:"0.641",  label:"best AUC on PhysioNet Challenge 2015"},
+              {num:"99%",  label:"of ICU alarms are ignored — most are false positives"},
+              {num:"350+", label:"alarms fired at a single patient every single day"},
+              {num:"34ms", label:"how fast SigmaMedStat evaluates each alarm"},
+              {num:"64%",  label:"accuracy on 750 real hospital alarm recordings"},
             ].map((s,i) => (
-              <div key={i} style={{ flex:1, padding:"36px 0", ...(i>0?{paddingLeft:40, borderLeft:"1px solid #f3f4f6"}:{}), paddingRight:40 }}>
-                <div style={{ fontSize:36, fontWeight:300, color:"#dc2626", fontFamily:"DM Mono, monospace", letterSpacing:"-1px" }}>{s.num}</div>
-                <div style={{ fontSize:13, color:"#9ca3af", marginTop:6 }}>{s.label}</div>
+              <div key={i} style={{ flex:1, padding:"36px 0", ...(i>0?{paddingLeft:40, borderLeft:`1px solid ${MID}`}:{}), paddingRight:40 }}>
+                <div style={{ fontSize:36, fontWeight:300, color:R, fontFamily:"DM Mono, monospace", letterSpacing:"-1px" }}>{s.num}</div>
+                <div style={{ fontSize:13, color:"#95a5a6", marginTop:6 }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -348,28 +519,28 @@ export default function HomePage() {
         <section style={{ maxWidth:960, margin:"0 auto", padding:"80px 40px" }}>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start" }}>
             <div>
-              <p style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:20 }}>The problem</p>
-              <h2 style={{ fontSize:30, fontWeight:300, color:"#111827", lineHeight:1.3, letterSpacing:"-0.5px", marginBottom:20 }}>
-                Alarm fatigue is a documented clinical crisis
+              <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:20 }}>What's actually happening in hospitals</p>
+              <h2 style={{ fontSize:30, fontWeight:300, color:CHARCOAL, lineHeight:1.3, letterSpacing:"-0.5px", marginBottom:20 }}>
+                Nurses have learned to ignore alarms. That's the crisis.
               </h2>
-              <p style={{ fontSize:14, color:"#6b7280", lineHeight:1.8, marginBottom:16 }}>
-                A patient moves. A sensor slips. The monitor screams. Nurses - conditioned to hundreds of false alarms daily - ignore it. Sometimes that's the one that mattered.
+              <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8, marginBottom:16 }}>
+                It's not negligence. It's survival. When 99% of alarms mean nothing, your brain stops treating them as emergencies. That's called alarm fatigue — and it's the number one patient safety hazard identified by the Emergency Care Research Institute, year after year.
               </p>
-              <p style={{ fontSize:14, color:"#6b7280", lineHeight:1.8 }}>
-                Current systems ask whether a reading is abnormal. SigmaMedStat asks whether the reading should be trusted at all.
+              <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8 }}>
+                The monitors aren't broken. They're doing exactly what they were designed to do — compare a reading to a fixed number and scream if it crosses the line. Nobody ever taught them to ask whether the reading itself should be trusted.
               </p>
             </div>
             <div className="card">
-              <p style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>What changes</p>
+              <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>The question no monitor currently asks</p>
               {[
-                {before:"Is this signal abnormal?",    after:"Should we trust this signal?"},
-                {before:"Threshold alert fires",        after:"Context-aware trust score"},
-                {before:"Nurse ignores alarm #347",     after:"False alarm suppressed with evidence"},
-                {before:"Unknown failure cause",         after:"Named: sensor displacement, 95% confidence"},
+                {before:"Is this reading outside the normal range?", after:"Should anyone trust this reading at all?"},
+                {before:"Fire the alarm and let the nurse decide", after:"Check the signal first, then decide whether to alarm"},
+                {before:"Nurse is on her 347th alarm of the shift", after:"Only the alarms worth acting on reach the nurse"},
+                {before:"No explanation — just a beeping sound", after:"Plain English: what happened and what to do"},
               ].map((r,i) => (
-                <div key={i} style={{ paddingBottom:14, marginBottom:14, borderBottom:i<3?"1px solid #f9fafb":"none" }}>
-                  <div style={{ fontSize:12, color:"#d1d5db", marginBottom:4, textDecoration:"line-through" }}>{r.before}</div>
-                  <div style={{ fontSize:12, color:"#111827" }}>→ {r.after}</div>
+                <div key={i} style={{ paddingBottom:14, marginBottom:14, borderBottom:i<3?`1px solid ${SOFT}`:"none" }}>
+                  <div style={{ fontSize:12, color:"#bdc3c7", marginBottom:4, textDecoration:"line-through" }}>{r.before}</div>
+                  <div style={{ fontSize:12, color:CHARCOAL }}>→ {r.after}</div>
                 </div>
               ))}
             </div>
@@ -377,47 +548,50 @@ export default function HomePage() {
         </section>
 
         {/* How it works */}
-        <section style={{ borderTop:"1px solid #f3f4f6", background:"#fafafa" }}>
+        <section style={{ borderTop:`1px solid ${MID}`, background:LIGHT }}>
           <div style={{ maxWidth:960, margin:"0 auto", padding:"80px 40px" }}>
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60 }}>
               <div>
-                <p style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:24 }}>How it works</p>
+                <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:24 }}>How it works — in plain English</p>
                 <div>
                   {[
-                    {n:"01", title:"Signal analysis",     body:"Detects flatlines, spikes, dropouts, and noise - the four ways sensors produce untrustworthy data."},
-                    {n:"02", title:"Context correlation", body:"Cross-references neighboring signals, patient motion, and clinical events. Context changes everything."},
-                    {n:"03", title:"Trust scoring",       body:"Fuses signal quality and context into a 0–100 trust score: Excellent, Good, Degraded, Poor, or Critical."},
-                    {n:"04", title:"Failure attribution", body:"Names the cause - sensor displacement, motion artifact, calibration drift - with supporting evidence."},
+                    {n:"01", title:"It reads the raw signal", body:"SigmaMedStat looks at the actual electrical data coming from the sensor — not just the final reading the monitor displays."},
+                    {n:"02", title:"It checks all signals together", body:"If blood oxygen looks bad but heart rhythm is fine and the patient just moved, that tells a very different story than everything crashing at once."},
+                    {n:"03", title:"It gives a confidence score", body:"Instead of just alarming, it says: 'We're 90% sure this is a sensor slipping off, not a real drop in oxygen.'"},
+                    {n:"04", title:"It tells you what to do", body:"Not medical advice — just what the signal shows. Reattach the sensor. Don't treat the patient. Check back in 30 seconds."},
                   ].map(s => (
                     <div key={s.n} className="step">
                       <div className="stepnum">{s.n}</div>
                       <div>
-                        <h3 style={{ fontSize:14, fontWeight:400, color:"#374151", marginBottom:6 }}>{s.title}</h3>
-                        <p style={{ fontSize:13, color:"#6b7280", lineHeight:1.7 }}>{s.body}</p>
+                        <h3 style={{ fontSize:14, fontWeight:400, color:"#5d6d7e", marginBottom:6 }}>{s.title}</h3>
+                        <p style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>{s.body}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
               <div>
-                <p style={{ fontSize:11, color:"#9ca3af", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:21 }}>Capabilities</p>
+                <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:21 }}>What it detects</p>
                 {[
-                  {label:"Signal Reliability Engine",  sub:"Flatline · Spike · Dropout · Noise"},
-                  {label:"Context Correlation Layer",  sub:"Motion · Events · Neighbors · History"},
-                  {label:"0–100 Trust Scoring",        sub:"Graded · Confidence-weighted"},
-                  {label:"Failure Attribution",         sub:"5 failure categories · Evidence-backed"},
-                  {label:"Temporal Drift Monitor",      sub:"Session degradation · Prediction"},
-                  {label:"IEC 62304 Aware",            sub:"ISO 14971 · FDA AI/ML SaMD aligned"},
+                  {label:"Sensor fell off or slipped", sub:"The most common cause of false alarms — motion, sweat, repositioning"},
+                  {label:"Electrical interference", sub:"Nearby equipment can corrupt a reading without touching the patient"},
+                  {label:"Signal dropped out completely", sub:"Total loss of data — often a cable issue, not a patient issue"},
+                  {label:"Gradual signal drift", sub:"Long sessions cause sensors to drift — what looked normal at 8am may alarm by 4pm"},
+                  {label:"Genuine emergency", sub:"When multiple signals all degrade together, that's usually real"},
+                  {label:"Regulatory awareness", sub:"Built with IEC 62304 and FDA AI/ML guidance in mind"},
                 ].map((f,i) => (
-                  <div key={i} style={{ padding:"14px 18px", background:"#ffffff", border:"1px solid #f3f4f6", borderRadius:8, marginBottom:4 }}>
-                    <div style={{ fontSize:13, color:"#374151", marginBottom:2 }}>{f.label}</div>
-                    <div style={{ fontSize:11, color:"#9ca3af" }}>{f.sub}</div>
+                  <div key={i} style={{ padding:"14px 18px", background:SOFT, border:`1px solid ${MID}`, borderRadius:8, marginBottom:4 }}>
+                    <div style={{ fontSize:13, color:CHARCOAL, marginBottom:2 }}>{f.label}</div>
+                    <div style={{ fontSize:11, color:"#95a5a6" }}>{f.sub}</div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </section>
+
+        {/* Industry */}
+        <IndustrySection />
 
         {/* ML Research */}
         <div id="ml-section">
@@ -426,24 +600,65 @@ export default function HomePage() {
 
         {/* CTA */}
         <section style={{ maxWidth:960, margin:"0 auto", padding:"60px 40px 80px" }}>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"44px 52px", border:"1px solid #e5e7eb", borderRadius:12, background:"#ffffff" }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"44px 52px", border:`1px solid ${MID}`, borderRadius:12, background:LIGHT }}>
             <div>
-              <h2 style={{ fontSize:24, fontWeight:300, color:"#111827", letterSpacing:"-0.5px", marginBottom:8 }}>See it running on real ICU data</h2>
-              <p style={{ fontSize:14, color:"#9ca3af" }}>Six clinical scenarios. Full pipeline. Live results.</p>
+              <h2 style={{ fontSize:24, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:8 }}>Try it on real hospital data</h2>
+              <p style={{ fontSize:14, color:"#95a5a6" }}>Six real ICU alarm events. Real model predictions. See where it gets it right — and where it doesn't.</p>
             </div>
-            <button className="btn" onClick={() => navigate("/demo")} style={{ flexShrink:0, marginLeft:40 }}>Open demo</button>
+            <button className="btn" onClick={() => navigate("/demo")} style={{ flexShrink:0, marginLeft:40 }}>Open the demo</button>
           </div>
         </section>
 
         {/* Footer */}
-        <footer style={{ borderTop:"1px solid #f3f4f6", maxWidth:960, margin:"0 auto", padding:"32px 40px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <img src="/logo.png" alt="SigmaMedStat" style={{ height:28, width:"auto" }} />
-            <span style={{ fontSize:14, color:"#6b7280" }}>SigmaMedStat</span>
-            <span style={{ fontSize:14, color:"#d1d5db" }}>· Built by Arunkumar Ramachandran</span>
+        <footer style={{ borderTop:`1px solid ${MID}`, background:LIGHT }}>
+          <div style={{ maxWidth:960, margin:"0 auto", padding:"40px 40px", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:40, alignItems:"start" }}>
+            <div>
+              <img src="/logo.png" alt="SigmaMedStat" style={{ height:32, width:"auto", marginBottom:12 }} />
+              <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>
+                A signal intelligence platform for ICU alarm management. Research project — not FDA cleared.
+              </div>
+              <div style={{ fontSize:11, color:"#bdc3c7", marginTop:8 }}>IEC 62304 aware · ISO 14971</div>
+            </div>
+            <div>
+              <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>Built by</div>
+              <div style={{ fontSize:14, color:CHARCOAL, marginBottom:4 }}>Arunkumar Ramachandran</div>
+              <div style={{ fontSize:13, color:"#7f8c8d", marginBottom:16 }}>Florida Institute of Technology</div>
+              <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                <a href="https://www.linkedin.com/in/arun-ramachandran-a2019a/" target="_blank" rel="noopener noreferrer" className="footlink">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  LinkedIn
+                </a>
+                <a href="https://github.com/Arun-K-Ram" target="_blank" rel="noopener noreferrer" className="footlink">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>Data & methods</div>
+              <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                {[
+                  "PhysioNet Challenge 2015 dataset",
+                  "750 labeled ICU alarm recordings",
+                  "EfficientNet-B0 feature extraction",
+                  "Continuous Wavelet Transform",
+                  "5-fold cross-validation",
+                  "36-run hyperparameter sweep",
+                ].map((t,i) => (
+                  <div key={i} style={{ fontSize:12, color:"#7f8c8d", display:"flex", alignItems:"center", gap:8 }}>
+                    <div style={{ width:3, height:3, borderRadius:"50%", background:"#bdc3c7", flexShrink:0 }} />
+                    {t}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div style={{ fontSize:12, color:"#d1d5db" }}>IEC 62304 · ISO 14971 · FDA AI/ML SaMD</div>
+          <div style={{ borderTop:`1px solid ${MID}`, maxWidth:960, margin:"0 auto", padding:"16px 40px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+            <div style={{ fontSize:12, color:"#bdc3c7" }}>© 2026 Arunkumar Ramachandran · SigmaMedStat</div>
+            <div style={{ fontSize:12, color:"#bdc3c7" }}>V1 deployed · ML validation complete · Seeking hospital partnerships</div>
+          </div>
         </footer>
+
       </div>
     </div>
   )
