@@ -277,7 +277,7 @@ function MLSection() {
   const isMobile = useIsMobile()
   const experiments = [
     {
-      num:"01", best:true,
+      num:"01", best:false,
       title:"Teaching a computer to see alarm patterns",
       subtitle:"Raw hospital signals are converted into images and analyzed using AI.",
       detail:"Sixty seconds of heart monitor data are converted into visual heat maps using a technique called Continuous Wavelet Transform. Those images are then fed into three different AI models originally trained on everyday photographs. The question is whether an AI can learn to detect a false alarm the same way it learned to recognize a dog.",
@@ -306,6 +306,16 @@ function MLSection() {
       finding:"Rapid heartbeat alarms were easiest to classify correctly (61%). One-size-fits-all models are the wrong approach for this problem.",
       findingColor:"#1a3a6b", findingBg:"#eaf0fb", findingBorder:"#9db8e8",
     },
+    {
+      num:"04", best:true,
+      title:"What if the model watches how the signal changes over time?",
+      subtitle:"Each 60-second recording is split into 6 consecutive chunks and fed into a sequence model.",
+      detail:"Instead of treating 60 seconds of signal as a single snapshot, the recording is split into six 10-second chunks. Each chunk becomes a scalogram. A shared EfficientNet encoder processes each chunk, then an LSTM reads the sequence of six feature vectors — learning whether the signal was degrading gradually or changed suddenly.",
+      models:["EfficientNet-B0 encoder","LSTM(hidden=64, layers=2)"],
+      results:[{name:"EfficientNet + LSTM (tuned)", auc:0.825, best:true},{name:"EfficientNet + LSTM (default)", auc:0.777, best:false},{name:"Static EfficientNet baseline", auc:0.641, best:false}],
+      finding:"Temporal modeling won decisively — AUC 0.825, up from 0.641. The LSTM learned that gradual signal degradation across chunks is a strong indicator of a real alarm, while sudden changes are more often artifacts.",
+      findingColor:"#1b4332", findingBg:"#edf7f1", findingBorder:"#a8d5b5",
+    },
   ]
 
   return (
@@ -315,13 +325,13 @@ function MLSection() {
           <div style={{ marginBottom:isMobile?32:56 }}>
             <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The research behind it</p>
             <h2 style={{ fontSize:isMobile?24:32, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:16, lineHeight:1.3 }}>
-              Three experiments were run. Here are the results.
+              Four experiments were run. Here are the results.
             </h2>
             <p style={{ fontSize:isMobile?14:15, color:"#7f8c8d", lineHeight:1.8 }}>
               The first version of SigmaMedStat used hand-coded rules. The goal here was to see whether a machine learning model trained on 750 real hospital alarm recordings could outperform the rule-based system.
             </p>
             <div style={{ display:"flex", gap:12, marginTop:24, flexWrap:"wrap" }}>
-              {[{label:"Real alarm recordings",value:"750"},{label:"Best accuracy",value:"64%"},{label:"Measurements tested",value:"103+"},{label:"Models compared",value:"15+"}].map((s,i) => (
+              {[{label:"Real alarm recordings",value:"750"},{label:"Best accuracy",value:"82%"},{label:"Measurements tested",value:"103+"},{label:"Models compared",value:"20+"}].map((s,i) => (
                 <div key={i} style={{ padding:"14px 20px", background:LIGHT, border:`1px solid ${MID}`, borderRadius:8 }}>
                   <div style={{ fontSize:22, fontWeight:300, color:R, fontFamily:"DM Mono" }}>{s.value}</div>
                   <div style={{ fontSize:11, color:"#95a5a6", marginTop:4 }}>{s.label}</div>
@@ -332,16 +342,14 @@ function MLSection() {
         </Reveal>
 
         <Reveal delay={0.05}>
-          <img src="/model_comparison.png" alt="Model comparison" style={{ width:"100%", borderRadius:12, marginBottom:32, border:`1px solid ${MID}` }} />
+          <img src="/experiment_04_training_curve.png" alt="Experiment 04 training curve — EfficientNet + LSTM vs static baseline" style={{ width:"100%", borderRadius:12, marginBottom:32, border:`1px solid ${MID}` }} />
         </Reveal>
 
         <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
           {experiments.map((exp,idx) => (
-            <Reveal key={idx} delay={idx * 0.1}>
+            <Reveal key={idx} delay={idx * 0.08}>
               <div style={{ background:LIGHT, border:`1px solid ${MID}`, borderRadius:12, padding:isMobile?16:32 }}>
-                {/* On mobile: stack title+detail first, then accuracy */}
                 <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
-                  {/* Title + detail */}
                   <div>
                     <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
                       <div style={{ width:32, height:32, borderRadius:"50%", background:"#fdf0ef", border:"1px solid #e8b4b0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:R, fontFamily:"DM Mono", flexShrink:0 }}>{exp.num}</div>
@@ -362,12 +370,9 @@ function MLSection() {
                     </div>
                   </div>
 
-                  {/* Accuracy - separator on desktop via nested grid */}
-                  {!isMobile ? (
-                    <div style={{ display:"none" }} />
-                  ) : null}
+                  {!isMobile ? <div style={{ display:"none" }} /> : null}
 
-                  <div style={{ borderTop: isMobile ? `1px solid ${MID}` : "none", paddingTop: isMobile ? 16 : 0 }}>
+                  <div style={{ borderTop:isMobile?`1px solid ${MID}`:"none", paddingTop:isMobile?16:0 }}>
                     <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>How accurate was each approach?</div>
                     <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
                       {exp.results.map((r,i) => (
@@ -393,13 +398,12 @@ function MLSection() {
                     </div>
                     {exp.best && (
                       <div style={{ marginTop:12, padding:"8px 12px", background:"#fdf0ef", borderRadius:6, border:"1px solid #e8b4b0", fontSize:11, color:R }}>
-                        ★ Best result across all three experiments
+                        ★ Best result across all four experiments
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Desktop: side by side */}
                 {!isMobile && (
                   <style>{`
                     .exp-grid-${idx} { display: grid !important; grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -424,7 +428,8 @@ function MLSection() {
               </p>
             </div>
 
-            {/* Hyperparameter cards - single col on mobile */}
+            {/* Exp 01 sweep */}
+            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 01 — EfficientNet + Neural Classifier</div>
             <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:isMobile?12:16, marginBottom:24 }}>
               {[
                 { param:"Dropout rate", values:["0.2","0.3","0.4","0.5"], winner:"0.5", why:"With only 498 training samples, overfitting was the biggest risk. Higher dropout performed best - the dataset was too small to support anything less aggressive." },
@@ -433,12 +438,40 @@ function MLSection() {
               ].map((p,i) => (
                 <div key={i} style={{ background:SOFT, borderRadius:10, padding:isMobile?14:18, border:`1px solid ${MID}` }}>
                   <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{p.param}</div>
-                  {/* Values - wrap naturally, bigger touch targets */}
                   <div style={{ display:"flex", gap:6, marginBottom:10, flexWrap:"wrap" }}>
                     {p.values.map((v,j) => (
                       <span key={j} style={{
                         fontSize:11,
-                        padding: isMobile ? "4px 10px" : "2px 8px",
+                        padding:isMobile?"4px 10px":"2px 8px",
+                        borderRadius:4,
+                        background:v===p.winner?"#fdf0ef":LIGHT,
+                        border:`1px solid ${v===p.winner?"#e8b4b0":MID}`,
+                        color:v===p.winner?R:"#95a5a6",
+                        fontFamily:"DM Mono"
+                      }}>{v}</span>
+                    ))}
+                  </div>
+                  <div style={{ fontSize:11, color:"#27ae60", marginBottom:6 }}>Winner: <span style={{ fontFamily:"DM Mono" }}>{p.winner}</span></div>
+                  <div style={{ fontSize:12, color:"#7f8c8d", lineHeight:1.7 }}>{p.why}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Exp 04 sweep */}
+            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 04 — EfficientNet + LSTM</div>
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:isMobile?12:16, marginBottom:24 }}>
+              {[
+                { param:"LSTM hidden size", values:["64","128","256","512"], winner:"64", why:"Smaller hidden size generalized better on 498 samples. Larger sizes memorized the training data before learning meaningful temporal patterns." },
+                { param:"Dropout rate", values:["0.2","0.3","0.4","0.5"], winner:"0.3", why:"The LSTM already provides implicit regularization through its gating mechanism. Less dropout was needed compared to the static classifier." },
+                { param:"Learning rate", values:["0.01","0.001","0.0001","0.00001"], winner:"0.001", why:"Faster than the static model's optimal rate — the LSTM needs more signal early to learn temporal dependencies before the gates saturate." },
+              ].map((p,i) => (
+                <div key={i} style={{ background:SOFT, borderRadius:10, padding:isMobile?14:18, border:`1px solid ${MID}` }}>
+                  <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{p.param}</div>
+                  <div style={{ display:"flex", gap:6, marginBottom:10, flexWrap:"wrap" }}>
+                    {p.values.map((v,j) => (
+                      <span key={j} style={{
+                        fontSize:11,
+                        padding:isMobile?"4px 10px":"2px 8px",
                         borderRadius:4,
                         background:v===p.winner?"#fdf0ef":LIGHT,
                         border:`1px solid ${v===p.winner?"#e8b4b0":MID}`,
@@ -463,8 +496,8 @@ function MLSection() {
                 </div>
                 <div style={{ display:"flex", flexDirection:"column", gap:10, marginTop:isMobile?12:0 }}>
                   {[
-                    {label:"Sweep ran across", value:"3 extractors × 3 parameters × 4 values = 36 runs"},
-                    {label:"Best config found", value:"EfficientNet · dropout=0.5 · hidden=256 · lr=1e-4"},
+                    {label:"Sweep ran across", value:"4 experiments × 3 parameters × 4 values = 48 runs"},
+                    {label:"Best config found", value:"EfficientNet + LSTM · hidden=64 · dropout=0.3 · lr=1e-3"},
                     {label:"Validated using", value:"5-fold cross-validation · held-out test set"},
                   ].map((s,i) => (
                     <div key={i} style={{ padding:"10px 14px", background:LIGHT, borderRadius:8, border:`1px solid ${MID}` }}>
@@ -482,7 +515,7 @@ function MLSection() {
           <div style={{ marginTop:24, padding:isMobile?"20px":"28px 32px", background:CHARCOAL, borderRadius:12 }}>
             <div style={{ fontSize:11, color:"#7f8c8d", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:12 }}>The bottom line</div>
             <p style={{ fontSize:isMobile?14:15, color:"#ecf0f1", lineHeight:1.8 }}>
-              The image-based approach beat everything else - <span style={{ color:R, fontFamily:"DM Mono" }}>64%</span> accuracy on real hospital alarms the model had never seen before. That's not good enough for clinical deployment yet, but it's a meaningful result on a genuinely hard problem. The next step is training on each patient's individual baseline.
+              The image-based approach beat everything else - <span style={{ color:R, fontFamily:"DM Mono" }}>82%</span> accuracy on real hospital alarms the model had never seen before. That's not good enough for clinical deployment yet, but it's a meaningful result on a genuinely hard problem. The next step is training on each patient's individual baseline.
             </p>
           </div>
         </Reveal>
@@ -571,7 +604,7 @@ export default function HomePage() {
                 {num:"99%",  label:"of ICU alarms are ignored - most are false positives"},
                 {num:"350+", label:"alarms fired at a single patient every day"},
                 {num:"34ms", label:"how fast SigmaMedStat evaluates each alarm"},
-                {num:"64%",  label:"accuracy on 750 real hospital alarm recordings"},
+                {num:"82%",  label:"accuracy on 750 real hospital alarm recordings"},
               ].map((s,i) => (
                 <div key={i} style={{ padding:isMobile?"24px 0":"36px 0", ...(isMobile?{borderBottom:i<2?`1px solid ${MID}`:"none",...(i%2===1?{paddingLeft:20,borderLeft:`1px solid ${MID}`}:{})}:{...(i>0?{paddingLeft:40,borderLeft:`1px solid ${MID}`}:{}),paddingRight:40}) }}>
                   <div style={{ fontSize:isMobile?28:36, fontWeight:300, color:R, fontFamily:"DM Mono, monospace", letterSpacing:"-1px" }}>{s.num}</div>
@@ -702,7 +735,7 @@ export default function HomePage() {
             <div>
               <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>Data & methods</div>
               <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-                {["PhysioNet Challenge 2015 dataset","750 labeled ICU alarm recordings","EfficientNet-B0 feature extraction","Continuous Wavelet Transform","5-fold cross-validation","36-run hyperparameter sweep"].map((t,i) => (
+                {["PhysioNet Challenge 2015 dataset","750 labeled ICU alarm recordings","EfficientNet-B0 feature extraction","Continuous Wavelet Transform","5-fold cross-validation","48-run hyperparameter sweep"].map((t,i) => (
                   <div key={i} style={{ fontSize:12, color:"#7f8c8d", display:"flex", alignItems:"center", gap:8 }}>
                     <div style={{ width:3, height:3, borderRadius:"50%", background:"#bdc3c7", flexShrink:0 }} />
                     {t}

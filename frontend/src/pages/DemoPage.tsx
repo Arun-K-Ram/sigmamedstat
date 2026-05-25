@@ -376,7 +376,7 @@ export default function DemoPage() {
           {[
             { title:"Why are there so many false alarms?", body:"Hospital monitors were designed in the 1980s to alarm whenever a reading crosses a threshold. They have no way to distinguish between a sick patient and a loose sensor. The hardware hasn't changed - it just got louder." },
             { title:"What does the model actually do?", body:"It converts 60 seconds of raw signal into a visual pattern, extracts 1,280 measurements using a computer vision model, and calculates the probability that the alarm reflects something real. All in 34 milliseconds." },
-            { title:"Why does it get some wrong?", body:"The model was trained on 498 recordings and achieves 64% accuracy - meaningfully better than random guessing, but not good enough for clinical deployment yet. Patient-specific training is the next step." },
+            { title:"Why does it get some wrong?", body:"The model was trained on 498 recordings and achieves 82% accuracy - meaningfully better than random guessing, but not good enough for clinical deployment yet. Patient-specific training is the next step." },
           ].map((c,i) => (
             <div key={i} style={{ padding:"16px 18px", background:LIGHT, border:`1px solid ${MID}`, borderRadius:10 }}>
               <div style={{ fontSize:13, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{c.title}</div>

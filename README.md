@@ -2,26 +2,110 @@
 
 **Medical device signal reliability intelligence - built for real clinical environments.**
 
-> Current systems ask: *"Is this reading abnormal?"*  
-> SigmaMedStat asks: *"Should we trust this reading at all?"*
+> SigmaMedStat asks: *"Should we trust sensor reading at all?"*
+
+**Live demo:** [sigmamedstat.vercel.app](https://sigmamedstat.vercel.app)
 
 ---
 
 ## What This Is
 
-SigmaMedStat is a real-time signal reliability platform that evaluates the trustworthiness of medical device outputs before any clinical decision is made.
+SigmaMedStat is a signal reliability research platform that evaluates the trustworthiness of medical device outputs before any clinical decision is made.
 
-ICU alarm fatigue is a documented crisis. Studies show nurses ignore 85–99% of alarms - not from negligence, but because current systems fire hundreds of false alerts daily. A sensor slips. A patient moves. The monitor screams. Nobody questions whether the device itself can be trusted. SigmaMedStat does!
+ICU alarm fatigue is a documented crisis. Studies show nurses ignore 85–99% of alarms - not from negligence, but because current systems fire hundreds of false alerts daily. A sensor slips. A patient moves. The monitor screams. Nobody questions whether the device itself can be trusted.
+
+SigmaMedStat does.
+
+> This is a research project. Not FDA cleared. Not for clinical use.
 
 ---
 
 ## The Core Idea
 
-Most medical AI asks: **"What does this signal mean?"**
+SigmaMedStat evaluates every alarm against its raw signal data - converting 60 seconds of electrical activity into time-frequency heat maps, extracting features, and determining whether the alarm reflects a real physiological event or a device artifact.
 
-SigmaMedStat asks: **"Should we believe this signal?"**
+---
 
-It evaluates every reading against its full clinical context - neighboring signals, patient motion, recent events, device session history - and produces a trust score with a plain-English explanation of why a signal is or isn't reliable.
+## ML Results
+
+Four experiments were run on the **PhysioNet Challenge 2015** dataset - 750 real ICU alarm recordings labeled as true or false alarms by clinicians.
+
+| # | Approach | Best Model | Test AUC |
+|---|---|---|---|
+| 01 | CWT scalograms + pretrained CNN (static) | EfficientNet-B0 + Neural Classifier | 0.641 |
+| 02 | 103 hand-crafted signal features | SVM (RBF kernel) | 0.539 |
+| 03 | Per-alarm-type classifiers | Tachycardia XGBoost | 0.612 |
+| **04** | **CWT scalograms + EfficientNet + LSTM (temporal)** | **EfficientNet-B0 + LSTM** | **0.825** ★ |
+
+**Experiment 04 won by a significant margin** - +12 percentage points over the previous best. The key insight: splitting each 60-second recording into 6 consecutive 10-second chunks and modeling them as a sequence allowed the LSTM to detect signal degradation patterns over time. A static classifier sees a snapshot. The LSTM sees a story.
+
+![Experiment 04 Training Curve](frontend/public/experiment_04_training_curve.png)
+
+![Model Comparison](frontend/public/model_comparison.png)
+
+---
+
+## How Experiment 04 Works
+
+Raw signal (60s, 4 channels, 250Hz)
+↓
+Split into 6 × 10-second chunks
+↓
+CWT scalogram per chunk per channel → (6, 4, 64, 64)
+↓
+EfficientNet-B0 encodes each chunk → (6, 1280) feature sequence
+↓
+LSTM(hidden=128, layers=2) learns temporal patterns
+↓
+Classifier head → false alarm / true alarm probability
+
+The model asks: did the signal degrade gradually before the alarm? Did it appear suddenly? Gradual degradation is often a real event. Sudden appearance is often a sensor artifact.
+
+---
+
+## Hyperparameter Tuning
+
+A structured one-parameter-at-a-time sweep was run across all experiments. Every decision is logged and traceable.
+
+### Experiment 01 - EfficientNet + Neural Classifier
+
+| Parameter | Values tested | Winner | Reason |
+|---|---|---|---|
+| Dropout | 0.2 → 0.3 → 0.4 → 0.5 | **0.5** | Small dataset - aggressive dropout prevents overfitting |
+| Hidden layer | 64 → 128 → 256 → 512 | **256** | Sweet spot between capacity and generalization |
+| Learning rate | 0.01 → 0.001 → 0.0001 → 0.00001 | **0.0001** | Preserves pretrained EfficientNet features |
+
+**Best config:** EfficientNet-B0 · dropout=0.5 · hidden=256 · lr=1e-4
+
+### Experiment 04 - EfficientNet + LSTM
+
+| Parameter | Values tested | Winner | Reason |
+|---|---|---|---|
+| LSTM hidden | 64 → 128 → 256 → 512 | **128** | Smaller hidden size generalizes better on 498 samples |
+| Dropout | 0.2 → 0.3 → 0.4 → 0.5 | **0.2** | LSTM already regularizes - less dropout needed |
+| Learning rate | 0.01 → 0.001 → 0.0001 → 0.00001 | **0.0001** | Most stable convergence |
+
+**Best config:** EfficientNet-B0 · LSTM hidden=128 · dropout=0.2 · lr=1e-4
+**Total sweep runs across all experiments:** 48
+
+---
+
+## Grad-CAM Explainability
+
+Gradient-weighted Class Activation Mapping was applied to the best static model to visualize which time periods and signal frequencies drove each prediction.
+
+| Record | Alarm type | Ground truth | Model | Correct |
+|---|---|---|---|---|
+| v100s | Ventricular Flutter | False | TRUE | ✗ |
+| v101l | Ventricular Flutter | True | TRUE | ✓ |
+| a109l | Asystole | True | TRUE | ✓ |
+| b187l | Bradycardia | True | TRUE | ✓ |
+| t116s | Tachycardia | False | FALSE | ✓ |
+| f120s | Ventricular Fibrillation | False | FALSE | ✓ |
+
+5/6 correct. Images saved to `frontend/public/gradcam/`.
+
+> These are not X-rays. They are mathematical fingerprints of the heart's electrical activity. Red areas show which time periods and frequency bands most influenced the model's decision.
 
 ---
 
@@ -55,8 +139,7 @@ Four statistical detectors running on raw signal windows:
 | Noise | SNR estimation + sample entropy + variance CV | Motion artifact, EMI, poor contact |
 
 ### Context Correlation Layer
-The core differentiator. Extracts four feature categories:
-
+Extracts four feature categories:
 - **Multi-signal** - are neighboring signals also degrading simultaneously?
 - **Temporal** - is reliability trending down over this session?
 - **Clinical events** - did a repositioning or procedure happen recently?
@@ -66,14 +149,7 @@ The core differentiator. Extracts four feature categories:
 Fuses signal quality index (SQI) with context features into a final 0–100 trust score. Context can adjust the score up or down by up to 20 points.
 
 ### Failure Attribution Engine
-Rule-based expert system that names the probable cause:
-- Sensor displacement
-- Motion artifact
-- Device malfunction
-- Environmental interference
-- Calibration drift
-
-Uses clinical knowledge encoded from medical device literature and FDA MAUDE adverse event patterns.
+Rule-based expert system that names the probable cause - sensor displacement, motion artifact, device malfunction, environmental interference, or calibration drift. Uses clinical knowledge encoded from medical device literature and FDA MAUDE adverse event patterns.
 
 ### Temporal Drift Monitor
 Tracks per-session SQI history. Detects gradual degradation using linear regression slope. Predicts time to critical threshold.
@@ -113,9 +189,7 @@ Designed with regulatory traceability in mind:
 
 - **IEC 62304** - Class B software safety classification. Modular architecture directly supports unit verification requirements in §5.5
 - **ISO 14971** - Risk management documentation. Identified hazards, severity/probability assessment, and control measures documented
-- **FDA AI/ML SaMD Action Plan** - Predetermined Change Control Plan for model updates. Algorithm transparency via XGBoost feature importance
-
-This is a research project. Full FDA clearance requires clinical validation at a scale beyond a portfolio project. The architecture is designed to demonstrate what the path to clearance looks like.
+- **FDA AI/ML SaMD Action Plan** - Predetermined Change Control Plan for model updates. Algorithm transparency via feature importance
 
 ---
 
@@ -123,94 +197,70 @@ This is a research project. Full FDA clearance requires clinical validation at a
 
 Built on the **PhysioNet Challenge 2015** dataset - *"Reducing False Arrhythmia Alarms in the ICU"*.
 
-Real ICU alarm events labeled as true or false alarms. Multi-signal (ECG, SpO₂, ABP, respiration). Ground truth labels built in - enabling direct evaluation against baseline threshold alerting.
+- 750 real ICU alarm recordings
+- 4 channels: ECG Lead II, ECG Lead V, SpO₂, Respiration
+- 250Hz sampling rate, 60-second windows
+- Ground truth labels: true alarm / false alarm
+- 498 records usable after 4-channel filtering
 
-No credentialing required. Freely available at: `physionet.org/content/challenge-2015`
+Freely available at: `physionet.org/content/challenge-2015`
 
 ---
 
 ## Tech Stack
 
+### ML Pipeline
+
+Python 3.12        Core language
+PyTorch            Deep learning
+torchvision        EfficientNet-B0 pretrained weights
+PyWavelets         Continuous Wavelet Transform
+scikit-learn       SVM, cross-validation, metrics
+XGBoost            Hand-crafted feature classifiers
+wfdb               PhysioNet signal loading
+NumPy / SciPy      Signal processing
+matplotlib         Results visualization
+
 ### Backend
-Python 3.12      Core language
-FastAPI          REST API layer
-Poetry           Dependency management
-scikit-learn     ML models
-XGBoost          Reliability ensemble
-wfdb             PhysioNet signal loading
-NumPy / SciPy    Signal processing
-Pydantic         Request/response schemas
-SQLite           Session storage
+FastAPI            REST API
+Poetry             Dependency management
+Pydantic           Request/response schemas
+SQLite             Session storage
 
 ### Frontend
-React + TypeScript   UI framework
-Vite                 Build tool
-Tailwind CSS         Styling
-Recharts             Signal visualization
-React Router         Navigation
-Axios                API client
-
----
-
-## Project Structure
-crip-x/
-├── backend/
-│   ├── crip_x/
-│   │   ├── signal/
-│   │   │   ├── detectors/         # Flatline, Spike, Dropout, Noise
-│   │   │   └── signal_quality_index.py
-│   │   ├── context/
-│   │   │   └── feature_extractor.py
-│   │   ├── scoring/
-│   │   │   └── reliability_scorer.py
-│   │   ├── attribution/
-│   │   │   └── attribute_engine.py
-│   │   ├── drift/
-│   │   │   └── drift_tracker.py
-│   │   ├── ingestion/
-│   │   │   └── fixture_loader.py
-│   │   └── utils/
-│   │       ├── config.py
-│   │       ├── logger.py
-│   │       └── validators.py
-│   ├── api/
-│   │   ├── main.py
-│   │   ├── routers/
-│   │   └── schemas/
-│   ├── data/fixtures/             # 6 clinical test scenarios
-│   ├── exploration/               # Development scripts
-│   └── pyproject.toml
-│
-└── frontend/
-├── src/
-│   ├── pages/
-│   │   ├── HomePage.tsx       # Landing page with hospital animation
-│   │   └── DemoPage.tsx       # Live signal demo
-│   └── components/
-│       └── Navbar.tsx
-└── vite.config.ts
+React + TypeScript  UI framework
+Vite               Build tool
+React Router       Navigation
 
 ---
 
 ## Setup
 
+### ML Pipeline
+
+```bash
+cd crip-x/ml
+
+# Build static scalogram dataset (Exp 01-03)
+python build_dataset.py
+
+# Build temporal dataset (Exp 04)
+python build_dataset_temporal.py
+
+# Train Experiment 01
+python train.py
+
+# Train Experiment 04 (LSTM sweep)
+python train_temporal.py
+```
+
 ### Backend
 
 ```bash
-git clone
 cd crip-x/backend
-
-# Install Poetry if needed
-curl -sSL https://install.python-poetry.org | python3 -
-
-# Install dependencies
 poetry install
-
-# Run API
 poetry run uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
-
-API docs available at `http://127.0.0.1:8000/docs`
 
 ### Frontend
 
@@ -224,42 +274,17 @@ Open `http://localhost:5173`
 
 ---
 
-## API Endpoints
-GET  /health                          System health check
-GET  /fixtures                        List all test scenarios
-GET  /fixtures/{id}                   Get fixture details
-POST /analyze                         Run pipeline on signal window
-POST /analyze/fixture/{fixture_id}    Run a predefined scenario
+## Why This Problem
+
+Most medical AI predicts diseases, classifies images, or summarizes records.
+
+SigmaMedStat focuses on something different: **can the input data be trusted before any model makes a decision?**
+
+Current hospital monitors were designed in an era before machine learning. They alarm when a reading crosses a threshold - with no understanding of whether that reading is even trustworthy. The result is 350+ alarms per patient per day, 85–99% of which are false positives.
+
+The fix isn't louder alarms or smarter thresholds. It's signal-level intelligence that asks - before the nurse is interrupted - whether this reading should be believed at all.
 
 ---
 
-## Clinical Scenarios Included
-
-| Scenario | Signal Type | What It Tests |
-|---|---|---|
-| Clean SpO₂ | SpO₂ | Baseline - no artifacts |
-| Flatline | SpO₂ | Sensor disconnection |
-| Spike | SpO₂ | Electrical interference |
-| Dropout | SpO₂ | Probe briefly disconnected |
-| Motion Artifact | SpO₂ | Patient repositioning event |
-| Degrading Session | SpO₂ | 4-hour calibration drift |
-
----
-
-## Why This Project
-
-Most medical AI projects predict diseases, classify images, or summarize records.
-
-SigmaMedStat focuses on a different problem: **can the input data be trusted before any AI makes a decision?**
-
-This aligns with real problems in:
-- ICU alarm fatigue reduction
-- Post-market surveillance of medical devices
-- AI governance for Software as a Medical Device
-- Signal integrity in wearable and remote monitoring
-
-
----
-
-*SigmaMedStat is a research project.  
-This project is Not FDA cleared. Not for clinical use.*
+*SigmaMedStat is a research project.*
+*Not FDA cleared. Not for clinical use.*
