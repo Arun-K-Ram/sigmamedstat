@@ -196,4 +196,5 @@ temp/
 # Distribution
 # --------------------------------------------
 site/
-docs/_build/
+docs/_build/backend/data/scalograms_temporal/ 
+backend/data/scalograms/ 
