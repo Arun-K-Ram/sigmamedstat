@@ -310,10 +310,10 @@ function MLSection() {
       num:"04", best:true,
       title:"What if the model watches how the signal changes over time?",
       subtitle:"Each 60-second recording is split into 6 consecutive chunks and fed into a sequence model.",
-      detail:"Instead of treating 60 seconds of signal as a single snapshot, the recording is split into six 10-second chunks. Each chunk becomes a scalogram. A shared EfficientNet encoder processes each chunk, then an LSTM reads the sequence of six feature vectors — learning whether the signal was degrading gradually or changed suddenly.",
+      detail:"Instead of treating 60 seconds of signal as a single snapshot, the recording is split into six 10-second chunks. Each chunk becomes a scalogram. A shared EfficientNet encoder processes each chunk, then an LSTM reads the sequence of six feature vectors - learning whether the signal was degrading gradually or changed suddenly.",
       models:["EfficientNet-B0 encoder","LSTM(hidden=64, layers=2)"],
       results:[{name:"EfficientNet + LSTM (tuned)", auc:0.825, best:true},{name:"EfficientNet + LSTM (default)", auc:0.777, best:false},{name:"Static EfficientNet baseline", auc:0.641, best:false}],
-      finding:"Temporal modeling won decisively — AUC 0.825, up from 0.641. The LSTM learned that gradual signal degradation across chunks is a strong indicator of a real alarm, while sudden changes are more often artifacts.",
+      finding:"Temporal modeling won decisively - AUC 0.825, up from 0.641. The LSTM learned that gradual signal degradation across chunks is a strong indicator of a real alarm, while sudden changes are more often artifacts.",
       findingColor:"#1b4332", findingBg:"#edf7f1", findingBorder:"#a8d5b5",
     },
   ]
@@ -342,7 +342,7 @@ function MLSection() {
         </Reveal>
 
         <Reveal delay={0.05}>
-          <img src="/experiment_04_training_curve.png" alt="Experiment 04 training curve — EfficientNet + LSTM vs static baseline" style={{ width:"100%", borderRadius:12, marginBottom:32, border:`1px solid ${MID}` }} />
+          <img src="/experiment_04_training_curve.png" alt="Experiment 04 training curve - EfficientNet + LSTM vs static baseline" style={{ width:"100%", borderRadius:12, marginBottom:32, border:`1px solid ${MID}` }} />
         </Reveal>
 
         <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
@@ -429,7 +429,7 @@ function MLSection() {
             </div>
 
             {/* Exp 01 sweep */}
-            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 01 — EfficientNet + Neural Classifier</div>
+            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 01 - EfficientNet + Neural Classifier</div>
             <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:isMobile?12:16, marginBottom:24 }}>
               {[
                 { param:"Dropout rate", values:["0.2","0.3","0.4","0.5"], winner:"0.5", why:"With only 498 training samples, overfitting was the biggest risk. Higher dropout performed best - the dataset was too small to support anything less aggressive." },
@@ -458,12 +458,12 @@ function MLSection() {
             </div>
 
             {/* Exp 04 sweep */}
-            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 04 — EfficientNet + LSTM</div>
+            <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:12 }}>Experiment 04 - EfficientNet + LSTM</div>
             <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(3, 1fr)", gap:isMobile?12:16, marginBottom:24 }}>
               {[
                 { param:"LSTM hidden size", values:["64","128","256","512"], winner:"64", why:"Smaller hidden size generalized better on 498 samples. Larger sizes memorized the training data before learning meaningful temporal patterns." },
                 { param:"Dropout rate", values:["0.2","0.3","0.4","0.5"], winner:"0.3", why:"The LSTM already provides implicit regularization through its gating mechanism. Less dropout was needed compared to the static classifier." },
-                { param:"Learning rate", values:["0.01","0.001","0.0001","0.00001"], winner:"0.001", why:"Faster than the static model's optimal rate — the LSTM needs more signal early to learn temporal dependencies before the gates saturate." },
+                { param:"Learning rate", values:["0.01","0.001","0.0001","0.00001"], winner:"0.001", why:"Faster than the static model's optimal rate - the LSTM needs more signal early to learn temporal dependencies before the gates saturate." },
               ].map((p,i) => (
                 <div key={i} style={{ background:SOFT, borderRadius:10, padding:isMobile?14:18, border:`1px solid ${MID}` }}>
                   <div style={{ fontSize:12, fontWeight:500, color:CHARCOAL, marginBottom:8 }}>{p.param}</div>
