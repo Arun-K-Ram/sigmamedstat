@@ -561,7 +561,7 @@ export default function HomePage() {
       <div style={{ position:"relative" }}>
 
         {/* Hero */}
-        <section style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"110px 20px 48px":"140px 40px 60px", textAlign:"center" }}>
+        <section style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"175px 20px 48px":"140px 40px 60px", textAlign:"center" }}>
           <div className="fi d1" style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#fdf0ef", border:"1px solid #e8b4b0", borderRadius:100, padding:"5px 14px", marginBottom:28 }}>
             <div style={{ width:6, height:6, borderRadius:"50%", background:R, animation:"pulseDot 2s ease infinite" }} />
             <span style={{ fontSize:10, color:R, letterSpacing:"0.08em", textTransform:"uppercase" }}>Built for ICU nurses and the patients they protect</span>
