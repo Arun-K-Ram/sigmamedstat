@@ -217,7 +217,7 @@ export default function DemoPage() {
         <div style={{ marginBottom:20 }}>
           <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:8 }}>Live demo - real data</p>
           <h1 style={{ fontSize:isMobile?20:26, fontWeight:300, color:CHARCOAL, letterSpacing:"-0.5px", marginBottom:8 }}>
-            Six real ICU alarms. Our model analyzed each one.
+            Six real ICU alarms. Model analyzed each one.
           </h1>
           <p style={{ fontSize:isMobile?13:14, color:"#7f8c8d", lineHeight:1.8 }}>
             Each scenario comes from real patient alarm recordings in a published hospital dataset. Select any one - the model will analyze the heart signal and tell you whether the alarm is worth acting on.
