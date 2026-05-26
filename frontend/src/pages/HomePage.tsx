@@ -100,7 +100,7 @@ function HospitalAnimation() {
           </div>
         ))}
       </div>
-      <div style={{ marginTop:16, fontSize:10, color:"#bdc3c7", textAlign:"center" }}>Standard hospital monitor</div>
+      <div style={{ marginTop:16, fontSize:10, color:"#7f8c8d", textAlign:"center" }}>Standard hospital monitor</div>
     </div>
   )
 
@@ -249,7 +249,7 @@ function IndustrySection() {
               <div>
                 <div style={{ fontSize:15, fontWeight:400, color:CHARCOAL, marginBottom:12 }}>What SigmaMedStat adds - without replacing anything</div>
                 <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.8 }}>
-                  SigmaMedStat doesn't replace the monitor. It sits alongside it, reading the same signals but asking a different question: not "Is this reading abnormal?" but "Should anyone act on this at all?"
+                  SigmaMedStat doesn't replace the monitor. It sits alongside it, reading the same signals. Primary focus is to check if a reading is abnormal and should anyone act on this at all?
                 </div>
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
@@ -257,10 +257,10 @@ function IndustrySection() {
                   {them:"Alarm fires when reading crosses a threshold", us:"Signal is evaluated before the alarm reaches the nurse"},
                   {them:"350 alarms per patient per day", us:"Each alarm comes with a confidence score and explanation"},
                   {them:"Nurse decides on every single alarm", us:"Model pre-screens: act now, or stand down"},
-                  {them:"No explanation - just a beeping sound", us:"Plain English: what happened and what to do"},
+                  {them:"No explanation - just a beeping sound", us:"What happened and what to do"},
                 ].map((r,i) => (
                   <div key={i} style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, paddingBottom:12, borderBottom:i<3?`1px solid ${MID}`:"none" }}>
-                    <div style={{ fontSize:12, color:"#bdc3c7", textDecoration:"line-through", lineHeight:1.6 }}>{r.them}</div>
+                    <div style={{ fontSize:12, color:"#7f8c8d", textDecoration:"line-through", lineHeight:1.6 }}>{r.them}</div>
                     <div style={{ fontSize:12, color:CHARCOAL, lineHeight:1.6 }}>→ {r.us}</div>
                   </div>
                 ))}
@@ -382,7 +382,7 @@ function MLSection() {
                             <span style={{ fontSize:12, fontFamily:"DM Mono", color:r.best?R:"#95a5a6" }}>{(r.auc*100).toFixed(0)}%</span>
                           </div>
                           <div style={{ height:6, background:SOFT, borderRadius:3, overflow:"hidden" }}>
-                            <div style={{ height:"100%", width:`${r.auc*100}%`, background:r.best?R:"#bdc3c7", borderRadius:3 }} />
+                            <div style={{ height:"100%", width:`${r.auc*100}%`, background:r.best?R:"#7f8c8d", borderRadius:3 }} />
                           </div>
                         </div>
                       ))}
@@ -393,7 +393,7 @@ function MLSection() {
                         <span style={{ fontSize:11, fontFamily:"DM Mono", color:"#95a5a6" }}>50%</span>
                       </div>
                       <div style={{ height:4, background:MID, borderRadius:2, marginTop:6, overflow:"hidden" }}>
-                        <div style={{ height:"100%", width:"50%", background:"#bdc3c7", borderRadius:2 }} />
+                        <div style={{ height:"100%", width:"50%", background:"#7f8c8d", borderRadius:2 }} />
                       </div>
                     </div>
                     {exp.best && (
@@ -551,9 +551,9 @@ export default function HomePage() {
 
       {/* Navbar */}
       <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, background:"rgba(244,244,242,0.95)", borderBottom:`1px solid ${MID}`, backdropFilter:"blur(8px)" }}>
-        <div style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"0 20px":"0 40px", height:64, display:"flex", alignItems:"center" }}>
+        <div style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"0 20px":"0 40px", height:130, display:"flex", alignItems:"center" }}>
           <div style={{ cursor:"pointer" }} onClick={() => navigate("/")}>
-            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?44:56, width:"auto" }} />
+            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?90:120, width:"auto", display:"block" }} />
           </div>
         </div>
       </div>
@@ -572,7 +572,7 @@ export default function HomePage() {
             Most of it is noise.
           </h1>
           <p className="fi d3" style={{ fontSize:isMobile?15:17, color:"#7f8c8d", maxWidth:520, margin:"0 auto 36px", lineHeight:1.8 }}>
-            SigmaMedStat analyzes the same signals as hospital monitors and tells you, before the alarm reaches the nurse, whether it's worth acting on.
+            SigmaMedStat analyzes the same signals as hospital monitors and tells you whether it's worth acting on before the alarm reaches the nurse.
           </p>
           <div className="fi d4" style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
           </div>
@@ -588,9 +588,9 @@ export default function HomePage() {
         {/* Animation */}
         <section style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"40px 20px 60px":"60px 40px 80px" }}>
           <Reveal>
-            <div style={{ fontSize:11, color:"#bdc3c7", letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", marginBottom:28 }}>Here's what it looks like in practice</div>
+            <div style={{ fontSize:11, color:"#7f8c8d", letterSpacing:"0.1em", textTransform:"uppercase", textAlign:"center", marginBottom:28 }}>Here's what it looks like in practice</div>
             <HospitalAnimation />
-            <div style={{ textAlign:"center", marginTop:20, fontSize:12, color:"#bdc3c7" }}>
+            <div style={{ textAlign:"center", marginTop:20, fontSize:12, color:"#7f8c8d" }}>
               Simulated scenario: blood oxygen sensor loses contact after the patient repositions.
             </div>
           </Reveal>
@@ -622,10 +622,10 @@ export default function HomePage() {
               <div>
                 <p style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:16 }}>What's actually happening in hospitals</p>
                 <h2 style={{ fontSize:isMobile?22:30, fontWeight:300, color:CHARCOAL, lineHeight:1.3, letterSpacing:"-0.5px", marginBottom:16 }}>
-                  In many hospitals, nurses sometimes end up ignoring alarms. That's the real problem.
+                  In many hospitals, nurses sometimes end up ignoring alarms thinking they are false alarms...That's the real problem.
                 </h2>
                 <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8, marginBottom:14 }}>
-                  It's not negligence. It's just survival. When 99% of alarms don't mean anything, people start tuning them out. That's called alarm fatigue, and the Emergency Care Research Institute has ranked it as a top patient safety risk year after year.
+                   When 99% of alarms don't mean anything, people start tuning them out. That's called alarm fatigue, and the Emergency Care Research Institute has ranked it as a top patient safety risk year after year.
                 </p>
                 <p style={{ fontSize:14, color:"#7f8c8d", lineHeight:1.8 }}>
                   The monitors aren't broken. They're doing exactly what they were designed to do. But they were never built to question whether the reading itself is reliable.
@@ -637,10 +637,10 @@ export default function HomePage() {
                   {before:"Is this reading outside the normal range?", after:"Should anyone trust this reading at all?"},
                   {before:"Fire the alarm and let the nurse decide", after:"Check the signal first, then decide whether to alarm"},
                   {before:"Nurse is on her 347th alarm of the shift", after:"Only the alarms worth acting on reach the nurse"},
-                  {before:"No explanation - just a beeping sound", after:"Plain English: what happened and what to do"},
+                  {before:"No explanation - just a beeping sound", after:"What happened and what to do"},
                 ].map((r,i) => (
                   <div key={i} style={{ paddingBottom:12, marginBottom:12, borderBottom:i<3?`1px solid ${SOFT}`:"none" }}>
-                    <div style={{ fontSize:12, color:"#bdc3c7", marginBottom:4, textDecoration:"line-through" }}>{r.before}</div>
+                    <div style={{ fontSize:12, color:"#7f8c8d", marginBottom:4, textDecoration:"line-through" }}>{r.before}</div>
                     <div style={{ fontSize:12, color:CHARCOAL }}>→ {r.after}</div>
                   </div>
                 ))}
@@ -714,9 +714,9 @@ export default function HomePage() {
         <footer style={{ borderTop:`1px solid ${MID}`, background:LIGHT }}>
           <div style={{ maxWidth:960, margin:"0 auto", padding:isMobile?"32px 20px":"40px 40px", display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr 1fr", gap:isMobile?28:40, alignItems:"start" }}>
             <div>
-              <img src="/logo.png" alt="SigmaMedStat" style={{ height:36, width:"auto", marginBottom:12 }} />
+              <img src="/logo.png" alt="SigmaMedStat" style={{ height:86, width:"auto", marginBottom:12 }} />
               <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>A signal intelligence platform for ICU alarm management.</div>
-              <div style={{ fontSize:11, color:"#bdc3c7", marginTop:8 }}>IEC 62304 aware · ISO 14971</div>
+              <div style={{ fontSize:11, color:"#7f8c8d", marginTop:8 }}>IEC 62304 aware · ISO 14971</div>
             </div>
             <div>
               <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>Built by</div>
@@ -737,7 +737,7 @@ export default function HomePage() {
               <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                 {["PhysioNet Challenge 2015 dataset","750 labeled ICU alarm recordings","EfficientNet-B0 feature extraction","Continuous Wavelet Transform","5-fold cross-validation","48-run hyperparameter sweep"].map((t,i) => (
                   <div key={i} style={{ fontSize:12, color:"#7f8c8d", display:"flex", alignItems:"center", gap:8 }}>
-                    <div style={{ width:3, height:3, borderRadius:"50%", background:"#bdc3c7", flexShrink:0 }} />
+                    <div style={{ width:3, height:3, borderRadius:"50%", background:"#7f8c8d", flexShrink:0 }} />
                     {t}
                   </div>
                 ))}
@@ -745,8 +745,8 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ borderTop:`1px solid ${MID}`, maxWidth:960, margin:"0 auto", padding:isMobile?"16px 20px":"16px 40px", display:"flex", flexDirection:isMobile?"column":"row", gap:isMobile?6:0, justifyContent:"space-between", alignItems:isMobile?"flex-start":"center" }}>
-            <div style={{ fontSize:12, color:"#bdc3c7" }}>© 2026 Arunkumar Ramachandran · SigmaMedStat</div>
-            <div style={{ fontSize:12, color:"#bdc3c7" }}>V1 deployed · ML validation complete · Seeking hospital partnerships</div>
+            <div style={{ fontSize:12, color:"#7f8c8d" }}>© 2026 Arunkumar Ramachandran · SigmaMedStat</div>
+            <div style={{ fontSize:12, color:"#7f8c8d" }}>V1 deployed · ML validation complete · Seeking hospital partnerships</div>
           </div>
         </footer>
       </div>

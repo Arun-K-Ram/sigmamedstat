@@ -191,12 +191,12 @@ export default function DemoPage() {
 
       {/* Navbar */}
       <div style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, background:"rgba(244,244,242,0.95)", borderBottom:`1px solid ${MID}`, backdropFilter:"blur(8px)" }}>
-        <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"0 16px":"0 40px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"0 16px":"0 40px", height:130, display:"flex", alignItems:"center" }}>
           <div style={{ cursor:"pointer" }} onClick={() => navigate("/")}>
-            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?40:56, width:"auto" }} />
+            <img src="/logo.png" alt="SigmaMedStat" style={{ height:isMobile?90:120, width:"auto", display:"block" }} />
           </div>
           {!isMobile && (
-            <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:16, marginLeft:"auto" }}>
               <div style={{ fontSize:12, color:"#95a5a6" }}>6 real ICU alarms · EfficientNet + Neural Classifier · PhysioNet 2015</div>
               <div style={{ fontSize:12, padding:"4px 14px", borderRadius:100, background:LIGHT, border:`1px solid ${MID}`, color:CHARCOAL }}>
                 Got {accuracy} of {total} right
@@ -211,7 +211,7 @@ export default function DemoPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"74px 16px 40px":"90px 40px 60px" }}>
+      <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"150px 16px 40px":"150px 40px 60px" }}>
 
         {/* Page intro */}
         <div style={{ marginBottom:20 }}>
@@ -265,7 +265,7 @@ export default function DemoPage() {
               Raw heart signal - 60 seconds
             </div>
             <Waveform signal={s.signal} active={phase==="result"} />
-            <div style={{ fontSize:11, color:"#bdc3c7", marginTop:6 }}>
+            <div style={{ fontSize:11, color:"#7f8c8d", marginTop:6 }}>
               This is the actual electrical signal from the patient's heart. SigmaMedStat analyzes the full 60-second window - not just the moment the alarm fired.
             </div>
           </div>
@@ -385,6 +385,45 @@ export default function DemoPage() {
           ))}
         </div>
 
+      {/* Footer */}
+      <footer style={{ borderTop:`1px solid ${MID}`, background:LIGHT, marginTop:40 }}>
+        <div style={{ maxWidth:1060, margin:"0 auto", padding:isMobile?"32px 20px":"40px 40px", display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr 1fr", gap:isMobile?28:40, alignItems:"start" }}>
+          <div>
+            <img src="/logo.png" alt="SigmaMedStat" style={{ height:86, width:"auto", marginBottom:12 }} />
+            <div style={{ fontSize:13, color:"#7f8c8d", lineHeight:1.7 }}>A signal intelligence platform for ICU alarm management.</div>
+            <div style={{ fontSize:11, color:"#7f8c8d", marginTop:8 }}>IEC 62304 aware · ISO 14971</div>
+          </div>
+          <div>
+            <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>Built by</div>
+            <div style={{ fontSize:14, color:CHARCOAL, marginBottom:4 }}>Arunkumar Ramachandran</div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              <a href="https://www.linkedin.com/in/arun-ramachandran-a2019a/" target="_blank" rel="noopener noreferrer" style={{ fontSize:13, color:"#7f8c8d", textDecoration:"none", display:"inline-flex", alignItems:"center", gap:6 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                LinkedIn
+              </a>
+              <a href="https://github.com/Arun-K-Ram" target="_blank" rel="noopener noreferrer" style={{ fontSize:13, color:"#7f8c8d", textDecoration:"none", display:"inline-flex", alignItems:"center", gap:6 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize:11, color:"#95a5a6", letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:14 }}>Data & methods</div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {["PhysioNet Challenge 2015 dataset","750 labeled ICU alarm recordings","EfficientNet-B0 feature extraction","Continuous Wavelet Transform","5-fold cross-validation","48-run hyperparameter sweep"].map((t,i) => (
+                <div key={i} style={{ fontSize:12, color:"#7f8c8d", display:"flex", alignItems:"center", gap:8 }}>
+                  <div style={{ width:3, height:3, borderRadius:"50%", background:"#7f8c8d", flexShrink:0 }} />
+                  {t}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop:`1px solid ${MID}`, maxWidth:1060, margin:"0 auto", padding:isMobile?"16px 20px":"16px 40px", display:"flex", flexDirection:isMobile?"column":"row", gap:isMobile?6:0, justifyContent:"space-between", alignItems:isMobile?"flex-start":"center" }}>
+          <div style={{ fontSize:12, color:"#7f8c8d" }}>© 2026 Arunkumar Ramachandran · SigmaMedStat</div>
+          <div style={{ fontSize:12, color:"#7f8c8d" }}>V1 deployed · ML validation complete · Seeking hospital partnerships</div>
+        </div>
+      </footer>
       </div>
     </div>
   )
