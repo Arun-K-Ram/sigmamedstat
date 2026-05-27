@@ -272,7 +272,7 @@ def train_per_type():
             str(MODELS_DIR / f"xgb_{alarm_type}.json")
         )
 
-    # ── Overall weighted AUC ──────────────────────────────────
+    #  Overall weighted AUC 
     if all_results:
         weights  = [all_results[t]['n_test']
                     for t in all_results]

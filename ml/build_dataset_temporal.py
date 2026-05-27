@@ -14,13 +14,13 @@ import wfdb
 from pathlib import Path
 from tqdm import tqdm
 
-# ── Paths ──────────────────────────────────────────────────────
+#  Paths 
 PHYSIONET_DIR = Path("C:/Users/Arun/Documents/git/crip-x/backend/data/physionet/training")
 RECORDS_FILE  = PHYSIONET_DIR / "RECORDS"
 OUTPUT_DIR    = Path("C:/Users/Arun/Documents/git/crip-x/backend/data/scalograms_temporal")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Config ─────────────────────────────────────────────────────
+#  Config 
 FS          = 250          # sampling rate Hz
 TOTAL_SEC   = 60           # total window seconds
 CHUNK_SEC   = 10           # each chunk seconds

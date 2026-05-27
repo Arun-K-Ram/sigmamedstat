@@ -42,7 +42,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Device: {DEVICE}")
 
 
-# ── Feature Extractors ────────────────────────────────────────
+#  Feature Extractors 
 def build_extractor(name: str) -> nn.Module:
     if name == "resnet18":
         m = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
@@ -103,7 +103,7 @@ def extract_features(extractor: nn.Module, X: np.ndarray,
     return np.concatenate(features, axis=0)
 
 
-# ── Neural Classifier ─────────────────────────────────────────
+#  Neural Classifier 
 class NeuralClassifier(nn.Module):
     def __init__(self, in_dim: int, hidden_dim: int = 256,
                  dropout: float = 0.5):
@@ -178,7 +178,7 @@ def train_neural_classifier(feat_train, y_train, feat_val, y_val,
     return model, best_auc, history
 
 
-# ── Hyperparameter Sweep ──────────────────────────────────────
+#  Hyperparameter Sweep 
 def run_sweep(feat_dict, y_tr, y_vl, y_te):
     print(f"\n{'='*60}")
     print("Full Hyperparameter Sweep - All Extractors")
@@ -259,7 +259,7 @@ def run_sweep(feat_dict, y_tr, y_vl, y_te):
         all_sweep_results[ext_name] = sweep_results
         plot_sweep(sweep_results, ext_name)
 
-    # ── Best overall ──────────────────────────────────────────
+    #  Best overall 
     print(f"\n{'='*60}")
     print(f"BEST OVERALL:")
     print(f"  Extractor: {best_overall['extractor']}")
@@ -267,7 +267,7 @@ def run_sweep(feat_dict, y_tr, y_vl, y_te):
     print(f"  Params:    {best_overall['params']}")
     print(f"{'='*60}")
 
-    # ── Train final model with best params ────────────────────
+    #  Train final model with best params 
     best_ext          = best_overall["extractor"]
     p                 = best_overall["params"]
     feat_tr, feat_vl, feat_te = feat_dict[best_ext]
@@ -321,7 +321,7 @@ def run_sweep(feat_dict, y_tr, y_vl, y_te):
     return all_sweep_results, best_overall
 
 
-# ── Plot Functions ────────────────────────────────────────────
+#  Plot Functions 
 def plot_sweep(sweep_results: dict, ext_name: str = ""):
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     fig.patch.set_facecolor('#0a0a0a')
@@ -490,7 +490,7 @@ def get_classifiers():
     }
 
 
-# ── Main ──────────────────────────────────────────────────────
+#  Main 
 def main():
     X = np.load(DATA_DIR / "X.npy")
     y = np.load(DATA_DIR / "y.npy")
@@ -505,7 +505,7 @@ def main():
     X_te, y_te = X[idx[vl_end:]],       y[idx[vl_end:]]
     print(f"Train {len(X_tr)} | Val {len(X_vl)} | Test {len(X_te)}")
 
-    # ── Step 1: Extract features for all extractors ───────────
+    #  Step 1: Extract features for all extractors 
     feat_dict = {}
     for ext_name in ["resnet18", "resnet50", "efficientnet"]:
         print(f"\nExtracting {ext_name} features...")
@@ -520,12 +520,12 @@ def main():
         feat_dict[ext_name] = (f_tr, f_vl, f_te)
         print(f"  Feature dim: {f_tr.shape[1]}")
 
-    # ── Step 2: Full hyperparameter sweep ─────────────────────
+    #  Step 2: Full hyperparameter sweep 
     all_sweep_results, best_overall = run_sweep(
         feat_dict, y_tr, y_vl, y_te
     )
 
-    # ── Step 3: Full model comparison (all classifiers) ───────
+    #  Step 3: Full model comparison (all classifiers) 
     print(f"\n{'='*60}")
     print("Full model comparison...")
     print(f"{'='*60}")

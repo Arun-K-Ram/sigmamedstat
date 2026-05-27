@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import models
 import json
 
-# ── Paths ──────────────────────────────────────────────────────
+#  Paths 
 DATA_DIR   = Path("C:/Users/Arun/Documents/git/crip-x/backend/data/scalograms_temporal")
 OUTPUT_DIR = Path("results/models")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -28,7 +28,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Device: {DEVICE}")
 
-# ── Fixed config ───────────────────────────────────────────────
+#  Fixed config 
 N_CHUNKS    = 6
 N_CHANNELS  = 4
 FEAT_DIM    = 1280
@@ -38,7 +38,7 @@ BATCH_SIZE  = 16
 PATIENCE    = 5        # stop if no improvement for 5 epochs
 SEED        = 42
 
-# ── Sweep grid ─────────────────────────────────────────────────
+#  Sweep grid 
 HIDDEN_VALUES  = [64, 128, 256, 512]
 DROPOUT_VALUES = [0.2, 0.3, 0.4, 0.5]
 LR_VALUES      = [0.01, 0.001, 0.0001, 0.00001]
@@ -52,7 +52,7 @@ torch.manual_seed(SEED)
 np.random.seed(SEED)
 
 
-# ── Model ──────────────────────────────────────────────────────
+#  Model 
 def build_encoder():
     m    = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT)
     orig = m.features[0][0]
@@ -94,7 +94,7 @@ class TemporalAlarmClassifier(nn.Module):
         return self.classifier(last_hidden)
 
 
-# ── Single training run ────────────────────────────────────────
+#  Single training run 
 def run(X_train, y_train, X_val, y_val, idx_train,
         lstm_hidden, dropout, lr, label="", save_history=False):
     """Train one configuration. Returns best val AUC, best epoch, history."""
@@ -163,7 +163,7 @@ def run(X_train, y_train, X_val, y_val, idx_train,
     return best_val_auc, best_epoch, history
 
 
-# ── Main sweep ─────────────────────────────────────────────────
+#  Main sweep 
 def main():
     # Load data
     print("Loading temporal dataset...")
@@ -189,7 +189,7 @@ def main():
 
     sweep_results = {}
 
-    # ── Sweep 1: LSTM hidden size ──────────────────────────────
+    #  Sweep 1: LSTM hidden size 
     print("=" * 55)
     print("SWEEP 1 - LSTM hidden size")
     print(f"  Fixed: dropout={DEFAULT_DROPOUT}  lr={DEFAULT_LR}")
@@ -206,7 +206,7 @@ def main():
           f"(val AUC {hidden_results[best_hidden]['val_auc']:.4f})\n")
     sweep_results["hidden"] = hidden_results
 
-    # ── Sweep 2: Dropout ───────────────────────────────────────
+    #  Sweep 2: Dropout 
     print("=" * 55)
     print("SWEEP 2 - Dropout rate")
     print(f"  Fixed: hidden={best_hidden}  lr={DEFAULT_LR}")
@@ -223,7 +223,7 @@ def main():
           f"(val AUC {dropout_results[best_dropout]['val_auc']:.4f})\n")
     sweep_results["dropout"] = dropout_results
 
-    # ── Sweep 3: Learning rate ─────────────────────────────────
+    #  Sweep 3: Learning rate 
     print("=" * 55)
     print("SWEEP 3 - Learning rate")
     print(f"  Fixed: hidden={best_hidden}  dropout={best_dropout}")
@@ -240,7 +240,7 @@ def main():
           f"(val AUC {lr_results[best_lr]['val_auc']:.4f})\n")
     sweep_results["lr"] = lr_results
 
-    # ── Final training with best config ───────────────────────
+    #  Final training with best config 
     print("=" * 55)
     print("FINAL RUN - Best config")
     print(f"  hidden={best_hidden}  dropout={best_dropout}  lr={best_lr}")
@@ -312,7 +312,7 @@ def main():
     print(f"  Difference: {test_auc - 0.641:+.3f}")
     print("=" * 55)
 
-    # ── Plot training curve ────────────────────────────────────
+    #  Plot training curve 
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt

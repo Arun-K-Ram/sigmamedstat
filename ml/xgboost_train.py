@@ -1,5 +1,5 @@
 """
-SigmaMedStat — XGBoost with Hyperparameter Tuning
+SigmaMedStat - XGBoost with Hyperparameter Tuning
 Hand-crafted signal features + gradient boosting.
 Full grid search with cross-validation.
 """
@@ -92,7 +92,7 @@ def plot_feature_importance(model, feat_names: list, top_n: int = 20):
 
     ax.barh([feat_names[i] for i in idx],
             importances[idx], color=colors, alpha=0.85)
-    ax.set_title('Top 20 Most Important Features — XGBoost',
+    ax.set_title('Top 20 Most Important Features - XGBoost',
                  color='white', fontsize=13)
     ax.set_xlabel('Feature Importance', color='#aaa')
     plt.tight_layout()
@@ -140,7 +140,7 @@ def load_beat_data():
 def main():
     X, y, feat_names = load_beat_data()
 
-    # Split — stratified to preserve class balance
+    # Split - stratified to preserve class balance
     X_tr, X_te, y_tr, y_te = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
@@ -149,7 +149,7 @@ def main():
     )
     print(f"Train {len(X_tr)} | Val {len(X_vl)} | Test {len(X_te)}")
 
-    # Robust scaler — handles outliers in feature range better than Standard
+    # Robust scaler - handles outliers in feature range better than Standard
     scaler = RobustScaler()
     X_tr_s = scaler.fit_transform(X_tr)
     X_vl_s = scaler.transform(X_vl)
@@ -157,7 +157,7 @@ def main():
 
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-    # ── XGBoost Hyperparameter Search ────────────────────────
+    #  XGBoost Hyperparameter Search 
     print("\n" + "="*60)
     print("XGBoost Hyperparameter Search")
     print("="*60)
@@ -173,7 +173,7 @@ def main():
         'min_child_weight':[1, 3, 5],
     }
 
-    # Reduced grid for speed — most important params
+    # Reduced grid for speed - most important params
     xgb_param_grid_fast = {
     'n_estimators':    [100, 200],
     'max_depth':       [3, 4],
@@ -185,7 +185,7 @@ def main():
     xgb_base = xgb.XGBClassifier(
     random_state=42,
     eval_metric='logloss',
-    tree_method='hist',  # CPU histogram method — more stable
+    tree_method='hist',  # CPU histogram method - more stable
     device='cpu'         # force CPU for grid search
 )
 
@@ -206,7 +206,7 @@ def main():
 
     best_xgb = xgb_search.best_estimator_
 
-    # ── Compare all models with best hyperparams ─────────────
+    #  Compare all models with best hyperparams ─
     print("\n" + "="*60)
     print("Model Comparison on Test Set")
     print("="*60)
@@ -268,21 +268,21 @@ def main():
             target_names=["False Alarm", "True Alarm"]
         ))
 
-    # ── Feature importance ────────────────────────────────────
+    #  Feature importance 
     plot_feature_importance(best_xgb, feat_names)
 
-    # ── Confusion matrix for best model ──────────────────────
+    #  Confusion matrix for best model 
     best_preds = best_xgb.predict(X_te_s)
     plot_confusion_matrix(
         y_te, best_preds,
-        "XGBoost — Confusion Matrix",
+        "XGBoost - Confusion Matrix",
         "confusion_matrix.png"
     )
 
-    # ── ROC curves ───────────────────────────────────────────
-    plot_roc(results, "SigmaMedStat — ROC Curves (Signal Features)", "roc_features.png")
+    #  ROC curves ─
+    plot_roc(results, "SigmaMedStat - ROC Curves (Signal Features)", "roc_features.png")
 
-    # ── Leaderboard ───────────────────────────────────────────
+    #  Leaderboard ─
     print("\n" + "="*60)
     print("LEADERBOARD")
     print("="*60)
@@ -298,7 +298,7 @@ def main():
     print(f"TEST AUC:   {best_r['auc']:.4f}")
     print(f"CV AUC:     {best_r['cv_auc']:.4f} ± {best_r['cv_std']:.4f}")
 
-    # ── Save summary ──────────────────────────────────────────
+    #  Save summary 
     summary = {
         k: {
             'test_auc': v['auc'],

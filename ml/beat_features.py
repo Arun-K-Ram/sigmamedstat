@@ -29,7 +29,7 @@ BEAT_WIN_MS  = 300               # ms around each beat to analyze
 BEAT_WIN_S   = int(BEAT_WIN_MS / 1000 * FS)  # samples
 
 
-# ── Pan-Tompkins QRS Detector ─────────────────────────────────
+#  Pan-Tompkins QRS Detector 
 def pan_tompkins(ecg: np.ndarray, fs: int = FS) -> np.ndarray:
     """
     Simplified Pan-Tompkins QRS detection.
@@ -80,7 +80,7 @@ def pan_tompkins(ecg: np.ndarray, fs: int = FS) -> np.ndarray:
     return np.array(peaks)
 
 
-# ── Per-Beat Features ─────────────────────────────────────────
+#  Per-Beat Features 
 def beat_morphology_features(ecg: np.ndarray,
                               r_peaks: np.ndarray) -> dict:
     """
@@ -101,7 +101,7 @@ def beat_morphology_features(ecg: np.ndarray,
             'irregularity_score', 'hr_mean', 'hr_std'
         ]}
 
-    # ── RR intervals (time between beats) ───────────────────
+    #  RR intervals (time between beats) 
     rr = np.diff(r_peaks) / FS * 1000  # convert to ms
 
     mean_rr  = np.mean(rr)
@@ -120,7 +120,7 @@ def beat_morphology_features(ecg: np.ndarray,
     hr_mean = np.mean(hr)
     hr_std  = np.std(hr)
 
-    # ── QRS morphology ───────────────────────────────────────
+    #  QRS morphology 
     half_win = BEAT_WIN_S // 2
     beats = []
 
@@ -254,7 +254,7 @@ def extract_beat_features(record_stem: str) -> tuple:
     ch_names = ['ECG_II', 'ECG_V', 'PLETH', 'RESP']
     all_feats = {}
 
-    # ── Beat features from ECG channels (II and V) ──────────
+    #  Beat features from ECG channels (II and V) 
     for ch_idx, ch_name in enumerate(['ECG_II', 'ECG_V']):
         ecg = signals[:, ch_idx]
 
@@ -266,14 +266,14 @@ def extract_beat_features(record_stem: str) -> tuple:
         for k, v in beat_feats.items():
             all_feats[f'{ch_name}_{k}'] = v if np.isfinite(v) else 0.0
 
-    # ── Signal quality features for all channels ─────────────
+    #  Signal quality features for all channels 
     for ch_idx, ch_name in enumerate(ch_names):
         sig = signals[:, ch_idx]
         sq  = signal_quality_features(sig)
         for k, v in sq.items():
             all_feats[f'{ch_name}_{k}'] = v if np.isfinite(v) else 0.0
 
-    # ── Cross-channel consistency ─────────────────────────────
+    #  Cross-channel consistency 
     # Key feature: if ECG looks normal but SpO2 is bad → likely false alarm
     ecg_std   = np.std(signals[:, 0])
     pleth_std = np.std(signals[:, 2])

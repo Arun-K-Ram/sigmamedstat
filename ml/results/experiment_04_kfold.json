@@ -1,0 +1,63 @@
+{
+  "experiment": "04_kfold_cv",
+  "config": {
+    "lstm_hidden": 64,
+    "dropout": 0.3,
+    "lr": 0.001,
+    "lstm_layers": 2,
+    "n_folds": 5,
+    "epochs": 40,
+    "patience": 8
+  },
+  "fold_aucs": [
+    0.7923,
+    0.8254,
+    0.8185,
+    0.8344,
+    0.8373
+  ],
+  "mean_auc": 0.8216,
+  "std_auc": 0.0161,
+  "ci_95_low": 0.79,
+  "ci_95_high": 0.8531,
+  "error_analysis": {
+    "overall_auc": 0.8153,
+    "overall_acc": 0.7651,
+    "total_errors": 117,
+    "false_negatives": 65,
+    "false_positives": 52,
+    "high_conf_errors": 85,
+    "per_alarm_type": {
+      "Ventricular Flutter": {
+        "auc": 0.82,
+        "n_records": 263,
+        "n_correct": 209,
+        "accuracy": 0.7947
+      },
+      "Asystole": {
+        "auc": 0.7215,
+        "n_records": 85,
+        "n_correct": 65,
+        "accuracy": 0.7647
+      },
+      "Bradycardia": {
+        "auc": 0.8103,
+        "n_records": 56,
+        "n_correct": 39,
+        "accuracy": 0.6964
+      },
+      "Tachycardia": {
+        "auc": 0.75,
+        "n_records": 62,
+        "n_correct": 44,
+        "accuracy": 0.7097
+      },
+      "Ventricular Fibrillation": {
+        "auc": 0.7333,
+        "n_records": 32,
+        "n_correct": 24,
+        "accuracy": 0.75
+      }
+    }
+  }
+}

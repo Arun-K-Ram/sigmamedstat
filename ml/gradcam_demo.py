@@ -24,7 +24,7 @@ import cv2
 import json
 import wfdb
 
-# ── Paths ──────────────────────────────────────────────────────
+#  Paths 
 SCALOGRAM_DIR = Path("C:/Users/Arun/Documents/git/crip-x/backend/data/scalograms")
 PHYSIONET_DIR = Path("C:/Users/Arun/Documents/git/crip-x/backend/data/physionet/training")
 MODELS_DIR    = Path("results/models")
@@ -50,7 +50,7 @@ RED  = "#c0392b"
 GRN  = "#1e8449"
 GREY = "#7f8c8d"
 
-# ── Model ──────────────────────────────────────────────────────
+#  Model 
 def build_extractor():
     m    = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT)
     orig = m.features[0][0]
@@ -77,7 +77,7 @@ class NeuralClassifier(nn.Module):
         )
     def forward(self, x): return self.net(x)
 
-# ── Grad-CAM ───────────────────────────────────────────────────
+#  Grad-CAM 
 class GradCAM:
     def __init__(self, model):
         self.model       = model
@@ -103,7 +103,7 @@ class GradCAM:
             cam = (cam - cam.min()) / (cam.max() - cam.min())
         return cam
 
-# ── Fit scaler ─────────────────────────────────────────────────
+#  Fit scaler 
 def fit_scaler(extractor):
     print("Fitting scaler...")
     X    = np.load(SCALOGRAM_DIR / "X.npy")
@@ -120,7 +120,7 @@ def fit_scaler(extractor):
     print(f"  {ft.shape[0]} samples, {ft.shape[1]} features")
     return StandardScaler().fit(ft), ft.shape[1]
 
-# ── Load raw ECG waveform ──────────────────────────────────────
+#  Load raw ECG waveform 
 def load_raw_ecg(record_id, n_points=500):
     """Load raw ECG Lead II signal, downsample to n_points for display."""
     path = str(PHYSIONET_DIR / record_id)
@@ -135,7 +135,7 @@ def load_raw_ecg(record_id, n_points=500):
         print(f"  Could not load raw signal for {record_id}: {e}")
         return None
 
-# ── Generate one clean image per record ───────────────────────
+#  Generate one clean image per record 
 def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam):
     extractor.eval(); classifier.eval()
 
@@ -168,7 +168,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     # Raw ECG
     raw_ecg = load_raw_ecg(record_id)
 
-    # ── Labels ────────────────────────────────────────────────
+    #  Labels 
     gt_label   = "This was a FALSE alarm - no real emergency" \
                  if not meta["ground_truth"] \
                  else "This was a REAL emergency"
@@ -180,10 +180,10 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     tick       = "✓  Model got this right" if correct else "✗  Model got this wrong"
     tick_color = GRN if correct else RED
 
-    # ── Figure ────────────────────────────────────────────────
+    #  Figure 
     fig = plt.figure(figsize=(16, 10), facecolor=BG)
 
-    # ── Header strip ──────────────────────────────────────────
+    #  Header strip 
     header = fig.add_axes([0, 0.91, 1, 0.09], facecolor=TEXT)
     header.set_axis_off()
     header.text(0.02, 0.65, f"{meta['label']}  ·  {meta['alarm_type']}",
@@ -204,7 +204,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
                 color=tick_color, fontsize=10, va="center", fontweight="medium",
                 transform=header.transAxes)
 
-    # ── Main grid: 2 rows, 2 cols ──────────────────────────────
+    #  Main grid: 2 rows, 2 cols 
     # Row 0: Raw ECG waveform (full width)
     # Row 1 left: Scalogram
     # Row 1 right: Grad-CAM
@@ -214,7 +214,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
                   hspace=0.45, wspace=0.18,
                   height_ratios=[1, 1.4])
 
-    # ── Row 0: Raw ECG (spans both columns) ───────────────────
+    #  Row 0: Raw ECG (spans both columns) 
     ax_ecg = fig.add_subplot(gs[0, :])
     ax_ecg.set_facecolor(BG)
 
@@ -243,7 +243,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     ax_ecg.text(59, ax_ecg.get_ylim()[1]*0.85, "Alarm\nfired",
                 color=RED, fontsize=7, ha="right", linespacing=1.3)
 
-    # ── Row 1 left: Scalogram ──────────────────────────────────
+    #  Row 1 left: Scalogram 
     ax_sc = fig.add_subplot(gs[1, 0])
     ax_sc.set_facecolor(BG)
     scalo = scalogram[0]  # ECG Lead II scalogram
@@ -271,7 +271,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     ax_sc.text(-3, ylim[0] + (ylim[1]-ylim[0])*0.92,  "High",
                fontsize=7, color=GREY, ha="right", va="center")
 
-    # ── Row 1 right: Grad-CAM ──────────────────────────────────
+    #  Row 1 right: Grad-CAM 
     ax_gc = fig.add_subplot(gs[1, 1])
     ax_gc.set_facecolor(BG)
 
@@ -298,7 +298,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     cb2.ax.tick_params(labelsize=7, colors=GREY)
     cb2.set_label("Attention strength", fontsize=7, color=GREY)
 
-    # ── Prediction box at bottom ───────────────────────────────
+    #  Prediction box at bottom 
     pred_ax = fig.add_axes([0.06, 0.03, 0.91, 0.10],
                             facecolor="white")
     pred_ax.set_xlim(0, 1)
@@ -357,7 +357,7 @@ def generate(record_id, scalogram, meta, extractor, classifier, scaler, gradcam)
     }
 
 
-# ── Main ───────────────────────────────────────────────────────
+#  Main 
 def main():
     np.random.seed(42)
     X     = np.load(SCALOGRAM_DIR / "X.npy")

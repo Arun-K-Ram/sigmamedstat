@@ -1,0 +1,11 @@
+{
+  "static_auc": 0.5959,
+  "temporal_auc": 0.7859,
+  "difference": 0.19,
+  "z_statistic": -3.1244,
+  "p_value": 0.001782,
+  "significant": true,
+  "bootstrap_ci_low": 0.1204,
+  "bootstrap_ci_high": 0.2561,
+  "bootstrap_excludes_zero": true
+}
