@@ -365,7 +365,7 @@ def fig_error_analysis():
                   fontsize=10, color=CHARCOAL)
 
     # Bar: confidence distribution of errors
-    conf_bins  = ["60-70%", "70-80%", "80-90%", "90-100%"]
+    conf_bins  = ["60–70%", "70–80%", "80–90%", "90–100%"]
     # Approximate from the high_conf_errors=85 at >80%
     # Total 117 errors: 32 below 80%, 85 above 80%
     conf_counts = [16, 16, 42, 43]
@@ -380,15 +380,21 @@ def fig_error_analysis():
                  fontsize=9, color=CHARCOAL)
 
     ax2.axvline(x=1.5, color=RED, linestyle="--",
-                linewidth=1.2, alpha=0.7)
-    ax2.text(1.6, 38, "High-confidence\nthreshold (>80%)",
-             color=RED, fontsize=7.5)
+            linewidth=1.2, alpha=0.7)
+    ax2.text(0.3, 54,
+            "High-confidence\nthreshold (>80%)",
+            color=RED, fontsize=7.5, va="top",
+            bbox=dict(boxstyle="round,pad=0.3",
+                    facecolor=WHITE,
+                    edgecolor=RED,
+                    alpha=0.9))
 
     ax2.set_xlabel("Model confidence at time of error")
     ax2.set_ylabel("Number of errors")
+    ax2.set_ylim(0, 58)
     ax2.set_title("(b) Error confidence distribution\n"
-                  "(85 of 117 errors made with >80% confidence)",
-                  fontsize=10, color=CHARCOAL)
+                "(85 of 117 errors made with >80% confidence)",
+                fontsize=10, color=CHARCOAL)
 
     fig.suptitle("Figure 6 - Error Analysis",
                  fontsize=11, color=CHARCOAL, y=1.02)
