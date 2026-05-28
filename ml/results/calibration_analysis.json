@@ -1,0 +1,320 @@
+{
+  "LSTM (Exp 04)": {
+    "ece": 0.126,
+    "brier_score": 0.1908,
+    "bin_data": [
+      {
+        "bin_center": 0.05,
+        "accuracy": 0.109,
+        "confidence": 0.023,
+        "count": 165,
+        "gap": 0.086
+      },
+      {
+        "bin_center": 0.15,
+        "accuracy": 0.129,
+        "confidence": 0.137,
+        "count": 85,
+        "gap": 0.008
+      },
+      {
+        "bin_center": 0.25,
+        "accuracy": 0.276,
+        "confidence": 0.249,
+        "count": 29,
+        "gap": 0.027
+      },
+      {
+        "bin_center": 0.35,
+        "accuracy": 0.267,
+        "confidence": 0.346,
+        "count": 15,
+        "gap": 0.079
+      },
+      {
+        "bin_center": 0.45,
+        "accuracy": 0.368,
+        "confidence": 0.444,
+        "count": 19,
+        "gap": 0.076
+      },
+      {
+        "bin_center": 0.55,
+        "accuracy": 0.462,
+        "confidence": 0.546,
+        "count": 13,
+        "gap": 0.084
+      },
+      {
+        "bin_center": 0.65,
+        "accuracy": 0.417,
+        "confidence": 0.655,
+        "count": 24,
+        "gap": 0.239
+      },
+      {
+        "bin_center": 0.75,
+        "accuracy": 0.615,
+        "confidence": 0.75,
+        "count": 39,
+        "gap": 0.135
+      },
+      {
+        "bin_center": 0.85,
+        "accuracy": 0.6,
+        "confidence": 0.864,
+        "count": 30,
+        "gap": 0.264
+      },
+      {
+        "bin_center": 0.95,
+        "accuracy": 0.658,
+        "confidence": 0.968,
+        "count": 79,
+        "gap": 0.31
+      }
+    ],
+    "conf_stratified": [
+      {
+        "quartile": 1,
+        "conf_range": "0.50\u20130.78",
+        "n": 125,
+        "accuracy": 0.584,
+        "mean_conf": 0.666
+      },
+      {
+        "quartile": 2,
+        "conf_range": "0.78\u20130.90",
+        "n": 124,
+        "accuracy": 0.798,
+        "mean_conf": 0.853
+      },
+      {
+        "quartile": 3,
+        "conf_range": "0.90\u20130.99",
+        "n": 124,
+        "accuracy": 0.75,
+        "mean_conf": 0.95
+      },
+      {
+        "quartile": 4,
+        "conf_range": "0.99\u20131.00",
+        "n": 124,
+        "accuracy": 0.887,
+        "mean_conf": 0.995
+      }
+    ]
+  },
+  "BiLSTM (Exp 05)": {
+    "ece": 0.1423,
+    "brier_score": 0.1902,
+    "bin_data": [
+      {
+        "bin_center": 0.05,
+        "accuracy": 0.108,
+        "confidence": 0.029,
+        "count": 231,
+        "gap": 0.079
+      },
+      {
+        "bin_center": 0.15,
+        "accuracy": 0.308,
+        "confidence": 0.146,
+        "count": 52,
+        "gap": 0.161
+      },
+      {
+        "bin_center": 0.25,
+        "accuracy": 0.346,
+        "confidence": 0.249,
+        "count": 26,
+        "gap": 0.097
+      },
+      {
+        "bin_center": 0.35,
+        "accuracy": 0.5,
+        "confidence": 0.359,
+        "count": 18,
+        "gap": 0.141
+      },
+      {
+        "bin_center": 0.45,
+        "accuracy": 0.32,
+        "confidence": 0.459,
+        "count": 25,
+        "gap": 0.139
+      },
+      {
+        "bin_center": 0.55,
+        "accuracy": 0.25,
+        "confidence": 0.555,
+        "count": 4,
+        "gap": 0.305
+      },
+      {
+        "bin_center": 0.65,
+        "accuracy": 0.5,
+        "confidence": 0.65,
+        "count": 14,
+        "gap": 0.15
+      },
+      {
+        "bin_center": 0.75,
+        "accuracy": 0.667,
+        "confidence": 0.755,
+        "count": 27,
+        "gap": 0.088
+      },
+      {
+        "bin_center": 0.85,
+        "accuracy": 0.556,
+        "confidence": 0.842,
+        "count": 27,
+        "gap": 0.287
+      },
+      {
+        "bin_center": 0.95,
+        "accuracy": 0.676,
+        "confidence": 0.977,
+        "count": 74,
+        "gap": 0.301
+      }
+    ],
+    "conf_stratified": [
+      {
+        "quartile": 1,
+        "conf_range": "0.50\u20130.82",
+        "n": 125,
+        "accuracy": 0.592,
+        "mean_conf": 0.682
+      },
+      {
+        "quartile": 2,
+        "conf_range": "0.82\u20130.95",
+        "n": 124,
+        "accuracy": 0.71,
+        "mean_conf": 0.891
+      },
+      {
+        "quartile": 3,
+        "conf_range": "0.95\u20130.98",
+        "n": 124,
+        "accuracy": 0.831,
+        "mean_conf": 0.972
+      },
+      {
+        "quartile": 4,
+        "conf_range": "0.98\u20131.00",
+        "n": 124,
+        "accuracy": 0.887,
+        "mean_conf": 0.989
+      }
+    ]
+  },
+  "Transformer (Exp 06)": {
+    "ece": 0.1457,
+    "brier_score": 0.189,
+    "bin_data": [
+      {
+        "bin_center": 0.05,
+        "accuracy": 0.121,
+        "confidence": 0.042,
+        "count": 248,
+        "gap": 0.079
+      },
+      {
+        "bin_center": 0.15,
+        "accuracy": 0.242,
+        "confidence": 0.144,
+        "count": 33,
+        "gap": 0.098
+      },
+      {
+        "bin_center": 0.25,
+        "accuracy": 0.316,
+        "confidence": 0.251,
+        "count": 19,
+        "gap": 0.065
+      },
+      {
+        "bin_center": 0.35,
+        "accuracy": 0.25,
+        "confidence": 0.335,
+        "count": 12,
+        "gap": 0.085
+      },
+      {
+        "bin_center": 0.45,
+        "accuracy": 0.5,
+        "confidence": 0.436,
+        "count": 8,
+        "gap": 0.064
+      },
+      {
+        "bin_center": 0.55,
+        "accuracy": 0.1,
+        "confidence": 0.544,
+        "count": 10,
+        "gap": 0.444
+      },
+      {
+        "bin_center": 0.65,
+        "accuracy": 0.3,
+        "confidence": 0.654,
+        "count": 10,
+        "gap": 0.354
+      },
+      {
+        "bin_center": 0.75,
+        "accuracy": 0.312,
+        "confidence": 0.774,
+        "count": 16,
+        "gap": 0.462
+      },
+      {
+        "bin_center": 0.85,
+        "accuracy": 0.707,
+        "confidence": 0.863,
+        "count": 58,
+        "gap": 0.156
+      },
+      {
+        "bin_center": 0.95,
+        "accuracy": 0.679,
+        "confidence": 0.945,
+        "count": 84,
+        "gap": 0.267
+      }
+    ],
+    "conf_stratified": [
+      {
+        "quartile": 1,
+        "conf_range": "0.51\u20130.87",
+        "n": 125,
+        "accuracy": 0.584,
+        "mean_conf": 0.745
+      },
+      {
+        "quartile": 2,
+        "conf_range": "0.87\u20130.94",
+        "n": 124,
+        "accuracy": 0.742,
+        "mean_conf": 0.912
+      },
+      {
+        "quartile": 3,
+        "conf_range": "0.94\u20130.97",
+        "n": 124,
+        "accuracy": 0.806,
+        "mean_conf": 0.953
+      },
+      {
+        "quartile": 4,
+        "conf_range": "0.97\u20130.99",
+        "n": 124,
+        "accuracy": 0.887,
+        "mean_conf": 0.978
+      }
+    ]
+  }
+}

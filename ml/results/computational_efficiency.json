@@ -1,0 +1,86 @@
+{
+  "LSTM (Exp 04)": {
+    "total_params": 4389982,
+    "trainable_params": 4389982,
+    "model_size_mb": 16.75,
+    "cpu_inference": {
+      "mean_ms": 25.826,
+      "std_ms": 2.934,
+      "min_ms": 22.284,
+      "max_ms": 32.963,
+      "p95_ms": 31.414
+    },
+    "gpu_inference": {
+      "mean_ms": 11.837,
+      "std_ms": 0.556,
+      "min_ms": 11.323,
+      "max_ms": 14.839,
+      "p95_ms": 12.641
+    },
+    "gpu_batch": {
+      "mean_ms": 15.668,
+      "std_ms": 0.403,
+      "min_ms": 14.94,
+      "max_ms": 19.487,
+      "p95_ms": 15.77
+    },
+    "realtime_cpu": true,
+    "realtime_gpu": true
+  },
+  "BiLSTM (Exp 05)": {
+    "total_params": 5863518,
+    "trainable_params": 5863518,
+    "model_size_mb": 22.37,
+    "cpu_inference": {
+      "mean_ms": 28.535,
+      "std_ms": 2.994,
+      "min_ms": 24.135,
+      "max_ms": 34.713,
+      "p95_ms": 33.999
+    },
+    "gpu_inference": {
+      "mean_ms": 12.203,
+      "std_ms": 0.437,
+      "min_ms": 11.937,
+      "max_ms": 15.983,
+      "p95_ms": 12.57
+    },
+    "gpu_batch": {
+      "mean_ms": 16.272,
+      "std_ms": 0.392,
+      "min_ms": 15.862,
+      "max_ms": 18.445,
+      "p95_ms": 16.405
+    },
+    "realtime_cpu": true,
+    "realtime_gpu": true
+  },
+  "Transformer (Exp 06)": {
+    "total_params": 4879454,
+    "trainable_params": 4879454,
+    "model_size_mb": 18.61,
+    "cpu_inference": {
+      "mean_ms": 27.947,
+      "std_ms": 3.054,
+      "min_ms": 23.93,
+      "max_ms": 34.468,
+      "p95_ms": 33.837
+    },
+    "gpu_inference": {
+      "mean_ms": 11.984,
+      "std_ms": 0.374,
+      "min_ms": 11.676,
+      "max_ms": 14.88,
+      "p95_ms": 12.314
+    },
+    "gpu_batch": {
+      "mean_ms": 15.879,
+      "std_ms": 0.251,
+      "min_ms": 15.648,
+      "max_ms": 17.921,
+      "p95_ms": 16.228
+    },
+    "realtime_cpu": true,
+    "realtime_gpu": true
+  }
+}

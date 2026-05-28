@@ -1,0 +1,773 @@
+{
+  "fn_total": 48,
+  "fp_total": 75,
+  "fn_categories": {
+    "High-confidence morphology overlap": 15,
+    "Temporal pattern not captured": 28,
+    "Asystole-artifact overlap": 5
+  },
+  "fp_categories": {
+    "Ventricular Flutter artifact pattern": 41,
+    "Borderline signal pattern": 22,
+    "High-confidence misclassification": 10,
+    "Tachycardia rate pattern mimics true alarm": 2
+  },
+  "fn_by_type": {
+    "Ventricular Flutter": 16,
+    "Tachycardia": 16,
+    "Bradycardia": 8,
+    "Asystole": 5,
+    "Ventricular Fibrillation": 3
+  },
+  "fp_by_type": {
+    "Ventricular Flutter": 41,
+    "Asystole": 17,
+    "Bradycardia": 4,
+    "Ventricular Fibrillation": 11,
+    "Tachycardia": 2
+  },
+  "fn_details": [
+    {
+      "record": "v143l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9848,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "t150s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.5993,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t151l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.5727,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t173l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9862,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "b187l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.8314,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v188s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9918,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v206s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9909,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "t209l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.7401,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t249l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.6145,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t251l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9217,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v275l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9084,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "b313l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.999,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v318s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.5781,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v328s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.952,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "t335l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9953,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "a345l",
+      "alarm_type": "Asystole",
+      "confidence": 0.5431,
+      "category": "Asystole-artifact overlap"
+    },
+    {
+      "record": "t356s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.769,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t358s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9707,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v368s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "b379l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.8514,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v404s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9899,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "t406s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.7431,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t430s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.6926,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t434s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.8158,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t445l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.6382,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "b455l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.9794,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "b456s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.8942,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "b497l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.8943,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t520s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.7407,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v541l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9469,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "f544s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.7005,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "f545l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.5551,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v559l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9883,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "f563l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.9993,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v571l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8919,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "a604s",
+      "alarm_type": "Asystole",
+      "confidence": 0.8738,
+      "category": "Asystole-artifact overlap"
+    },
+    {
+      "record": "a653l",
+      "alarm_type": "Asystole",
+      "confidence": 0.7043,
+      "category": "Asystole-artifact overlap"
+    },
+    {
+      "record": "a654s",
+      "alarm_type": "Asystole",
+      "confidence": 0.8834,
+      "category": "Asystole-artifact overlap"
+    },
+    {
+      "record": "b672s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.8466,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "b708s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.7453,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "t719l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.8371,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v761l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.744,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v788s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.5065,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "a796s",
+      "alarm_type": "Asystole",
+      "confidence": 0.8522,
+      "category": "Asystole-artifact overlap"
+    },
+    {
+      "record": "t800s",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9996,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v831l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9877,
+      "category": "High-confidence morphology overlap"
+    },
+    {
+      "record": "v836s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6028,
+      "category": "Temporal pattern not captured"
+    },
+    {
+      "record": "v842s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9987,
+      "category": "High-confidence morphology overlap"
+    }
+  ],
+  "fp_details": [
+    {
+      "record": "v101l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8775,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v102s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.693,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v111l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.5782,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v154s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9108,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a165l",
+      "alarm_type": "Asystole",
+      "confidence": 0.5564,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v169l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8829,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a171l",
+      "alarm_type": "Asystole",
+      "confidence": 0.6364,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v180s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.803,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a219l",
+      "alarm_type": "Asystole",
+      "confidence": 0.5969,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v222s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6194,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v241l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.5255,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v248s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8699,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v256s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6793,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "b285l",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.9815,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v291l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8266,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v292s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6176,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f304s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.9833,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "a311l",
+      "alarm_type": "Asystole",
+      "confidence": 0.6069,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v312s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9998,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a315l",
+      "alarm_type": "Asystole",
+      "confidence": 0.8136,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "b340s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.722,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v359l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9851,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v360s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9141,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v361l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.7541,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f362s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.9029,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v365l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9994,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a378s",
+      "alarm_type": "Asystole",
+      "confidence": 0.5578,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v380s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9896,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "t383l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9852,
+      "category": "Tachycardia rate pattern mimics true alarm"
+    },
+    {
+      "record": "a397l",
+      "alarm_type": "Asystole",
+      "confidence": 0.7242,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v405l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6771,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f407l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.5287,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "f408s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.6243,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "t409l",
+      "alarm_type": "Tachycardia",
+      "confidence": 0.9778,
+      "category": "Tachycardia rate pattern mimics true alarm"
+    },
+    {
+      "record": "f415l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.9869,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "b428s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.9049,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "a429l",
+      "alarm_type": "Asystole",
+      "confidence": 0.8991,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v432s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6865,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v437l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.7802,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a439l",
+      "alarm_type": "Asystole",
+      "confidence": 0.7361,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "f440s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.7968,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "a457l",
+      "alarm_type": "Asystole",
+      "confidence": 0.9869,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v459l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9182,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v479l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9778,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v491l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8705,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f493l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.6293,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "a539l",
+      "alarm_type": "Asystole",
+      "confidence": 0.9944,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v568s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9787,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f572s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.7075,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v575l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8547,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a584s",
+      "alarm_type": "Asystole",
+      "confidence": 0.7572,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v585l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9199,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f592s",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.9865,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v611l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.916,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v615l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.7316,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v619l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9734,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "f637l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.6433,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v674s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9977,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v718s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.705,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v720s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6555,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a723l",
+      "alarm_type": "Asystole",
+      "confidence": 0.5832,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "a735l",
+      "alarm_type": "Asystole",
+      "confidence": 0.9574,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "f751l",
+      "alarm_type": "Ventricular Fibrillation",
+      "confidence": 0.8904,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "v756s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.9979,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v770s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8839,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v779l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.78,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v795l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.7216,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v804s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.8888,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a810s",
+      "alarm_type": "Asystole",
+      "confidence": 0.7459,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "a822s",
+      "alarm_type": "Asystole",
+      "confidence": 0.7468,
+      "category": "Borderline signal pattern"
+    },
+    {
+      "record": "b824s",
+      "alarm_type": "Bradycardia",
+      "confidence": 0.9843,
+      "category": "High-confidence misclassification"
+    },
+    {
+      "record": "v826s",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.6029,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v833l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.7197,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "v845l",
+      "alarm_type": "Ventricular Flutter",
+      "confidence": 0.921,
+      "category": "Ventricular Flutter artifact pattern"
+    },
+    {
+      "record": "a847l",
+      "alarm_type": "Asystole",
+      "confidence": 0.6892,
+      "category": "Borderline signal pattern"
+    }
+  ],
+  "high_conf_fn": 18,
+  "high_conf_fp": 27
+}

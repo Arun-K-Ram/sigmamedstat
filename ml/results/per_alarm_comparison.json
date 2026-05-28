@@ -1,0 +1,45 @@
+{
+  "static_per_alarm": {
+    "Ventricular Flutter": 0.6125,
+    "Asystole": 0.6441,
+    "Tachycardia": 0.6542,
+    "Bradycardia": 0.5859,
+    "Ventricular Fibrillation": 0.5425
+  },
+  "temporal_per_alarm": {
+    "Ventricular Flutter": 0.82,
+    "Asystole": 0.722,
+    "Tachycardia": 0.75,
+    "Bradycardia": 0.81,
+    "Ventricular Fibrillation": 0.733
+  },
+  "improvements": {
+    "Ventricular Flutter": {
+      "static": 0.6125,
+      "temporal": 0.82,
+      "gain": 0.2075
+    },
+    "Asystole": {
+      "static": 0.6441,
+      "temporal": 0.722,
+      "gain": 0.0779
+    },
+    "Tachycardia": {
+      "static": 0.6542,
+      "temporal": 0.75,
+      "gain": 0.0958
+    },
+    "Bradycardia": {
+      "static": 0.5859,
+      "temporal": 0.81,
+      "gain": 0.2241
+    },
+    "Ventricular Fibrillation": {
+      "static": 0.5425,
+      "temporal": 0.733,
+      "gain": 0.1905
+    }
+  },
+  "static_overall": 0.6154,
+  "temporal_overall": 0.822
+}

@@ -1,0 +1,38 @@
+{
+  "LSTM vs BiLSTM": {
+    "auc_a": 0.7886,
+    "auc_b": 0.8025,
+    "z": -0.4626,
+    "p": 0.643648,
+    "significant": false,
+    "bootstrap_ci": [
+      -0.0537,
+      0.0273
+    ],
+    "ci_excludes_zero": false
+  },
+  "LSTM vs Transformer": {
+    "auc_a": 0.7886,
+    "auc_b": 0.7921,
+    "z": -0.1134,
+    "p": 0.909692,
+    "significant": false,
+    "bootstrap_ci": [
+      -0.0508,
+      0.0457
+    ],
+    "ci_excludes_zero": false
+  },
+  "BiLSTM vs Transformer": {
+    "auc_a": 0.8025,
+    "auc_b": 0.7921,
+    "z": 0.3459,
+    "p": 0.729394,
+    "significant": false,
+    "bootstrap_ci": [
+      -0.0274,
+      0.049
+    ],
+    "ci_excludes_zero": false
+  }
+}

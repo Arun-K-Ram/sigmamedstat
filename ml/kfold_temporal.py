@@ -300,6 +300,8 @@ def error_analysis(X, y, names, skf):
         "false_positives":int(len(false_pos)),
         "high_conf_errors":int(len(high_conf_errors)),
         "per_alarm_type": type_results,
+        "oof_probs":      all_probs.tolist(),
+        "oof_labels":     [int(i) for i in y],
     }
 
 
