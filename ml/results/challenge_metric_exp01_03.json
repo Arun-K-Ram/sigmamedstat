@@ -1,0 +1,22 @@
+{
+  "exp01": {
+    "experiment": "01_static_efficientnet",
+    "test_auc": 0.5612,
+    "challenge_score": 41.76,
+    "best_threshold": 0.05,
+    "n_test": 75
+  },
+  "exp02": {
+    "experiment": "02_handcrafted_svm",
+    "test_auc": 0.5,
+    "challenge_score": 49.56,
+    "best_threshold": 0.05,
+    "n_test": 113
+  },
+  "exp03": {
+    "experiment": "03_per_alarm_xgboost",
+    "note": "Beat features not found",
+    "reported_auc": 0.612,
+    "challenge_score": null
+  }
+}
